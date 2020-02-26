@@ -15,7 +15,7 @@ Make sure to have the following downloaded on your local machine:
 ## How to Run
 - Open up the terminal (or Git Bash on Windows OS).
 - Navigate to a path in your local directory in which you'd like to save the project in (use the ```cd``` command).
-- Clone the repo by running: ```https://github.com/dayakulkarniasu/CSE545_Team7.git```.
+- Clone the repo by running: ```git clone https://github.com/dayakulkarniasu/CSE545_Team7.git```.
 
 ### Back-End
 
@@ -46,7 +46,7 @@ Make sure to have the following downloaded on your local machine:
 - Maven
 
 ### Database
-- MySQL (?)
+- MySQL
 
 ## Resources Used
 - [create-react-app](https://github.com/facebook/create-react-app)
@@ -58,8 +58,8 @@ Make sure to have the following downloaded on your local machine:
 - Daya Kulkarni
 - Alyssa Goldstein
 - Maneesha Poluri
-- Akanksha Magod
-- Ganesh Betha
-- Saumil Dixit
 - Yash Sarvaiya
 - Aneesh Gangadhar
+- Akanksha Magod
+- Saumil Dixit
+- Ganesh Betha
