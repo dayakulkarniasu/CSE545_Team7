@@ -10,6 +10,8 @@ import Paper from "@material-ui/core/Paper";
 
 import Home from './Home';
 import Users from './Users';
+import Accounts from './Accounts';
+import Register from './Register';
 
 const styles = theme => ({
     root: {
@@ -42,21 +44,25 @@ class App extends React.Component {
             <div className="App">
                 <Paper elevation={0} className={classes.root}>
                     <Typography variant="h3">Sparky's Secure Bank</Typography>
-                  </Paper>
-                    <AppBar position="static">
-                        <Tabs value={value} onChange={this.handleChange} centered>
-                            <Tab label="Home" />
-                            <Tab label="Accounts" />
-                            <Tab label="Request Transfer" />
-                            <Tab label="Approve Transfer" />
-                            <Tab label="Login" />
-                        </Tabs>
-                    </AppBar>
-                    {value === 0 && <Paper component={Home}></Paper>}
-                    {value === 1 && <Paper component={Users}></Paper>}
-                    {value === 2 && <Paper /*component={Ranking}*/></Paper>}
-                    {value === 3 && <Paper /*component={Ranking}*/></Paper>}
-                    {value === 4 && <Paper /*component={Ranking}*/></Paper>}
+                </Paper>
+                <AppBar position="static">
+                    <Tabs value={value} onChange={this.handleChange} centered>
+                        <Tab label="Home" />
+                        <Tab label="Accounts" />
+                        <Tab label="Users" />
+                        <Tab label="Request Transfer" />
+                        <Tab label="Approve Transfer" />
+                        <Tab label="Login" />
+                        <Tab label="Register" />
+                    </Tabs>
+                </AppBar>
+                {value === 0 && <Paper component={Home}></Paper>}
+                {value === 1 && <Paper component={Accounts}></Paper>}
+                {value === 2 && <Paper component={Users}></Paper>}
+                {value === 3 && <Paper /*component={RequestTransfer}*/></Paper>}
+                {value === 4 && <Paper /*component={ApproveTransfer}*/></Paper>}
+                {value === 5 && <Paper /*component={Login}*/></Paper>}
+                {value === 6 && <Paper component={Register}></Paper>}
             </div>
         );
     }

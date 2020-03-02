@@ -38,7 +38,7 @@ const tableIcons = {
     Edit: forwardRef((props, ref) => <EditIcon {...props} ref={ref} />),
 };
 
-class Home extends React.Component {
+class Users extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -53,7 +53,7 @@ class Home extends React.Component {
         const { classes } = this.props;
 
         return (
-            <div className="Home">
+            <div className="Users">
                 <Paper elevation={0} className={classes.root}>
                     <MaterialTable
                         className={classes.root}
@@ -89,4 +89,4 @@ class Home extends React.Component {
     }
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Users);
