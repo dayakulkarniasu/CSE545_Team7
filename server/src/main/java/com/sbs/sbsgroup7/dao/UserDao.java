@@ -23,7 +23,7 @@ public class UserDao implements UserDaoInterface<User, String> {
 
     @Override
     public void update(User userEntity) {
-        Optional<User> foundUser = userRepository.findById(userEntity.getId());
+        Optional<User> foundUser = userRepository.findById(userEntity.getUserId());
         if(foundUser.isPresent()){
             userRepository.save(userEntity);
         }

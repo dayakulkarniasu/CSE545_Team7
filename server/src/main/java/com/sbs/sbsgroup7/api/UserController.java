@@ -27,7 +27,7 @@ public class UserController {
         userService.add(user);
     }
 
-    @PostMapping("/update")
+    @PutMapping ("/update")
     public void update(@NotNull @Validated @RequestBody User user){
         userService.update(user);
     }
@@ -42,7 +42,7 @@ public class UserController {
         userService.delete(id);
     }
 
-    @GetMapping("all-users")
+    @GetMapping(path = "/")
     public List<User> getAllUsers(){
         return userService.findAll();
     }
