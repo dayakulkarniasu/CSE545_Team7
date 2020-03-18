@@ -11,6 +11,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 import Button from '@material-ui/core/Button';
 
+import CreateAccount from './CreateAccount';
+import history from './history';
+
 const useStyles = makeStyles(theme => ({
     root: {
         flexGrow: 1,
@@ -23,18 +26,18 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function Accounts() {
+export default function AccountsView() {
     const classes = useStyles();
 
     return (
-        <div className="Accounts">
+        <div className="AccountsView">
             <Paper elevation={0} className={classes.root}>
                 <Typography variant="h4">
                     Accounts
                 </Typography>
                 <br />
                 <div>
-                    <Button variant="contained" color="primary">
+                    <Button variant="contained" color="primary" onClick={() => history.push('/AccountsView')}>
                         Create New Account
                     </Button>
                     <br />
