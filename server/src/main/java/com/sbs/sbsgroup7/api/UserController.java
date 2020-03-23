@@ -25,6 +25,10 @@ public class UserController {
     }
 
 
+    @GetMapping("login")
+    public String login(){  return "login";}
+
+
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
         userService.add(user);
