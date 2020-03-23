@@ -50,12 +50,12 @@ public class UserController {
     }
 
     @GetMapping(path = "/")
-    public String getAllUsers(Model model) {
-        model.addAttribute("name", "John");
-        return "index";
+    public List<User> getAllUsers(){
+        return userService.findAll();
     }
-//    public List<User> getAllUsers(){
-//        return userService.findAll();
+//    public String getAllUsers(Model model) {
+//        model.addAttribute("name", "John");
+//        return "index";
 //    }
 
     @DeleteMapping(path="/removeAll")
