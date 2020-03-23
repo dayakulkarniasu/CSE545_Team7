@@ -32,4 +32,9 @@ public class ViewController {
     public String approveTransfers() {
         return "approveTransfers";
     }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
 }
