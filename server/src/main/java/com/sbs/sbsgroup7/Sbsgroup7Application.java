@@ -39,7 +39,7 @@ public class Sbsgroup7Application {
 		connector.setScheme("http");
 		connector.setPort(8080);
 		connector.setSecure(false);
-		connector.setRedirectPort(8090);
+		connector.setRedirectPort(8443);
 		return connector;
 	}
 
