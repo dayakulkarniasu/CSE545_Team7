@@ -67,6 +67,8 @@ public class User {
     @NotNull
     private int zipCode;
 
+    private boolean active;
+
 
     public User(@JsonProperty("userId") String userId,
                 @JsonProperty("firstName") String firstName,
@@ -81,7 +83,8 @@ public class User {
                 @JsonProperty("city") String city,
                 @JsonProperty("state") String state,
                 @JsonProperty("country") String country,
-                @JsonProperty("zipCode") int zipCode
+                @JsonProperty("zipCode") int zipCode,
+                @JsonProperty("active") boolean active
                 ){
         this.userId=userId;
         this.firstName=firstName;
@@ -97,6 +100,7 @@ public class User {
         this.state=state;
         this.country=country;
         this.zipCode=zipCode;
+        this.active=true;
 
     }
 
@@ -120,6 +124,8 @@ public class User {
 
     public String getRole() { return role; }
 
+    public String getUserName() { return email; }
+
     public String getPassword() { return password; }
 
     public int getSsn() { return ssn; }
@@ -135,5 +141,7 @@ public class User {
     public String getCountry() { return country; }
 
     public int getZipCode() { return zipCode; }
+
+    public boolean getActive(){ return active; }
 
 }

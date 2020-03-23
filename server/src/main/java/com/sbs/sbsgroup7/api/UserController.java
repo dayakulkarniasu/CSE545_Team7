@@ -3,6 +3,8 @@ package com.sbs.sbsgroup7.api;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,7 +12,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RequestMapping("/user")
-@RestController
+//@RestController
+@Controller
 public class UserController {
 
     private final UserService userService;
@@ -20,6 +23,10 @@ public class UserController {
     {
         this.userService=userService;
     }
+
+
+    @GetMapping("login")
+    public String login(){  return "login";}
 
 
     @PostMapping("/add")
@@ -43,9 +50,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/")
-    public List<User> getAllUsers(){
-        return userService.findAll();
+    public String getAllUsers(Model model) {
+        model.addAttribute("name", "John");
+        return "index";
     }
+//    public List<User> getAllUsers(){
+//        return userService.findAll();
+//    }
 
     @DeleteMapping(path="/removeAll")
     public void deleteAll(){
