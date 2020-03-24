@@ -1,4 +1,4 @@
-package com.sparky.downloads;
+package com.sbs.sbsgroup7.downloads;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
