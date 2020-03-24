@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @Column(name = "userId",nullable = false)
