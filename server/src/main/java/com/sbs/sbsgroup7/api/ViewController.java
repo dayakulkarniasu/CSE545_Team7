@@ -36,4 +36,10 @@ public class ViewController {
         return "approveTransfers";
     }
 
+    //Only viewable by Tier-2 employees (approving bank account requests)
+    @RequestMapping("/approveRequests")
+    public String approveRequests() {
+        return "approveRequests";
+    }
+
 }
