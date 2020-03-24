@@ -30,4 +30,5 @@
 * Right-click on the ```server``` folder and click on ```Maven``` -> ```Reimport```
 * Once done, you can 'Run' the application by clicking on the 'Play' icon (green triangle) in the tool bar at the top
 * On your browser (Chrome recommended), go to [https://localhost:8443/](https://localhost:8443/) to view the web application
+* When prompted to log in, make sure you run ```insert into user values("1",1,"address","tempe","us","user","john","doe","pass",123,"ADMIN",321,"az",5454);``` on MySQL, then use ```user``` and ```pass``` as credentials.
 * IMPORTANT: After making changes to the template (HTML) pages, you must re-run the project in order to view the changes to the web application
