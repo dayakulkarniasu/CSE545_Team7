@@ -40,6 +40,31 @@
     <div class="starter-template">
         <h1>Request Transfers</h1>
     </div>
+    <div class="card-block" style="padding: 24px;">
+        <form name="requestForm" method="post">
+            <fieldset>
+                <div class="form-group">
+                    <label for="srcAcct">From: </label>
+                    <input type="text" class="form-control" id="srcAcct" name="srcAcct"
+                           placeholder="Account #">
+                </div>
+                <div class="form-group">
+                    <label for="dstAcct">To: </label>
+                    <input type="text" class="form-control" id="dstAcct" name="dstAcct"
+                           placeholder="Account #">
+                </div>
+                <div class="form-group">
+                    <label for="amt">Amount(USD):  </label>
+                    <input type="text" class="form-control" id="amt" name="amt"
+                           placeholder="$0.00">
+                </div>
+                <!-- Submit Button -->
+                <div class="form-actions" style="margin-top: 12px;">
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
 </main>
 
 </body>
