@@ -1,8 +1,13 @@
 package com.sbs.sbsgroup7.api;
 
+<<<<<<< HEAD
 import com.sbs.sbsgroup7.dao.UserDao;
 import com.sbs.sbsgroup7.model.contact;
 import com.sbs.sbsgroup7.service.OTP;
+=======
+import com.sbs.sbsgroup7.service.RequestService;
+import com.sbs.sbsgroup7.service.TransactionService;
+>>>>>>> 7e209f3df76c82926073f5d54d2827c75d09a550
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +27,8 @@ import java.util.List;
 
 @Controller
 public class ViewController {
+    @Autowired
+    RequestService requestService;
 
     @Autowired
     private UserDao userDao;
@@ -210,6 +217,10 @@ public class ViewController {
     public String createAccount() {
         return "createAccount";
     }
+    @RequestMapping("/EmailPhoneTransfer")
+    public String EmailPhoneTransfer() {
+        return "EmailPhoneTransfer";
+    }
 
     @RequestMapping("/requestTransfers")
     public String requestTransfers() {
@@ -223,13 +234,23 @@ public class ViewController {
 
     //Only viewable by Tier-2 employees (approving bank account requests)
     @RequestMapping("/approveRequests")
-    public String approveRequests() {
+    public String approveRequests(Model model) {
+        model.addAttribute("requests", requestService.findAll());
+
         return "approveRequests";
     }
+    /*@RequestMapping("/transactions")
+    public String transaction(Model model) {
+        model.addAttribute("requests", TransactionService.TIDVAL());
+
+<<<<<<< HEAD
 
 
 
 
 
-
+=======
+        return "transactions";
+    }*/
+>>>>>>> 7e209f3df76c82926073f5d54d2827c75d09a550
 }

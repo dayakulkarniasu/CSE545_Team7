@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RequestMapping("/user")
-//@RestController
-@Controller
+@RestController
+//@Controller
 public class UserController {
 
     private final UserService userService;
