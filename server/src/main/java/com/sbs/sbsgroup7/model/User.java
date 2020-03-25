@@ -2,6 +2,7 @@ package com.sbs.sbsgroup7.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -30,9 +31,9 @@ public class User {
 
     @Column(name = "phone")
     @NotNull
-    private int phone;
+    private String phone;
 
-    @Column(name = "role")
+    @Column(name = "roles")
     @NotNull
     private String role;
 
@@ -40,33 +41,19 @@ public class User {
     @NotNull
     private String password;
 
-    @Column(name = "ssn")
+    @Column(name = "ssn" , unique = true)
     @NotNull
-    private int ssn;
+    private String ssn;
 
-//    @Column(name = "dob")
-//    @NotNull
-//    private Date dob;
+    @Column(name = "dob")
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private Date dob;
 
     @Column(name = "address")
     @NotNull
     private String address;
 
-    @Column(name = "city")
-    @NotNull
-    private String city;
-
-    @Column(name = "state")
-    @NotNull
-    private String state;
-
-    @Column(name = "country")
-    @NotNull
-    private String country;
-
-    @Column(name = "zipCode")
-    @NotNull
-    private int zipCode;
 
     private boolean active;
 
@@ -75,16 +62,12 @@ public class User {
                 @JsonProperty("firstName") String firstName,
                 @JsonProperty("lastName") String lastName,
                 @JsonProperty("email") String email,
-                @JsonProperty("phone") int phone,
+                @JsonProperty("phone") String phone,
                 @JsonProperty("role") String role,
                 @JsonProperty("password") String password,
-                @JsonProperty("ssn") int ssn,
-//                @JsonProperty("dob") Date dob,
+                @JsonProperty("ssn") String ssn,
+                @JsonProperty("dob") Date dob,
                 @JsonProperty("address") String address,
-                @JsonProperty("city") String city,
-                @JsonProperty("state") String state,
-                @JsonProperty("country") String country,
-                @JsonProperty("zipCode") int zipCode,
                 @JsonProperty("active") boolean active
                 ){
         this.userId=userId;
@@ -95,12 +78,8 @@ public class User {
         this.role=role;
         this.password=password;
         this.ssn=ssn;
-//        this.dob=dob;
+        this.dob=dob;
         this.address=address;
-        this.city=city;
-        this.state=state;
-        this.country=country;
-        this.zipCode=zipCode;
         this.active=true;
 
     }
@@ -121,7 +100,7 @@ public class User {
 
     public String getEmail() { return email; }
 
-    public int getPhone() { return phone; }
+    public String getPhone() { return phone; }
 
     public String getRole() { return role; }
 
@@ -129,20 +108,45 @@ public class User {
 
     public String getPassword() { return password; }
 
-    public int getSsn() { return ssn; }
+    public String getSsn() { return ssn; }
 
-//    public Date getDob() { return dob; }
+    public Date getDob() { return dob; }
 
     public String getAddress()  { return address; }
 
-    public String getCity() { return city; }
-
-    public String getState() { return state; }
-
-    public String getCountry() { return country; }
-
-    public int getZipCode() { return zipCode; }
-
     public boolean getActive(){ return active; }
+
+
+
+
+
+    public void setUserId(String userId) {
+         this.userId=userId;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName=firstName;
+    }
+
+    public void setLastName(String lastName) { this.lastName=lastName; }
+
+    public void setEmail(String email) { this.email=email; }
+
+    public void setPhone(String phone) { this.phone= phone; }
+
+    public void setRole(String role) { this.role=role; }
+
+
+    public void setPassword(String password) { this.password = password; }
+
+    public void setSsn(String ssn) { this.ssn=ssn; }
+
+    public void setDob(Date dob) { this.dob=dob; }
+
+    public void setAddress(String address)  { this.address=address; }
+
+    public void setActive(boolean active){ this.active=active; }
+
+
 
 }

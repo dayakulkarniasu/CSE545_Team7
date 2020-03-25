@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RequestMapping("/user")
-@RestController
-//@Controller
+//@RestController
+@Controller
 public class UserController {
 
     private final UserService userService;
@@ -25,8 +25,7 @@ public class UserController {
     }
 
 
-    @GetMapping("login")
-    public String login(){  return "login";}
+
 
 
     @PostMapping("/add")
@@ -39,10 +38,10 @@ public class UserController {
         userService.update(user);
     }
 
-    @GetMapping(path = "/{id}")
-    public User getUserById(@PathVariable("id") String id) {
-        return userService.findById(id);
-    }
+//    @GetMapping(path = "/{id}")
+//    public User getUserById(@PathVariable("id") String id) {
+//        return userService.findById(id);
+//    }
 
     @DeleteMapping(path="/remove/{id}")
     public void deleteUserById(@PathVariable("id") String id){

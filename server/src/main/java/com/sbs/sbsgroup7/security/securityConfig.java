@@ -31,9 +31,13 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home").hasAnyAuthority("ADMIN", "TIER_ONE", "TIER_TWO", "USER", "ORG")
                 .antMatchers("/").permitAll()
                 .and()
-                .formLogin()
+                    .formLogin()
+                    .loginPage("/login")  //Loginform all can access ..
+                    .defaultSuccessUrl("/dashboard")
+                    .failureUrl("/login?error")
+                    .permitAll()
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
+                    .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
 
     }
 
