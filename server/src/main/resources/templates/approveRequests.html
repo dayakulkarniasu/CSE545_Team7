@@ -28,51 +28,35 @@
                 <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{login}" class="nav-link" href="#">Login</a>
+                <a class="nav-link" href="#">Logout</a>
             </li>
         </ul>
     </div>
 </nav>
+
 <br>
 <br>
 <br>
+
 <main role="main" class="container">
     <div class="starter-template">
         <h1>Approve Bank Account Creation Requests</h1>
 
         <table class="table">
-            <thead>
             <tr>
-                <th scope="col">Request ID</th>
-                <th scope="col">Requested Username</th>
-                <th scope="col">Status</th>
-                <th scope="col">Account Type</th>
-                <th scope="col">Action</th>
+                <th>Request ID</th>
+                <th>Requested User</th>
+                <th>Account Type</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th scope="row">593</th>
-                <td>johndoe</td>
-                <td>Pending</td>
-                <td>Checking</td>
+            <tr th:each = "request: ${requests}">
+                <td th:text="${request.requestId}"></td>
+                <td th:text="${request.requestedUser}"></td>
+                <td th:text="${request.requestType}"></td>
+                <td th:text="${request.status}"></td>
                 <td><button type="button" class="btn btn-primary">Approve</button></td>
             </tr>
-            <tr>
-                <th scope="row">220</th>
-                <td>adamsmith</td>
-                <td>Pending</td>
-                <td>Savings</td>
-                <td><button type="button" class="btn btn-primary">Approve</button></td>
-            </tr>
-            <tr>
-                <th scope="row">389</th>
-                <td>bobby</td>
-                <td>Processing</td>
-                <td>Credit</td>
-                <td><button type="button" class="btn btn-primary">Approve</button></td>
-            </tr>
-            </tbody>
         </table>
     </div>
 </main>
