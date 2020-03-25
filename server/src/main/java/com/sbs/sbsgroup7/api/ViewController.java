@@ -29,7 +29,7 @@ public class ViewController {
     public String index(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("name", auth.getName());
-        return "index";
+        return "welcome";
     }
     @GetMapping("/login")
     public String login() {
