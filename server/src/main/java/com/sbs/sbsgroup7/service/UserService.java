@@ -26,26 +26,26 @@ public class UserService {
 
     public void add(User user) {
         //userDao.openCurrentSessionwithTransaction();
-        userDao.persist(user);
+        //userDao.persist(user);
         //userDao.closeCurrentSessionwithTransaction();
     }
 
     public void update(User user) {
         //userDao.openCurrentSessionwithTransaction();
-        userDao.update(user);
+        //userDao.update(user);
         //userDao.closeCurrentSessionwithTransaction();
     }
 
     public User findById(String id) {
         //userDao.openCurrentSession();
-        User user = userDao.findById(id);
+        User user = userDao.findByUserId(id);
         //userDao.closeCurrentSession();
         return user;
     }
 
     public void delete(String id) {
         //userDao.openCurrentSessionwithTransaction();
-        User user = userDao.findById(id);
+        User user = userDao.findByUserId(id);
         userDao.delete(user);
         //userDao.closeCurrentSessionwithTransaction();
     }
