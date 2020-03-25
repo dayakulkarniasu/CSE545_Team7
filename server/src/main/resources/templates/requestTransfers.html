@@ -42,6 +42,13 @@
     </div>
     <div class="card-block" style="padding: 24px;">
         <form name="requestForm" method="post">
+            <div class="starter-template">
+                <a th:href="@{EmailPhoneTransfer}" class="btn btn-link" href="#">Create a Transfer by Email/Phone</a>
+            </div>
+
+
+
+
             <fieldset>
                 <div class="form-group">
                     <label for="srcAcct">From: </label>
@@ -62,6 +69,7 @@
                 <div class="form-actions" style="margin-top: 12px;">
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
+
             </fieldset>
         </form>
     </div>

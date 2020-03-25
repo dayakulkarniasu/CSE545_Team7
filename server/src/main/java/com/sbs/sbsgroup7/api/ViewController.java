@@ -1,6 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.service.RequestService;
+import com.sbs.sbsgroup7.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,10 @@ public class ViewController {
     public String createAccount() {
         return "createAccount";
     }
+    @RequestMapping("/EmailPhoneTransfer")
+    public String EmailPhoneTransfer() {
+        return "EmailPhoneTransfer";
+    }
 
     @RequestMapping("/requestTransfers")
     public String requestTransfers() {
@@ -47,4 +52,10 @@ public class ViewController {
 
         return "approveRequests";
     }
+    /*@RequestMapping("/transactions")
+    public String transaction(Model model) {
+        model.addAttribute("requests", TransactionService.TIDVAL());
+
+        return "transactions";
+    }*/
 }
