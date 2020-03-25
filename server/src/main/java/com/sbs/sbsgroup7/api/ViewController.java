@@ -1,13 +1,10 @@
 package com.sbs.sbsgroup7.api;
 
-<<<<<<< HEAD
 import com.sbs.sbsgroup7.dao.UserDao;
 import com.sbs.sbsgroup7.model.contact;
 import com.sbs.sbsgroup7.service.OTP;
-=======
 import com.sbs.sbsgroup7.service.RequestService;
 import com.sbs.sbsgroup7.service.TransactionService;
->>>>>>> 7e209f3df76c82926073f5d54d2827c75d09a550
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -242,15 +239,6 @@ public class ViewController {
     /*@RequestMapping("/transactions")
     public String transaction(Model model) {
         model.addAttribute("requests", TransactionService.TIDVAL());
-
-<<<<<<< HEAD
-
-
-
-
-
-=======
         return "transactions";
     }*/
->>>>>>> 7e209f3df76c82926073f5d54d2827c75d09a550
 }
