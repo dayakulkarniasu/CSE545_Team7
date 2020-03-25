@@ -52,7 +52,7 @@ public class OtpController {
             if(serverOtp > 0){
                 if(Integer.parseInt(otpnum ) == serverOtp){
                     otpService.clearOTP(username);
-                    return "index";
+                    return "userHome";
                 }else{
                     return SUCCESS;
                 }
