@@ -16,9 +16,9 @@ public class bankUserDetails implements UserDetails {
     private List<GrantedAuthority> authorityList;
 
     public bankUserDetails(User user) {
-        //this.username = user.getUserName();
+        this.username = user.getUserName();
         this.password = user.getPassword();
-        //this.authorityList = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
+        this.authorityList = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override
