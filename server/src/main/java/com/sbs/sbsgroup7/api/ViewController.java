@@ -1,5 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
+import com.sbs.sbsgroup7.service.RequestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ViewController {
+    @Autowired
+    RequestService requestService;
 
     @RequestMapping("/home")
     public String index(Model model) {
@@ -38,8 +42,9 @@ public class ViewController {
 
     //Only viewable by Tier-2 employees (approving bank account requests)
     @RequestMapping("/approveRequests")
-    public String approveRequests() {
+    public String approveRequests(Model model) {
+        model.addAttribute("requests", requestService.findAll());
+
         return "approveRequests";
     }
-
 }
