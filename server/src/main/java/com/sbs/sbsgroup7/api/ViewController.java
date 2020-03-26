@@ -18,10 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class ViewController {
+
     @Autowired
     private OtpService otpService;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     RequestService requestService;
 
@@ -65,6 +68,12 @@ public class ViewController {
 //    public String user() {
 //        return "role";
 //    }
+
+    @GetMapping("/userHome")
+    public String userHome()
+    {
+        return "userHome";
+    }
 
     @GetMapping("/403")
     public String error403() {
@@ -115,6 +124,7 @@ public class ViewController {
 
         return "approveRequests";
     }
+
     /*@RequestMapping("/transactions")
     public String transaction(Model model) {
         model.addAttribute("requests", TransactionService.TIDVAL());
