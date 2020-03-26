@@ -5,10 +5,7 @@ package com.sbs.sbsgroup7.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
@@ -17,9 +14,15 @@ public class Account {
 
     @Id
     @Column(name = "accountNumber",nullable = false)
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
-    private UUID accountNumber;
+//    @GeneratedValue(generator="system-uuid")
+//    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer accountNumber;
+
+    @JoinColumn(nullable = false)
+    @NotNull
+    @ManyToOne
+    private User user;
 
     @Column(name="accountType")
     @NotNull
@@ -28,18 +31,18 @@ public class Account {
     @Column(name="balance")
     private double balance;
 
-    @Column(name="rateOfInterest")
-    private double rateOfInterest;
+//    @Column(name="rateOfInterest")
+//    private double rateOfInterest;
 
-    public Account(@JsonProperty("accountNumber") UUID accountNumber,
+    public Account(@JsonProperty("accountNumber") Integer accountNumber,
                 @JsonProperty("accountType") String accountType,
-                @JsonProperty("balance") double balance,
-                @JsonProperty("rateOfInterest") double rateOfInterest){
+                @JsonProperty("balance") double balance) {
+//                @JsonProperty("rateOfInterest") double rateOfInterest){
 
         this.accountNumber=accountNumber;
         this.accountType=accountType;
         this.balance=balance;
-        this.rateOfInterest=rateOfInterest;
+//        this.rateOfInterest=rateOfInterest;
 
     }
 
@@ -47,7 +50,9 @@ public class Account {
 
     }
 
-    public UUID getAccountNumber() { return accountNumber; }
+    public void setAccountNumber(Integer accountNumber) { this.accountNumber=accountNumber; }
+
+    public Integer getAccountNumber() { return accountNumber; }
 
     public void setAccountType(String accountType){
         this.accountType=accountType;
@@ -61,11 +66,15 @@ public class Account {
 
     public double getBalance() { return balance; }
 
-    public void setRateOfInterest(double rateOfInterest){
-        this.rateOfInterest=rateOfInterest;
-    }
+    public void setUser(User user) { this.user=user; }
 
-    public double getRateOfInterest() { return rateOfInterest; }
+    public User getUser() { return user; }
+
+//    public void setRateOfInterest(double rateOfInterest){
+//        this.rateOfInterest=rateOfInterest;
+//    }
+//
+//    public double getRateOfInterest() { return rateOfInterest; }
 
 
 

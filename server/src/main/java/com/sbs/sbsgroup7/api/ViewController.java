@@ -1,10 +1,9 @@
 package com.sbs.sbsgroup7.api;
 
+import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.Request;
 import com.sbs.sbsgroup7.model.User;
-import com.sbs.sbsgroup7.service.OtpService;
-import com.sbs.sbsgroup7.service.UserService;
-import com.sbs.sbsgroup7.service.RequestService;
-import com.sbs.sbsgroup7.service.TransactionService;
+import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class ViewController {
@@ -98,10 +98,7 @@ public class ViewController {
         return "accounts";
     }
 
-    @RequestMapping("/createAccount")
-    public String createAccount() {
-        return "createAccount";
-    }
+
     @RequestMapping("/EmailPhoneTransfer")
     public String EmailPhoneTransfer() {
         return "EmailPhoneTransfer";
@@ -135,4 +132,20 @@ public class ViewController {
 
         return "transactions";
     }*/
+
+//    @GetMapping("/createRequest")
+//    public String createRequest(Model model){
+//        model.addAttribute("request", new Request());
+//        return "createAccount";
+//    }
+//
+//    @PostMapping("/createRequest")
+//    public String createRequest(@ModelAttribute("user") Request request){
+//        try {
+//            requestService.createRequest(userService.getLoggedUser(), request);
+//            return "accountRequestSent";
+//        } catch(Exception e) {
+//            return e.getMessage();
+//        }
+//    }
 }

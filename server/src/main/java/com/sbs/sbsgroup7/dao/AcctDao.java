@@ -27,9 +27,9 @@ public class AcctDao implements AcctDaoInterface{
         return accounts;
     }
 
-    @Override
-    public void createAccount(UUID accountNumber, Account account) {
-        acctRepository.save(new Account(accountNumber, account.getAccountType(), account.getBalance(), account.getRateOfInterest()));
+//    @Override
+    public void createAccount(Integer accountNumber, Account account) {
+        acctRepository.save(new Account(accountNumber, account.getAccountType(), account.getBalance()));
     }
 
 

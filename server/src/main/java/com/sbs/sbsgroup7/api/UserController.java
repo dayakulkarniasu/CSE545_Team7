@@ -1,6 +1,8 @@
 package com.sbs.sbsgroup7.api;
 
+import com.sbs.sbsgroup7.model.Account;
 import com.sbs.sbsgroup7.model.User;
+import com.sbs.sbsgroup7.service.AccountService;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,14 +21,13 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
+    AccountService accountService;
+
+    @Autowired
     public UserController(UserService userService)
     {
         this.userService=userService;
     }
-
-
-
-
 
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
@@ -63,4 +64,17 @@ public class UserController {
     }
 
 
+    @GetMapping("/createAccount")
+    public String createAccount(Model model){
+        model.addAttribute("request", new Account());
+        return "createAccount";
+    }
+
+    @PostMapping("/createAccount")
+    public void createAccount(@ModelAttribute("request") Account account){
+        User user = userService.getLoggedUser();
+        accountService.createAccount(user, account);
+
+        System.out.println(user.getUserId() + " added to account");
+    }
 }

@@ -9,11 +9,11 @@ public interface AcctDaoInterface {
 
     List<Account> getAccounts();
 
-    void createAccount(UUID accountNumber, Account account);
+    void createAccount(Integer accountNumber, Account account);
 
-    default void createAccount(Account account){
-        UUID accountNumber= UUID.randomUUID();
-        createAccount(accountNumber, account);
-
-    }
+//    default void createAccount(Account account){
+////        String accountNumber= String.randomUUID();
+////        createAccount(accountNumber, account);
+//
+//    }
 }

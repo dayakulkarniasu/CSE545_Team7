@@ -13,6 +13,9 @@ import com.sbs.sbsgroup7.model.Account;
 import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import com.sbs.sbsgroup7.errors.EmailUsedException;
 
@@ -118,16 +121,23 @@ public class UserService {
         //userDao.closeCurrentSessionwithTransaction();
     }
 
-    public void createAccount(Account account){
-        acctDao.createAccount(account);
+//    public void createAccount(Account account){
+//        acctDao.createAccount(account);
+//    }
+//
+//    public List<Account> getAccounts() {
+//        return acctDao.getAccounts();
+//    }
+
+
+    public User getLoggedUser() {
+        String loggedUserName = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            loggedUserName = authentication.getName();
+        }
+        return userRepository.findByEmail(loggedUserName).orElse(null);
     }
-
-    public List<Account> getAccounts() {
-        return acctDao.getAccounts();
-    }
-
-
-
 
 
 }

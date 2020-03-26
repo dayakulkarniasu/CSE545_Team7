@@ -1,6 +1,10 @@
 package com.sbs.sbsgroup7.service;
 
+import com.sbs.sbsgroup7.DataSource.RequestRepository;
+import com.sbs.sbsgroup7.DataSource.UserRepository;
+import com.sbs.sbsgroup7.dao.UserDao;
 import com.sbs.sbsgroup7.model.Request;
+import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,6 +19,9 @@ public class RequestService {
 
     @Autowired
     JdbcTemplate template;
+
+    @Autowired
+    private RequestRepository requestRepository;
 
     public List<Request> findAll() {
         String sql = "select * from request";
@@ -34,5 +41,21 @@ public class RequestService {
         };
 
         return template.query(sql, rm);
+    }
+
+    //need to change setApprovedUser and setRequestId
+    public Request createRequest(User user, Request requestedAccount){
+        Request r = new Request();
+        r.setApprovedUser(user.getUserId());
+        r.setRequestId("1");
+        r.setRequestType(requestedAccount.getRequestType());
+        r.setDescription("null");
+        r.setStatus("Pending");
+        r.setApprovedUser(user.getUserId());
+        r.setSrcAcct("null");
+
+
+        requestRepository.save(r);
+        return r;
     }
 }
