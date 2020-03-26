@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     @Autowired
     public UserController(UserService userService)
@@ -66,15 +66,22 @@ public class UserController {
 
     @GetMapping("/createAccount")
     public String createAccount(Model model){
-        model.addAttribute("request", new Account());
+        model.addAttribute("account", new Account());
         return "createAccount";
     }
 
     @PostMapping("/createAccount")
-    public void createAccount(@ModelAttribute("request") Account account){
-        User user = userService.getLoggedUser();
-        accountService.createAccount(user, account);
+    public String createAccount(@ModelAttribute("request") Account account){
+        try {
+            User user = userService.getLoggedUser();
+            accountService.createAccount(user, account);
 
-        System.out.println(user.getUserId() + " added to account");
+            System.out.println(user.getUserId() + " added to account");
+
+            return "accountRequestSent";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+
     }
 }

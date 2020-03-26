@@ -1,19 +1,17 @@
 package com.sbs.sbsgroup7.dao;
 
 import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.User;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
-public interface AcctDaoInterface {
+public interface AcctDaoInterface<T, Id extends Serializable> {
 
-    List<Account> getAccounts();
+    public Account findById(Id id);
 
-    void createAccount(Integer accountNumber, Account account);
+    public void save(T accountEntity);
 
-//    default void createAccount(Account account){
-////        String accountNumber= String.randomUUID();
-////        createAccount(accountNumber, account);
-//
-//    }
+    public List<Account> findAll();
+
 }

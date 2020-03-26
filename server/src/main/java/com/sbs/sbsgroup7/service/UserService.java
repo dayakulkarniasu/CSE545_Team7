@@ -3,8 +3,6 @@ package com.sbs.sbsgroup7.service;
 import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.UserRepository;
-import com.sbs.sbsgroup7.dao.AcctDao;
-import com.sbs.sbsgroup7.dao.AcctDaoInterface;
 import com.sbs.sbsgroup7.dao.UserDaoInterface;
 import com.sbs.sbsgroup7.errors.PhoneUsedException;
 import com.sbs.sbsgroup7.errors.RoleException;
@@ -24,16 +22,16 @@ import com.sbs.sbsgroup7.errors.EmailUsedException;
 public class UserService {
 
     private final UserDaoInterface userDao;
-    private final AcctDaoInterface acctDao;
+//    private final AcctDaoInterface acctDao;
 
     @Autowired
     private UserRepository userRepository;
 
 
     @Autowired
-    public UserService(@Qualifier("user") UserDaoInterface userDao, @Qualifier("account") AcctDaoInterface acctDao) {
+    public UserService(@Qualifier("user") UserDaoInterface userDao) { //, @Qualifier("account") AcctDaoInterface acctDao) {
         this.userDao = userDao;
-        this.acctDao = acctDao;
+//        this.acctDao = acctDao;
     }
 
     public User registerUser(User user){
