@@ -124,6 +124,10 @@ public class ViewController {
 
         return "approveRequests";
     }
+    @RequestMapping("/appointment")
+    public String appointment() {
+        return "appointment";
+    }
 
     /*@RequestMapping("/transactions")
     public String transaction(Model model) {
