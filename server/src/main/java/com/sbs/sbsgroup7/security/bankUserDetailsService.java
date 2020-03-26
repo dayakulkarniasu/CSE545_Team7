@@ -32,7 +32,6 @@ public class bankUserDetailsService implements UserDetailsService {
         user.get().setSessionLog(Arrays.asList(sessionLog));
         userRepository.save(user.get());
 
-        System.out.println();
 
         return user.map(bankUserDetails::new).get();
     }
