@@ -59,9 +59,7 @@ public class User {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private List<SessionLog> sessionLog;
 
-    public List<SessionLog> getSessionLog() {
-        return sessionLog;
-    }
+    public List<SessionLog> getSessionLog() { return sessionLog; }
 
     public void setSessionLog(List<SessionLog> sessionLog) {
         this.sessionLog = sessionLog;
@@ -69,6 +67,18 @@ public class User {
 
     private boolean active;
 
+    /*
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private List<Appointment> appointments;
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }*/
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
 
     public User(@JsonProperty("userId") String userId,
                 @JsonProperty("firstName") String firstName,

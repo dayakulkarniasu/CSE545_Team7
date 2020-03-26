@@ -1,6 +1,9 @@
 package com.sbs.sbsgroup7.api;
 
+import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
+import com.sbs.sbsgroup7.model.Appointment;
 import com.sbs.sbsgroup7.model.User;
+import com.sbs.sbsgroup7.service.AppointmentService;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,9 +27,15 @@ public class UserController {
         this.userService=userService;
     }
 
+    @Autowired
+    private AppointmentService AppointmentService;
 
 
 
+    @RequestMapping("/appointment")
+    public String appointment() {
+        return "appointment";
+    }
 
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
@@ -60,6 +69,18 @@ public class UserController {
     @DeleteMapping(path="/removeAll")
     public void deleteAll(){
         userService.deleteAll();
+    }
+
+    @GetMapping("/createAppointment")
+    public String createAccount(Model model){
+        model.addAttribute("scheduleapp", new Appointment());
+        return "appointment";
+    }
+
+    @PostMapping("/createAppointment")
+    public void createAppointment(@ModelAttribute("schedulAapp") Appointment appointment){
+        User user = userService.getLoggedUser();
+        AppointmentService.createAppointment(user, appointment);
     }
 
 
