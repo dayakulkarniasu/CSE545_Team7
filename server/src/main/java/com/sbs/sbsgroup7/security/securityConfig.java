@@ -29,6 +29,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/accounts").hasAnyAuthority("ADMIN", "TIER_ONE", "TIER_TWO")
                 .antMatchers("/home").hasAnyAuthority("ADMIN", "TIER_ONE", "TIER_TWO", "USER", "ORG")
+                .antMatchers("/dashboard").hasAnyAuthority("ADMIN", "TIER_ONE", "TIER_TWO", "USER", "ORG")
                 .antMatchers("/").permitAll()
                 .and()
                     .formLogin()
@@ -41,6 +42,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    // TODO: need to use a password encoder - okay for now
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();

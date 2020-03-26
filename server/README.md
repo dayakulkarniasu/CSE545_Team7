@@ -30,5 +30,12 @@
 * Right-click on the ```server``` folder and click on ```Maven``` -> ```Reimport```
 * Once done, you can 'Run' the application by clicking on the 'Play' icon (green triangle) in the tool bar at the top
 * On your browser (Chrome recommended), go to [https://localhost:8443/](https://localhost:8443/) to view the web application
-* When prompted to log in, make sure you run ```use sbsDb;``` and then ```insert into user values("1",1,"address","tempe","us","user","john","doe","pass",123,"ADMIN",321,"az",5454);``` on MySQL, then use ```user``` and ```pass``` as credentials.
+* When prompted to log in, make sure you run ```use sbsDb;``` and then ```insert into user values("1", 1, "address", "1970-01-01 00:00:01", "user", "john", "doe", "pass", "123", "ADMIN", 456);``` on MySQL, then use ```user``` and ```pass``` as credentials.
 * IMPORTANT: After making changes to the template (HTML) pages, you must re-run the project in order to view the changes to the web application
+
+### Additional users with spscific roles:
+* TIER_ONE: ```insert into user values("2", 1, "address2", "1972-01-01 00:00:01", "user2", "jane", "doe", "pass", "888", "TIER_ONE", 222);```
+* TIER_TWO: ```insert into user values("3", 1, "address3", "1973-01-01 00:00:01", "user3", "jack", "doe", "pass", "777", "TIER_TWO", 333);```
+* ADMIN: ```insert into user values("4", 1, "address4", "1974-01-01 00:00:01", "user4", "batman", "wayne", "pass", "666", "ADMIN", 444);```
+* USER: ```insert into user values("5", 1, "address5", "1975-01-01 00:00:01", "user5", "hulk", "green", "pass", "555", "USER", 555);```
+* ORG: ```insert into user values("6", 1, "address6", "1976-01-01 00:00:01", "user6", "thor", "ragnarock", "pass", "444", "ORG", 666);```

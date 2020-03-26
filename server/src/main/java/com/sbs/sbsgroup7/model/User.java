@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -54,6 +55,17 @@ public class User {
     @NotNull
     private String address;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private List<SessionLog> sessionLog;
+
+    public List<SessionLog> getSessionLog() {
+        return sessionLog;
+    }
+
+    public void setSessionLog(List<SessionLog> sessionLog) {
+        this.sessionLog = sessionLog;
+    }
 
     private boolean active;
 
