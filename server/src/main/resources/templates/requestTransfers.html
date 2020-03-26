@@ -41,39 +41,29 @@
         <h1>Request Transfers</h1>
     </div>
     <div class="card-block" style="padding: 24px;">
-        <form name="requestForm" method="post">
+        <form action="#" th:action="@{/requestTransfers}" th:object="${transaction}" method="post">
             <div class="starter-template">
                 <a th:href="@{EmailPhoneTransfer}" class="btn btn-link" href="#">Create a Transfer by Email/Phone</a>
             </div>
-
-
-
-
             <fieldset>
                 <div class="form-group">
                     <label for="srcAcct">From: </label>
-                    <input type="text" class="form-control" id="srcAcct" name="srcAcct"
-                           placeholder="Account #">
+                    <input type="text" class="form-control" id="srcAcct" name="srcAcct" placeholder="Account #" th:field="*{srcAcct}">
                 </div>
                 <div class="form-group">
                     <label for="dstAcct">To: </label>
-                    <input type="text" class="form-control" id="dstAcct" name="dstAcct"
-                           placeholder="Account #">
+                    <input type="text" class="form-control" id="dstAcct" name="dstAcct" placeholder="Account #" th:field="*{dstAcct}">
                 </div>
                 <div class="form-group">
                     <label for="amt">Amount(USD):  </label>
-                    <input type="text" class="form-control" id="amt" name="amt"
-                           placeholder="$0.00">
+                    <input type="text" class="form-control" id="amt" name="amt" placeholder="0.00" th:field="*{amount}">
                 </div>
-                <!-- Submit Button -->
                 <div class="form-actions" style="margin-top: 12px;">
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
-
             </fieldset>
         </form>
     </div>
 </main>
-
 </body>
 </html>

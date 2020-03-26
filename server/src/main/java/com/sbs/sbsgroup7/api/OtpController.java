@@ -37,7 +37,7 @@ public class OtpController {
 //        replacements.put("otpnum", String.valueOf(otp));
 //        String message = template.getTemplate(replacements);
         emailService.sendOTPMail(username, Integer.toString(otp));
-        return "otppage";
+        return "OtpPage";
     }
     @RequestMapping(value ="/validateOtp", method = RequestMethod.POST)
     public String validateOtp(@ModelAttribute("otp") String otpnum){

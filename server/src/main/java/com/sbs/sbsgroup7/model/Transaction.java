@@ -23,6 +23,14 @@ public class Transaction {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String transactionID;
 
+    @Column(name = "srcAcct")
+    @NotNull
+    private String srcAcct;
+
+    @Column(name = "dstAcct")
+    @NotNull
+    private String dstAcct;
+
     @Column(name = "amount")
     @NotNull
     private double amount;
@@ -43,19 +51,19 @@ public class Transaction {
     @NotNull
     private String description;
 
-    public  Transaction(@JsonProperty("transactionID") String transactionID,
-                        @JsonProperty("transactionID") double amount,
-                        @JsonProperty("transactionID") int createdTime,
-                        @JsonProperty("transactionID") String status,
-                        @JsonProperty("transactionID") int commitTime,
-                        @JsonProperty("transactionID") String description){
-        this.transactionID  =transactionID;
-        this.amount  =amount;
+    public Transaction(){}
+    public  Transaction(@JsonProperty("srcAcct") String srcAcct,
+                        @JsonProperty("dstAcct") String dstAcct,
+                        @JsonProperty("amount") double amount){
+        this.srcAcct  = srcAcct;
+        this.dstAcct = dstAcct;
+        this.amount  = amount;
+        /*
         this.createdTime  =createdTime;
         this.status  =status;
         this.commitTime  =commitTime;
         this.description  =description;
-
+        */
     }
 
     public String getTID() { return transactionID; }
@@ -63,9 +71,22 @@ public class Transaction {
     public void setTID(String transactionID){
         this.transactionID=transactionID;
     }
+
+    public String getSrcAcct() { return srcAcct;}
+
+    public void setSrcAcct(String srcAcct) {
+        this.srcAcct = srcAcct;
+    }
+
+    public String getDstAcct() { return dstAcct;}
+
+    public void setDstAcct(String dstAcct) {
+        this.dstAcct = dstAcct;
+    }
+
     public double getAmount() { return amount; }
 
-    public void setTID(double amount){
+    public void setAmount(double amount){
         this.amount=amount;
     }
     public double getCreateTime() { return createdTime; }

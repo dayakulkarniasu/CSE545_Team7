@@ -1,5 +1,6 @@
 package com.sbs.sbsgroup7.api;
 
+import com.sbs.sbsgroup7.model.Transaction;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.OtpService;
 import com.sbs.sbsgroup7.service.UserService;
@@ -24,6 +25,9 @@ public class ViewController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Autowired
     RequestService requestService;
@@ -53,6 +57,22 @@ public class ViewController {
         try {
             userService.registerUser(userForm);
             return "signin";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    @GetMapping("/requestTransfers")
+    public String transfer(Model model){
+        model.addAttribute("transaction", new Transaction());
+        return "requestTransfers";
+    }
+
+    @PostMapping("/requestTransfers")
+    public String transfer(@ModelAttribute("transaction") Transaction transferForm){
+        try {
+            transactionService.createTransaction(transferForm);
+            return "accounts";
         } catch(Exception e) {
             return e.getMessage();
         }
