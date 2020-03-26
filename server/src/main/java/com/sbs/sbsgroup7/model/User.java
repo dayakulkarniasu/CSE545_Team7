@@ -74,11 +74,11 @@ public class User {
 
     public List<Appointment> getAppointments() {
         return appointments;
-    }*/
+    }
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
-    }
+    }*/
 
     public User(@JsonProperty("userId") String userId,
                 @JsonProperty("firstName") String firstName,
