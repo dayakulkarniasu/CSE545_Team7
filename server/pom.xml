@@ -11,6 +11,7 @@
 	<groupId>com.sbs</groupId>
 	<artifactId>sbsgroup7</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>sbsgroup7</name>
 	<description>Secure Banking System</description>
 
@@ -107,7 +108,10 @@
 					<execution>
 						<goals>
 							<goal>
-								run
+								repackage
+							</goal>
+							<goal>
+								start
 							</goal>
 						</goals>
 					</execution>
