@@ -80,15 +80,15 @@ public class Request {
 
     public String getStatus() { return status; }
 
-    public void setRequestedUser() { this.requestedUser=requestedUser; }
+    public void setRequestedUser(String requestedUser) { this.requestedUser=requestedUser; }
 
     public String getRequestedUser() { return requestedUser; }
 
-    public void setApprovedUser() { this.approvedUser=approvedUser; }
+    public void setApprovedUser(String approvedUser) { this.approvedUser=approvedUser; }
 
     public String getApprovedUser() { return approvedUser; }
 
-    public void setSrcAcct() { this.srcAcct=srcAcct; }
+    public void setSrcAcct(String srcAcct) { this.srcAcct=srcAcct; }
 
     public String getSrcAcct() { return srcAcct; }
 

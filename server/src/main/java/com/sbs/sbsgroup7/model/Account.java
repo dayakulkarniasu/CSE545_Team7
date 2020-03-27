@@ -1,72 +1,67 @@
 package com.sbs.sbsgroup7.model;
 
-
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 @Entity
+@Table(name = "account")
 public class Account {
-
     @Id
     @Column(name = "accountNumber",nullable = false)
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
-    private UUID accountNumber;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long accountNumber;
 
-    @Column(name="accountType")
+    @Column(name = "userId")
+    @NotNull
+    private String userId;
+
+    @Column(name = "accountType")
     @NotNull
     private String accountType;
 
-    @Column(name="balance")
+    @Column(name = "balance")
+    @NotNull
     private double balance;
 
-    @Column(name="rateOfInterest")
-    private double rateOfInterest;
-
-    public Account(@JsonProperty("accountNumber") UUID accountNumber,
+    public Account(@JsonProperty("accountNumber") Long accountNumber,
+                @JsonProperty("userId") String userId,
                 @JsonProperty("accountType") String accountType,
-                @JsonProperty("balance") double balance,
-                @JsonProperty("rateOfInterest") double rateOfInterest){
-
+                @JsonProperty("balance") double balance){
         this.accountNumber=accountNumber;
-        this.accountType=accountType;
+        this.userId=userId;
+        this.accountType = accountType;
         this.balance=balance;
-        this.rateOfInterest=rateOfInterest;
+    }
+
+    public Account(){
 
     }
 
-    public Account() {
-
+    public Long getAccountNumber() {
+        return accountNumber;
     }
 
-    public UUID getAccountNumber() { return accountNumber; }
-
-    public void setAccountType(String accountType){
-        this.accountType=accountType;
+    public String getUserId() {
+        return userId;
     }
 
     public String getAccountType() { return accountType; }
 
-    public void setBalance(double balance){
-        this.balance=balance;
-    }
-
     public double getBalance() { return balance; }
 
-    public void setRateOfInterest(double rateOfInterest){
-        this.rateOfInterest=rateOfInterest;
+
+    public void setAccountNumber(Long accountNumber) {
+        this.accountNumber=accountNumber;
     }
 
-    public double getRateOfInterest() { return rateOfInterest; }
+    public void setUserId(String userId) {
+        this.userId=userId;
+    }
 
+    public void setAccountType(String accountType) { this.accountType=accountType; }
 
-
+    public void setBalance(double balance) { this.balance=balance; }
 }
