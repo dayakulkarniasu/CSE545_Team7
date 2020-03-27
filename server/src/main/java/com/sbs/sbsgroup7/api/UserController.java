@@ -1,6 +1,5 @@
 package com.sbs.sbsgroup7.api;
 
-import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
 import com.sbs.sbsgroup7.model.Appointment;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.AppointmentService;
@@ -32,9 +31,14 @@ public class UserController {
 
 
 
-    @RequestMapping("/appointment")
+    @GetMapping("/appointment")
     public String appointment() {
         return "appointment";
+    }
+
+    @GetMapping("/updateProfile")
+    public String updateProfile() {
+        return "updateProfile";
     }
 
     @PostMapping("/add")
@@ -71,16 +75,25 @@ public class UserController {
         userService.deleteAll();
     }
 
+    /*@GetMapping("/createAppointment")
+    public String createAppointment(Model model){
+        model.addAttribute("scheduleApp", new Appointment());
+        return "createAppointment";
+    }*/
+
     @GetMapping("/createAppointment")
-    public String createAccount(Model model){
-        model.addAttribute("scheduleapp", new Appointment());
+    public String createAppointment(Model model){
+        model.addAttribute("scheduleApp", new Appointment());
         return "appointment";
     }
 
     @PostMapping("/createAppointment")
-    public void createAppointment(@ModelAttribute("schedulAapp") Appointment appointment){
+    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment){
         User user = userService.getLoggedUser();
+        System.out.println(user.getUserId());
         AppointmentService.createAppointment(user, appointment);
+
+        return "createdAppointment";
     }
 
 

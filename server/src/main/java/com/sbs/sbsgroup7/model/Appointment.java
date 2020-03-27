@@ -1,10 +1,10 @@
 package com.sbs.sbsgroup7.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -14,15 +14,14 @@ public class Appointment {
     //Appointment ID
     @Id
     @Column(name = "appId",nullable = false)
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
-    private String appId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long appId;
 
 
     //userID (Foreign Key)
-    //@Column(name = "userId")
-    //@NotNull
-    //private String userId;
+    @Column(name = "userId")
+    @NotNull
+    private String userId;
 
     //title
     @Column(name = "title")
@@ -34,28 +33,28 @@ public class Appointment {
     @NotNull
     private String description;
 
-    //Start time
-//    @Column(name = "startTime")
-//    @NotNull
-//    private Timestamp startTime;
+   // Start time
+    @Column(name = "startTime")
+    @NotNull
+    private Date startTime;
 
     //End time
-    //@Column(name = "endTime")
-    //@NotNull
-    //private Timestamp endTime;
+    @Column(name = "endTime")
+    @NotNull
+    private Date endTime;
 
     //Contact way
     @Column(name = "contactWay")
     @NotNull
     private String contactWay;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(nullable = false)
-    @NotNull
-    private User user;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(nullable = false)
+//    @NotNull
+//    private User userId;
 
 
-    public Appointment(@JsonProperty("appId") String appId,
+    public Appointment(@JsonProperty("appId") Long appId,
                        @JsonProperty("userId") String userId,
                        @JsonProperty("title") String title,
                        @JsonProperty("description") String description,
@@ -63,7 +62,7 @@ public class Appointment {
                        //@JsonProperty("user") User user){
 
         this.appId=appId;
-        //this.userId=userId;
+        this.userId=userId;
         this.title=title;
         this.description=description;
         this.contactWay=contactWay;
@@ -72,11 +71,11 @@ public class Appointment {
 
     public Appointment() { }
 
-    public void setAppId(String appId){
+    public void setAppId(Long appId){
         this.appId=appId;
     }
 
-    public String getAppId() { return appId; }
+    public Long getAppId() { return appId; }
 
    // public void setUserId(String userId){ this.userId=userId; }
     // public String getUserId() { return userId; }
@@ -93,10 +92,21 @@ public class Appointment {
 
     public String getContactWay() { return contactWay; }
 
-    public void setUser(User user) { this.user=user; }
+//    public void setUser(User user) { this.user=user; }
+//
+//    public User getUser() { return user; }
 
-    public User getUser() { return user; }
+    public void setUserId(String userId) { this.userId=userId; }
 
+    public String getUserId() { return userId; }
+
+    public Date getStartTime() { return startTime ;}
+
+    public void setStartTime(Date startTime){ this.startTime = startTime; }
+
+    public Date getEndTime() { return endTime ;}
+
+    public void setEndTime(Date endTime){ this.endTime = endTime; }
 
 }
 

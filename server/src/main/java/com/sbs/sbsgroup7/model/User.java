@@ -67,7 +67,7 @@ public class User {
 
     private boolean active;
 
-    /*
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private List<Appointment> appointments;
@@ -78,7 +78,7 @@ public class User {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
-    }*/
+    }
 
     public User(@JsonProperty("userId") String userId,
                 @JsonProperty("firstName") String firstName,
