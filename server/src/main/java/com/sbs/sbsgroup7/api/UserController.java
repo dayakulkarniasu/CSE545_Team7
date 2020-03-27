@@ -1,8 +1,10 @@
 package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.Request;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.AccountService;
+import com.sbs.sbsgroup7.service.RequestService;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,9 @@ public class UserController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private RequestService requestService;
 
     @Autowired
     public UserController(UserService userService)
@@ -64,24 +69,36 @@ public class UserController {
     }
 
 
+
+    //requesting new bank account creations
     @GetMapping("/createAccount")
     public String createAccount(Model model){
-        model.addAttribute("account", new Account());
+        model.addAttribute("request", new Request());
         return "createAccount";
     }
-
     @PostMapping("/createAccount")
-    public String createAccount(@ModelAttribute("request") Account account){
+    public String createAccount(@ModelAttribute("request") Request request){
         try {
             User user = userService.getLoggedUser();
-            accountService.createAccount(user, account);
+            requestService.createRequest(user, request);
 
-            System.out.println(user.getUserId() + " added to account");
+            System.out.println(user.getUserId() + " created bank account request");
 
             return "accountRequestSent";
         } catch(Exception e) {
             return e.getMessage();
         }
+    }
 
+    //Tier-2 employees can view this (approving bank account requests)
+    @RequestMapping("/approveTransfers")
+    public String approveTransfers() {
+        return "approveTransfers";
+    }
+    @RequestMapping("/approveRequests")
+    public String approveRequests(Model model) {
+        model.addAttribute("requests", requestService.findAll());
+
+        return "approveRequests";
     }
 }

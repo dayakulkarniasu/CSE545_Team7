@@ -109,18 +109,6 @@ public class ViewController {
         return "requestTransfers";
     }
 
-    @RequestMapping("/approveTransfers")
-    public String approveTransfers() {
-        return "approveTransfers";
-    }
-
-    //Only viewable by Tier-2 employees (approving bank account requests)
-    @RequestMapping("/approveRequests")
-    public String approveRequests(Model model) {
-        model.addAttribute("requests", requestService.findAll());
-
-        return "approveRequests";
-    }
     @RequestMapping("/appointment")
     public String appointment() {
         return "appointment";
@@ -132,20 +120,4 @@ public class ViewController {
 
         return "transactions";
     }*/
-
-//    @GetMapping("/createRequest")
-//    public String createRequest(Model model){
-//        model.addAttribute("request", new Request());
-//        return "createAccount";
-//    }
-//
-//    @PostMapping("/createRequest")
-//    public String createRequest(@ModelAttribute("user") Request request){
-//        try {
-//            requestService.createRequest(userService.getLoggedUser(), request);
-//            return "accountRequestSent";
-//        } catch(Exception e) {
-//            return e.getMessage();
-//        }
-//    }
 }
