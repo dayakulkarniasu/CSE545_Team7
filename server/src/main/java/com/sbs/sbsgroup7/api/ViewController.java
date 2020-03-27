@@ -1,5 +1,8 @@
 package com.sbs.sbsgroup7.api;
 
+import com.sbs.sbsgroup7.DataSource.UserRepository;
+import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.EmailPhoneTransfer;
 import com.sbs.sbsgroup7.model.Transaction;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.OtpService;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 @Controller
 public class ViewController {
@@ -31,6 +35,8 @@ public class ViewController {
 
     @Autowired
     RequestService requestService;
+
+
 
     @RequestMapping("/home")
     public String index(Model model) {
@@ -73,6 +79,26 @@ public class ViewController {
         try {
             transactionService.createTransaction(transferForm);
             return "accounts";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+    }
+
+    UserRepository userRepo;
+    @GetMapping("/EmailPhoneTransfer")
+    public String EPTransfer(Model model){
+        model.addAttribute("EPTransfer", new EmailPhoneTransfer());
+        return "EmailPhoneTransfer";
+    }
+
+    @PostMapping("/EmailPhoneTransfer")
+    public String EPTransfer(@ModelAttribute("EPTransfer") EmailPhoneTransfer EPTransfer){
+        try {
+            //Optional<User> trial = userRepo.findByEmail(EPTransfer.getArcEmail());
+            //System.out.println("in the post method and the trial value is: " + trial);
+            return "EmailPhoneTransfer";
+            //transactionService.createTransaction(transferForm);
+           // return "accounts";
         } catch(Exception e) {
             return e.getMessage();
         }

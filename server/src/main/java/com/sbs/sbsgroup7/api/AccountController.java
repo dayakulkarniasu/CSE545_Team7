@@ -22,15 +22,15 @@ public class AccountController {
         this.userService = userService;
     }
 
-    @PostMapping("/add")
-    public void createAccount(@NotNull @Validated @RequestBody Account account){
-        userService.createAccount(account);
-    }
+//    @PostMapping("/add")
+//    public void createAccount(@NotNull @Validated @RequestBody Account account){
+//        userService.createAccount(account);
+//    }
 
-    @GetMapping(path = "/")
-    public List<Account> getAccounts(){
-        return userService.getAccounts();
-    }
+//    @GetMapping(path = "/")
+//    public List<Account> getAccounts(){
+//        return userService.getAccounts();
+//    }
 
 
 }

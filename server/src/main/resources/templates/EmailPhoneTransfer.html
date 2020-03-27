@@ -60,19 +60,57 @@
             <li><a class="dropdown-item" href="#" data-value="Phone">Phone</a></li>
         </ul>
     </div>
-    <form action="/action_page.php">
+    <!--<form action="/action_page.php"> -->
+    <form action="#" th:action="@{/EmailPhoneTransfer}" th:object="${EPTransfer}" method="post">
+        <!--
         <label for="username">Name:</label><br>
         <input type="text" id="username" name="username"><br>
-        <label for="email">User Email:</label><br>
-        <input type="emailadd" id="email" name="email"><br><br>
-        <label for="sentto">Sending Money To:</label><br>
-        <input type="sent" id="sentto" name="sentto"><br><br>
+        -->
+        <fieldset>
+        <div class="form-group">
+            <label for="email">User Email:</label>
+            <input type="text" class="form-control" id="email" placeholder="email" name="email" th:field="*{arcEmail}">
+        </div>
+        <div class="form-group">
+            <label for="sentTo">Sending Money To (provide email):</label>
+            <input type="text" class="form-control" id="sentTo" placeholder="sentTo" name="sentTo" th:field="*{desEmail}">
+        </div>
+        <div class="form-group">
+            <label for="money">Amount of Money:</label>
+            <input type="text" class="form-control" id="money" placeholder="money" name="money" th:field="*{amtEmail}">
+        </div>
+
+
+        <!--
         <label for="accnum">Account number:</label><br>
         <input type="retriever" id="accnum" name="accnum"><br><br>
-        <label for="money">Amount of Money:</label><br>
-        <input type="sumofmon" id="money" name="money"><br><br>
-        <input type="submit" value="Submit">
+        -->
+        <div class="form-actions" style="margin-top: 12px;">
+             <input type="submit" value="Submit">
+        <div>
+
+
+
+        <fieldset>
     </form>
+
+
+
+    <h1>Result</h1>
+    <p th:text="'arc emai;: ' + ${EPTransfer.arcEmail}" />
+    <p th:text="'des email: ' + ${EPTransfer.desEmail}" />
+    <p th:text="'amt email: ' + ${EPTransfer.amtEmail}" />
+
+   <!-- <div th:each="entry : *{user}">
+        <p th:text="'the username trial : ' + ${EPTransfer.}" />
+        <h2 th:text="${entry.title}"></h2>
+        <p th:text="${entry.content}"></p>
+    </div>
+    -->
+
+    <a href="/EmailPhoneTransfer">Submit another message</a>
+
+
     <script>
         $(".dropdown-menu li a").click(function(){
             $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');

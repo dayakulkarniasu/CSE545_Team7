@@ -5,13 +5,11 @@ package com.sbs.sbsgroup7.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -50,6 +48,16 @@ public class Transaction {
     @Column(name = "description")
     @NotNull
     private String description;
+/*
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "srcAcct", referencedColumnName = "accountNumber")
+    private List<SessionLog> sessionLog;
+
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Account.class)
+    @JoinColumn(name = "srcAcct")
+    private List<Account> accounts;
+*/
+
 
     public Transaction(){}
     public  Transaction(@JsonProperty("srcAcct") String srcAcct,
@@ -111,5 +119,11 @@ public class Transaction {
         this.description=description;
     }
 
+    /*public void setSessionLog(List<SessionLog> sessionLog) {
+        this.sessionLog = sessionLog;
+    }
 
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }*/
 }

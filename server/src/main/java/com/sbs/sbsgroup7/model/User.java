@@ -59,13 +59,10 @@ public class User {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private List<SessionLog> sessionLog;
 
-    public List<SessionLog> getSessionLog() {
-        return sessionLog;
-    }
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Account.class)
+    @JoinColumn(name = "userId")
+    private List<Account> accounts;
 
-    public void setSessionLog(List<SessionLog> sessionLog) {
-        this.sessionLog = sessionLog;
-    }
 
     private boolean active;
 
@@ -81,7 +78,7 @@ public class User {
                 @JsonProperty("dob") Date dob,
                 @JsonProperty("address") String address,
                 @JsonProperty("active") boolean active
-                ){
+    ){
         this.userId=userId;
         this.firstName=firstName;
         this.lastName = lastName;
@@ -128,12 +125,20 @@ public class User {
 
     public boolean getActive(){ return active; }
 
+    public List<SessionLog> getSessionLog() {
+        return sessionLog;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
 
 
 
 
     public void setUserId(String userId) {
-         this.userId=userId;
+        this.userId=userId;
     }
 
     public void setFirstName(String firstName) {
@@ -159,6 +164,13 @@ public class User {
 
     public void setActive(boolean active){ this.active=active; }
 
+    public void setSessionLog(List<SessionLog> sessionLog) {
+        this.sessionLog = sessionLog;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
 
 
 }
