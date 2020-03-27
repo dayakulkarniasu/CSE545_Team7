@@ -31,15 +31,15 @@ public class UserController {
 
 
 
-    @GetMapping("/appointment")
-    public String appointment() {
-        return "appointment";
-    }
-
-    @GetMapping("/updateProfile")
-    public String updateProfile() {
-        return "updateProfile";
-    }
+//    @GetMapping("/appointment")
+//    public String appointment() {
+//        return "appointment";
+//    }
+//
+//    @GetMapping("/updateProfile")
+//    public String updateProfile() {
+//        return "updateProfile";
+//    }
 
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
@@ -94,6 +94,21 @@ public class UserController {
         AppointmentService.createAppointment(user, appointment);
 
         return "createdAppointment";
+    }
+
+    @GetMapping("/updateProfile")
+    public String updateProfile(Model model){
+        model.addAttribute("updateProf", new User());
+        return "updateProfile";
+    }
+
+    @PostMapping("/updateProfile")
+    public String createAppointment(@ModelAttribute("updateProf") User user){
+        //User sameUser = userService.getLoggedUser();
+        //System.out.println(user.getUserId());
+        userService.updateInformation(user);
+
+        return "profileUpdated";
     }
 
 
