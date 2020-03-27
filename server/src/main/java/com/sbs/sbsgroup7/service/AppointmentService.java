@@ -30,7 +30,7 @@ public class AppointmentService {
 
     public void createAppointment(User user, Appointment appointment){
         Appointment app = new Appointment();
-        app.setContactWay("InPerson");
+        app.setContactWay(appointment.getContactWay());
         app.setDescription(appointment.getDescription());
         app.setTitle(appointment.getTitle());
         app.setUserId(user.getUserId());

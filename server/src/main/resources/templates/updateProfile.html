@@ -50,18 +50,18 @@
         <h1>Update Profile</h1>
     </div>
     <div class="card-block" style="padding: 24px;">
-        <form name="updateProfileForm" method="post">
+        <form role="form" name="updateProfileForm" th:action="@{/user/updateProfile}" method="post" th:object="${updateProf}">
 
             <fieldset>
                 <div class="form-group">
                     <label for="fname">First Name </label>
                     <input type="text" class="form-control" id="fname" name="fname"
-                           placeholder="First Name">
+                           placeholder="First Name" th:field="*{fname}">
                 </div>
                 <div class="form-group">
                     <label for="lname">Last Name </label>
                     <input type="text" class="form-control" id="lname" name="lname"
-                           placeholder="Last Name">
+                           placeholder="Last Name" th:field="*{lname}">
                 </div>
                 <!--<div class="form-group">
                     <label for="email">Email  </label>
@@ -71,20 +71,20 @@
                 <div class="form-group">
                     <label for="phoneno">Phone Number  </label>
                     <input type="text" class="form-control" id="phoneno" name="phoneno"
-                           placeholder="Phone Number">
+                           placeholder="Phone Number" th:field="*{phoneno}">
                 </div>
 
                 <div class="form-group">
                     <label for="ssn">SSN:</label>
-                    <input type="text" class="form-control" id="ssn" placeholder="SSN" name="ssn"> <!--th:field="*{ssn}"-->
+                    <input type="text" class="form-control" id="ssn" placeholder="SSN" name="ssn" th:field="*{ssn}">
                 </div>
                 <div class="form-group">
                     <label for="dob">Date of Birth:</label>
-                    <input type="date" class="form-control" id="dob" placeholder="yyyy-mm-dd" name="dob" ><!--th:field="*{dob}"-->
+                    <input type="date" class="form-control" id="dob" placeholder="yyyy-mm-dd" name="dob" th:field="*{dob}">
                 </div>
                 <div class="form-group">
                     <label for="address">Address:</label>
-                    <input type="text" class="form-control" id="address" placeholder="Address" name="address"> <!--th:field="*{address}"-->
+                    <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:field="*{address}">
                 </div>
                 <!-- Submit Button -->
                 <div class="form-actions" style="margin-top: 12px;">
