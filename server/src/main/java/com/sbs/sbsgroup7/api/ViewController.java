@@ -28,6 +28,9 @@ public class ViewController {
     @Autowired
     RequestService requestService;
 
+    @Autowired
+    AccountService accountService;
+
     @RequestMapping("/home")
     public String index(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -92,12 +95,12 @@ public class ViewController {
         return "redirect:/login?logout";
     }
 
-
     @RequestMapping("/accounts")
-    public String accounts() {
+    public String approveRequests(Model model) {
+        model.addAttribute("accounts", accountService.findAll());
+
         return "accounts";
     }
-
 
     @RequestMapping("/EmailPhoneTransfer")
     public String EmailPhoneTransfer() {

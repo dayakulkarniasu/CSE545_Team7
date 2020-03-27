@@ -91,10 +91,6 @@ public class UserController {
     }
 
     //Tier-2 employees can view this (approving bank account requests)
-    @RequestMapping("/approveTransfers")
-    public String approveTransfers() {
-        return "approveTransfers";
-    }
     @RequestMapping("/approveRequests")
     public String approveRequests(Model model) {
         model.addAttribute("requests", requestService.findAll());
