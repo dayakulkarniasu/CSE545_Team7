@@ -36,11 +36,19 @@ public class AccountService {
         this.acctDao = acctDao;
     }
 
+    public Account createAccount(User user){
+        Account a =new Account();
+        a.setAccountType("Savings");
+        createAccount(user,a);
+        return a;
+    }
+
+
     public Account createAccount(User user,  Account account){
         Account a = new Account();
         a.setBalance(100.00);
         a.setAccountType(account.getAccountType());
-        a.setUserId(user.getUserId());
+        a.setUser(user);
 
         acctRepository.save(a);
         return a;

@@ -27,6 +27,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AccountService accountService;
+
 
     @Autowired
     public UserService(@Qualifier("user") UserDaoInterface userDao) { //, @Qualifier("account") AcctDaoInterface acctDao) {
@@ -53,6 +56,7 @@ public class UserService {
         u.setAddress(user.getAddress());
         u.setActive(false);
         userRepository.save(u);
+        accountService.createAccount(u);
         return u;
 
     }

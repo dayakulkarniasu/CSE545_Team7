@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class bankUserDetails implements UserDetails {
 
@@ -19,11 +20,15 @@ public class bankUserDetails implements UserDetails {
         this.username = user.getUserName();
         this.password = user.getPassword();
         this.authorityList = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
+//        this.authorityList = Arrays.stream(user.getRole().split(","))
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ADMIN"));
+//        return authorityList;
+        return Arrays.asList(new SimpleGrantedAuthority("USER"));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.sbs.sbsgroup7.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -14,9 +15,11 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long accountNumber;
 
-    @Column(name = "userId")
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable=false)
     @NotNull
-    private String userId;
+    @JsonIgnore
+    private User user;
 
     @Column(name = "accountType")
     @NotNull
@@ -27,11 +30,9 @@ public class Account {
     private double balance;
 
     public Account(@JsonProperty("accountNumber") Long accountNumber,
-                @JsonProperty("userId") String userId,
                 @JsonProperty("accountType") String accountType,
                 @JsonProperty("balance") double balance){
         this.accountNumber=accountNumber;
-        this.userId=userId;
         this.accountType = accountType;
         this.balance=balance;
     }
@@ -44,8 +45,8 @@ public class Account {
         return accountNumber;
     }
 
-    public String getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     public String getAccountType() { return accountType; }
@@ -57,8 +58,8 @@ public class Account {
         this.accountNumber=accountNumber;
     }
 
-    public void setUserId(String userId) {
-        this.userId=userId;
+    public void setUser(User user) {
+        this.user=user;
     }
 
     public void setAccountType(String accountType) { this.accountType=accountType; }

@@ -28,6 +28,16 @@ public class UserController {
     {
         this.userService=userService;
     }
+    @RequestMapping("/home")
+    public String userHome(){
+        return "userHome" ;
+    }
+
+    @RequestMapping("/accounts")
+    public String userAccounts(){
+        return "accounts" ;
+    }
+
 
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
@@ -62,6 +72,7 @@ public class UserController {
     public void deleteAll(){
         userService.deleteAll();
     }
+
 
 
     @GetMapping("/createAccount")
