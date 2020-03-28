@@ -1,7 +1,9 @@
 package com.sbs.sbsgroup7.security;
 
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.model.SessionLog;
+import com.sbs.sbsgroup7.model.SystemLog;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.model.bankUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class bankUserDetailsService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SystemLogRepository systemLogRepository;
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(userName);
@@ -31,6 +36,9 @@ public class bankUserDetailsService implements UserDetailsService {
         sessionLog.setTimestamp(new Date());
         user.get().setSessionLog(Arrays.asList(sessionLog));
         userRepository.save(user.get());
+        SystemLog systemLog = new SystemLog();
+        systemLog.setMessage(userName + " logged in");
+        systemLogRepository.save(systemLog);
 
 
         return user.map(bankUserDetails::new).get();
