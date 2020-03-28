@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/user/home}" class="navbar-brand" href="#">Home</a>
+    <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -20,13 +20,18 @@
 <!--            </li>-->
             <li class="nav-item">
                 <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
+
             </li>
             <li class="nav-item">
-                <a th:href="@{requestTransfers}" class="nav-link">Request Transfers</a>
+                <a th:href="@{/user/creditdebit}" class="nav-link">CREDIT/DEBIT</a>
+
             </li>
             <li class="nav-item">
-                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>
+                <a th:href="@{/user/requestTransfers}" class="nav-link">Request Transfers</a>
             </li>
+<!--            <li class="nav-item">-->
+<!--                <a th:href="@{user/approveTransfers}" class="nav-link">Approve Transfers</a>-->
+<!--            </li>-->
             <li class="nav-item">
                 <a th:href="@{logout}" class="nav-link">logout</a>
             </li>

@@ -1,6 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.CreditDebit;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.AccountService;
 import com.sbs.sbsgroup7.service.UserService;
@@ -33,9 +34,71 @@ public class UserController {
         return "user/home" ;
     }
 
-    @RequestMapping("/accounts")
-    public String userAccounts(){
-        return "accounts" ;
+    @GetMapping("/accounts")
+    @ResponseBody
+    public List<Account> userAccounts()
+    {
+        User user=userService.getLoggedUser();
+        return accountService.getAccountsByUser(user);
+    }
+
+    @GetMapping("/createAccount")
+    public String createAccount(Model model){
+        model.addAttribute("account", new Account());
+        return "createAccount";
+    }
+
+    @PostMapping("/createAccount")
+    public String createAccount(@ModelAttribute("request") Account account){
+        try {
+            User user = userService.getLoggedUser();
+            accountService.createAccount(user, account);
+
+            System.out.println(user.getUserId() + " added to account");
+
+            return "accountRequestSent";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+
+    }
+
+//    @GetMapping("/credit")
+//    public String credit(Model model){
+//        model.addAttribute("credit", new CreditDebit());
+//        return "user/credit";
+//    }
+//
+//    @PostMapping("/credit")
+//    public String credit(@ModelAttribute("credit") CreditDebit creditDebit){
+//        User user = userService.getLoggedUser();
+//        try {
+//            if(!(creditDebit.getTransferType().equals("CREDIT")))
+//                throw new Exception("invalid");
+//            accountService.creditDebitTransaction(user,creditDebit);
+//            return "redirect:user/accounts";
+//        } catch(Exception e) {
+//            return "redirect:user/error";
+//        }
+//
+//    }
+
+    @GetMapping("/creditdebit")
+    public String debit(Model model){
+        model.addAttribute("creditdebit", new CreditDebit());
+        return "user/creditdebit";
+    }
+
+    @PostMapping("/creditdebit")
+    public String debit(@ModelAttribute("creditdebit") CreditDebit creditDebit){
+        User user = userService.getLoggedUser();
+        try {
+            accountService.creditDebitTransaction(user,creditDebit);
+            return "redirect:/user/accounts";
+        } catch(Exception e) {
+            return "redirect:/user/error";
+        }
+
     }
 
 
@@ -68,31 +131,7 @@ public class UserController {
 //        return "index";
 //    }
 
-    @DeleteMapping(path="/removeAll")
-    public void deleteAll(){
-        userService.deleteAll();
-    }
 
 
 
-    @GetMapping("/createAccount")
-    public String createAccount(Model model){
-        model.addAttribute("account", new Account());
-        return "createAccount";
-    }
-
-    @PostMapping("/createAccount")
-    public String createAccount(@ModelAttribute("request") Account account){
-        try {
-            User user = userService.getLoggedUser();
-            accountService.createAccount(user, account);
-
-            System.out.println(user.getUserId() + " added to account");
-
-            return "accountRequestSent";
-        } catch(Exception e) {
-            return e.getMessage();
-        }
-
-    }
 }

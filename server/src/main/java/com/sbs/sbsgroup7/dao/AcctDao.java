@@ -17,23 +17,23 @@ public class AcctDao implements AcctDaoInterface<Account, String> {
 
     @Autowired
     private AcctRepository acctRepository;
-
-    @Override
-    public Account findById(String id) {
-        return acctRepository.findById(id).orElse(null);
-    }
-
-
-    @Override
-    public void save(Account accountEntity) {
-        acctRepository.save(accountEntity);
-    }
-
-    @Override
-    public List<Account> findAll() {
-        List<Account> accounts = new ArrayList<Account>();
-        Iterable<Account> it = acctRepository.findAll();
-        it.forEach(accounts::add);
-        return accounts;
-    }
+//
+//    @Override
+//    public Account findById(String id) {
+//        return acctRepository.findById(id).orElse(null);
+//    }
+//
+//
+//    @Override
+//    public void save(Account accountEntity) {
+//        acctRepository.save(accountEntity);
+//    }
+//
+//    @Override
+//    public List<Account> findAll() {
+//        List<Account> accounts = new ArrayList<Account>();
+//        Iterable<Account> it = acctRepository.findAll();
+//        it.forEach(accounts::add);
+//        return accounts;
+//    }
 }

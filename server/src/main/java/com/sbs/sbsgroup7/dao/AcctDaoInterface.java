@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface AcctDaoInterface<T, Id extends Serializable> {
 
-    public Account findById(Id id);
-
-    public void save(T accountEntity);
-
-    public List<Account> findAll();
+//    public Account findById(Id id);
+//
+//    public void save(T accountEntity);
+//
+//    public List<Account> findAll();
 
 }
