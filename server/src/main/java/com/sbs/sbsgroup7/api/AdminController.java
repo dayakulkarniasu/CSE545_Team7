@@ -9,7 +9,7 @@ public class AdminController {
 
     @RequestMapping("/home")
     public String userHome(){
-        return "adminHome" ;
+        return "admin/home" ;
     }
 
 }

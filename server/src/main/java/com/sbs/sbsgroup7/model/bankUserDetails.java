@@ -27,8 +27,8 @@ public class bankUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return authorityList;
-        return Arrays.asList(new SimpleGrantedAuthority("USER"));
+      return authorityList;
+//        return Arrays.asList(new SimpleGrantedAuthority());
     }
 
     @Override

@@ -30,7 +30,7 @@ public class UserController {
     }
     @RequestMapping("/home")
     public String userHome(){
-        return "userHome" ;
+        return "user/home" ;
     }
 
     @RequestMapping("/accounts")
