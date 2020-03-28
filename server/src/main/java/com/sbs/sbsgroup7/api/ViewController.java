@@ -1,10 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.model.User;
-import com.sbs.sbsgroup7.service.OtpService;
-import com.sbs.sbsgroup7.service.UserService;
-import com.sbs.sbsgroup7.service.RequestService;
-import com.sbs.sbsgroup7.service.TransactionService;
+import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +24,9 @@ public class ViewController {
 
     @Autowired
     RequestService requestService;
+
+    @Autowired
+    AccountService accountService;
 
     @RequestMapping("/home")
     public String index(Model model) {
@@ -69,12 +69,6 @@ public class ViewController {
 //        return "role";
 //    }
 
-    @GetMapping("/userHome")
-    public String userHome()
-    {
-        return "userHome";
-    }
-
     @GetMapping("/403")
     public String error403() {
         return "error/403";
@@ -92,20 +86,18 @@ public class ViewController {
         return "redirect:/login?logout";
     }
 
+//    @RequestMapping("/accounts")
+//    public String approveRequests(Model model) {
+//        model.addAttribute("accounts", accountService.findAll());
+//
+//        return "user/accounts";
+//    }
 
-    @RequestMapping("/accounts")
-    public String accounts() {
-        return "accounts";
-    }
-
-    @RequestMapping("/createAccount")
-    public String createAccount() {
-        return "createAccount";
-    }
     @RequestMapping("/EmailPhoneTransfer")
     public String EmailPhoneTransfer() {
         return "EmailPhoneTransfer";
     }
+
 
     @RequestMapping("/requestTransfers")
     public String requestTransfers() {
@@ -124,7 +116,6 @@ public class ViewController {
 
         return "approveRequests";
     }
-
 
     /*@RequestMapping("/transactions")
     public String transaction(Model model) {

@@ -1,7 +1,8 @@
 package com.sbs.sbsgroup7.DataSource;
 
 import com.sbs.sbsgroup7.model.Account;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AcctRepository extends CrudRepository<Account, String> {
+public interface AcctRepository extends JpaRepository<Account, String> {
+
 }

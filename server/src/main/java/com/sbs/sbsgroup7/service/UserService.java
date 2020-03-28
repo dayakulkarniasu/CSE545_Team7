@@ -3,8 +3,6 @@ package com.sbs.sbsgroup7.service;
 import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.UserRepository;
-import com.sbs.sbsgroup7.dao.AcctDao;
-import com.sbs.sbsgroup7.dao.AcctDaoInterface;
 import com.sbs.sbsgroup7.dao.UserDaoInterface;
 import com.sbs.sbsgroup7.errors.PhoneUsedException;
 import com.sbs.sbsgroup7.errors.RoleException;
@@ -24,16 +22,19 @@ import com.sbs.sbsgroup7.errors.EmailUsedException;
 public class UserService {
 
     private final UserDaoInterface userDao;
-    private final AcctDaoInterface acctDao;
+//    private final AcctDaoInterface acctDao;
 
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private AccountService accountService;
+
 
     @Autowired
-    public UserService(@Qualifier("user") UserDaoInterface userDao, @Qualifier("account") AcctDaoInterface acctDao) {
+    public UserService(@Qualifier("user") UserDaoInterface userDao) { //, @Qualifier("account") AcctDaoInterface acctDao) {
         this.userDao = userDao;
-        this.acctDao = acctDao;
+//        this.acctDao = acctDao;
     }
 
     public User registerUser(User user){
@@ -55,6 +56,7 @@ public class UserService {
         u.setAddress(user.getAddress());
         u.setActive(false);
         userRepository.save(u);
+        accountService.createAccount(u);
         return u;
 
     }
@@ -121,23 +123,6 @@ public class UserService {
         //userDao.closeCurrentSessionwithTransaction();
     }
 
-//    public void createAccount(Account account){
-//        acctDao.createAccount(account);
-//    }
-
-//    public List<Account> getAccounts() {
-//        return acctDao.getAccounts();
-//    }
-
-    public User getLoggedUser() {
-        String loggedUserName = "";
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            loggedUserName = authentication.getName();
-        }
-        return userRepository.findByEmail(loggedUserName).orElse(null);
-    }
-
     public void updateInformation(User user){
         User sameUser = getLoggedUser();
         User updateUser = new User();
@@ -151,10 +136,18 @@ public class UserService {
         updateUser.setEmail(sameUser.getEmail());
         updateUser.setPassword(sameUser.getPassword());
         updateUser.setRole(sameUser.getRole());
-        System.out.println(updateUser.getUserId());
+        System.out.println("Hi" +updateUser.getUserId());
         userRepository.save(updateUser);
     }
 
+    public User getLoggedUser() {
+        String loggedUserName = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            loggedUserName = authentication.getName();
+        }
+        return userRepository.findByEmail(loggedUserName).orElse(null);
+    }
 
 
 }

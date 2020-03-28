@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -59,11 +60,13 @@ public class User {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private List<SessionLog> sessionLog;
 
-    public List<SessionLog> getSessionLog() { return sessionLog; }
 
-    public void setSessionLog(List<SessionLog> sessionLog) {
-        this.sessionLog = sessionLog;
-    }
+
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Account.class)
+    @JoinColumn(name = "userId")
+    private Set<Account> accounts;
+
+
 
     private boolean active;
 
@@ -138,6 +141,14 @@ public class User {
 
     public boolean getActive(){ return active; }
 
+    public List<SessionLog> getSessionLog() {
+        return sessionLog;
+    }
+
+    public Set<Account> getAccounts() {
+        return accounts;
+    }
+
 
 
 
@@ -169,6 +180,13 @@ public class User {
 
     public void setActive(boolean active){ this.active=active; }
 
+    public void setSessionLog(List<SessionLog> sessionLog) {
+        this.sessionLog = sessionLog;
+    }
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
 
 
 }

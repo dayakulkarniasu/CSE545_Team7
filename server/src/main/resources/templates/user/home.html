@@ -8,27 +8,21 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{userHome}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/user/home}" class="navbar-brand" href="#">Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-<!--            <li class="nav-item active">-->
-<!--                <a th:href="@{home}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
             <li class="nav-item">
-                <a th:href="@{accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{requestTransfers}" class="nav-link">Request Transfers</a>
+                <a th:href="@{/user/requestTransfers}" class="nav-link">Request Transfers</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>
-            </li>
-            <li class="nav-item">
-                <a th:href="@{logout}" class="nav-link">logout</a>
+                <a th:href="@{/logout}" class="nav-link">Logout</a>
             </li>
         </ul>
     </div>
@@ -38,7 +32,14 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Approve Transfers</h1>
+        <h1 th:inline="text">Hello :
+            [[${#httpServletRequest.remoteUser}]]!</h1>
+        <br>
+        <h3>Welcome to Sparky's bank</h3>
+        <p class="lead">Where privacy and security are our #1 priority.</p>
+        <br>
+        <br>
+
     </div>
 </main>
 
