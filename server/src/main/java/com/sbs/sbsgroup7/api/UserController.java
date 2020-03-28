@@ -1,21 +1,18 @@
 package com.sbs.sbsgroup7.api;
 
 
-import com.sbs.sbsgroup7.model.Account;
-import com.sbs.sbsgroup7.model.CreditDebit;
+import com.sbs.sbsgroup7.model.*;
 
-import com.sbs.sbsgroup7.model.Request;
-
-import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.AccountService;
 import com.sbs.sbsgroup7.service.RequestService;
+import com.sbs.sbsgroup7.service.TransactionService;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import com.sbs.sbsgroup7.model.Transaction;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -30,6 +27,9 @@ public class UserController {
 
     @Autowired
     private RequestService requestService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @Autowired
     public UserController(UserService userService)
@@ -69,7 +69,21 @@ public class UserController {
         }
     }
 
+    @GetMapping("/requestTransfers")
+    public String transfer(Model model){
+        model.addAttribute("transaction", new Transaction());
+        return "user/requestTransfers";
+    }
 
+    @PostMapping("/requestTransfers")
+    public String transfer(@ModelAttribute("transaction") Transaction transferForm){
+        try {
+            transactionService.createTransaction(transferForm);
+            return "user/requestTransfers";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+    }
 
     @GetMapping("/creditdebit")
     public String debit(Model model){
@@ -114,7 +128,62 @@ public class UserController {
 //    }
 
 
+    @GetMapping("/EmailPhoneTransfer")
+    public String EPTransfer(Model model){
+        model.addAttribute("EPTransfer", new EmailPhoneTransfer());
+        return "user/EmailPhoneTransfer";
+    }
 
+    @Autowired
+    UserService userserv;
+    @Autowired
+    UserService userserv1;
+    @PostMapping("/EmailPhoneTransfer")
+    public String EPTransfer(@ModelAttribute("EPTransfer") EmailPhoneTransfer EPTransfer){
+        try {
+
+            //UserRepository userRepo;
+            //find the userid inusers to then get the account number to then use account number
+
+
+            //User getAccinfo = try1.findByUsername(EPTransfer.getArcEmail());
+            //User getAccinfo2 = try2.findByUsername(EPTransfer.getDesEmail());
+           // System.out.println("in the post method and the email getter value is: " + EPTransfer.getArcEmail());
+            //  userserv.findByUsername("dayakulkarni@gmail.com");
+            User getAccinfo = userserv.findByUsername(EPTransfer.getArcEmail());
+           // System.out.println("outside the getacctinfo method: " + getAccinfo.getFirstName() );
+
+            User getAccinfo2 = userserv1.findByUsername(EPTransfer.getDesEmail());
+
+           // System.out.println("outside the getacctinfo2 method: " + getAccinfo.getFirstName() );
+
+            //System.out.println("in the post method and the email getter value is: " + EPTransfer.getArcEmail());
+            //this is list so just grab one value for now
+
+            List<Account> list1 = getAccinfo.getAccounts();
+            List<Account> list2 =getAccinfo2.getAccounts();
+
+          //  System.out.println("the list 1 account info is: " + list1.get(0).getAccountNumber());
+           // System.out.println("the list 2 account info is: " + list2.get(0).getAccountNumber());
+
+            Transaction tran = new Transaction();
+
+            tran.setAmount(EPTransfer.getAmtEmail());
+            tran.setSrcAcct(list1.get(0).getAccountNumber());
+            tran.setDstAcct(list2.get(0).getAccountNumber());
+
+            transactionService.createTransaction(tran);
+
+
+            // Optional<User> trial = userRepo.findByEmail(EPTransfer.getArcEmail());
+            //System.out.println("in the post method and the trial value is: " + trial);
+            return "user/EmailPhoneTransfer";
+            //transactionService.createTransaction(transferForm);
+            // return "accounts";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+    }
 
 
     @DeleteMapping(path="/removeAll")
@@ -132,9 +201,6 @@ public class UserController {
 //    }
 
 
-    @RequestMapping("/requestTransfers")
-    public String requestTransfers() {
-        return "user/requestTransfers";
-    }
+
 
 }

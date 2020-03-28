@@ -62,7 +62,7 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = Account.class)
     @JoinColumn(name = "userId")
-    private Set<Account> accounts;
+    private List<Account> accounts;
 
 
     private boolean active;
@@ -130,7 +130,7 @@ public class User {
         return sessionLog;
     }
 
-    public Set<Account> getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
@@ -169,7 +169,7 @@ public class User {
         this.sessionLog = sessionLog;
     }
 
-    public void setAccounts(Set<Account> accounts) {
+    public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
 
