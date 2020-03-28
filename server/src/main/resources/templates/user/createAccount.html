@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -12,27 +12,24 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{userHome}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/user/home}" class="navbar-brand" href="#">Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-<!--            <li class="nav-item active">-->
-<!--                <a th:href="@{home}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
             <li class="nav-item">
-                <a th:href="@{accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{requestTransfers}" class="nav-link">Request Transfers</a>
+                <a th:href="@{/user/creditdebit}" class="nav-link">Credit/Debit Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>
+                <a th:href="@{/user/requestTransfers}" class="nav-link">Request Transfers</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{logout}" class="nav-link">logout</a>
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
             </li>
         </ul>
     </div>
@@ -45,17 +42,15 @@
         <h1>Apply for a New Account Today!</h1>
         <p>Select an Account Type:</p>
 
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li><a class="dropdown-item" href="#" data-value="Checkings">Checkings</a></li>
-                <li><a class="dropdown-item" href="#" data-value="Savings">Savings</a></li>
-                <li><a class="dropdown-item" href="#" data-value="Credit">Credit</a></li>
-            </ul>
-        </div>
+        <form role="form" th:action="@{/user/createAccount}" th:object="${request}" method="post">
+            <select th:field="*{requestType}" class="form-control">
+                <option th:value="Select" th:text="Select">Select</option>
+                <option th:value="Checkings" th:text="Checkings">Checkings</option>
+                <option th:value="Savings" th:text="Savings">Savings</option>
+                <option th:value="Credit" th:text="Credit">Credit</option>
+            </select>
+            <button type="submit" class="btn btn-default">Request</button>
+        </form>
 
         <script>
             $(".dropdown-menu li a").click(function(){
@@ -66,10 +61,6 @@
 
         <br>
         <br>
-
-<!--        Once this button is pressed, the type of account to be open is sent to a Requests (?) table where only-->
-<!--        Tier-2 employees can view. That table is then viewed in Approve Transfers page for only Tier-2-->
-        <a th:href="@{approveRequests}" class="btn btn-info" href="#">Request</a>
     </div>
 
 

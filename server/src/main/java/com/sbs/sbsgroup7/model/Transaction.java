@@ -5,13 +5,11 @@ package com.sbs.sbsgroup7.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -25,11 +23,11 @@ public class Transaction {
 
     @Column(name = "srcAcct")
     @NotNull
-    private String srcAcct;
+    private Long srcAcct;
 
     @Column(name = "dstAcct")
     @NotNull
-    private String dstAcct;
+    private Long dstAcct;
 
     @Column(name = "amount")
     @NotNull
@@ -50,10 +48,19 @@ public class Transaction {
     @Column(name = "description")
     @NotNull
     private String description;
+/*
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "srcAcct", referencedColumnName = "accountNumber")
+    private List<SessionLog> sessionLog;
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Account.class)
+    @JoinColumn(name = "srcAcct")
+    private List<Account> accounts;
+*/
+
 
     public Transaction(){}
-    public  Transaction(@JsonProperty("srcAcct") String srcAcct,
-                        @JsonProperty("dstAcct") String dstAcct,
+    public  Transaction(@JsonProperty("srcAcct") Long srcAcct,
+                        @JsonProperty("dstAcct") Long dstAcct,
                         @JsonProperty("amount") double amount){
         this.srcAcct  = srcAcct;
         this.dstAcct = dstAcct;
@@ -72,15 +79,15 @@ public class Transaction {
         this.transactionID=transactionID;
     }
 
-    public String getSrcAcct() { return srcAcct;}
+    public Long getSrcAcct() { return srcAcct;}
 
-    public void setSrcAcct(String srcAcct) {
+    public void setSrcAcct(Long srcAcct) {
         this.srcAcct = srcAcct;
     }
 
-    public String getDstAcct() { return dstAcct;}
+    public Long getDstAcct() { return dstAcct;}
 
-    public void setDstAcct(String dstAcct) {
+    public void setDstAcct(Long dstAcct) {
         this.dstAcct = dstAcct;
     }
 
@@ -111,5 +118,10 @@ public class Transaction {
         this.description=description;
     }
 
-
+    /*public void setSessionLog(List<SessionLog> sessionLog) {
+        this.sessionLog = sessionLog;
+    }
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }*/
 }

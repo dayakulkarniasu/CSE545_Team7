@@ -8,27 +8,24 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{userHome}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-<!--            <li class="nav-item active">-->
-<!--                <a th:href="@{home}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
             <li class="nav-item">
-                <a th:href="@{accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{requestTransfers}" class="nav-link">Request Transfers</a>
+                <a th:href="@{/user/creditdebit}" class="nav-link">Credit/Debit Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>
+                <a th:href="@{/user/requestTransfers}" class="nav-link">Request Transfers</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{logout}" class="nav-link">logout</a>
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
             </li>
         </ul>
     </div>
@@ -41,9 +38,9 @@
         <h1>Request Transfers</h1>
     </div>
     <div class="card-block" style="padding: 24px;">
-        <form action="#" th:action="@{/requestTransfers}" th:object="${transaction}" method="post">
+        <form action="#" th:action="@{/user/requestTransfers}" th:object="${transaction}" method="post">
             <div class="starter-template">
-                <a th:href="@{EmailPhoneTransfer}" class="btn btn-link" href="#">Create a Transfer by Email/Phone</a>
+                <a th:href="@{/user/EmailPhoneTransfer}" class="btn btn-link" href="#">Create a Transfer by Email/Phone</a>
             </div>
             <fieldset>
                 <div class="form-group">

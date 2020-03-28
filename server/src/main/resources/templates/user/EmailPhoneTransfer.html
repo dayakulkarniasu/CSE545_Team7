@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -14,27 +14,24 @@
 
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{userHome}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-<!--            <li class="nav-item active">-->
-<!--                <a th:href="@{home}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
             <li class="nav-item">
-                <a th:href="@{accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{requestTransfers}" class="nav-link">Request Transfers</a>
+                <a th:href="@{/user/creditdebit}" class="nav-link">Credit/Debit Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>
+                <a th:href="@{/user/requestTransfers}" class="nav-link">Request Transfers</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{logout}" class="nav-link">logout</a>
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
             </li>
         </ul>
     </div>
@@ -60,19 +57,45 @@
             <li><a class="dropdown-item" href="#" data-value="Phone">Phone</a></li>
         </ul>
     </div>
-    <form action="/action_page.php">
+    <!--<form action="/action_page.php"> -->
+    <form action="#" th:action="@{/user/EmailPhoneTransfer}" th:object="${EPTransfer}" method="post">
+        <!--
         <label for="username">Name:</label><br>
         <input type="text" id="username" name="username"><br>
-        <label for="email">User Email:</label><br>
-        <input type="emailadd" id="email" name="email"><br><br>
-        <label for="sentto">Sending Money To:</label><br>
-        <input type="sent" id="sentto" name="sentto"><br><br>
-        <label for="accnum">Account number:</label><br>
-        <input type="retriever" id="accnum" name="accnum"><br><br>
-        <label for="money">Amount of Money:</label><br>
-        <input type="sumofmon" id="money" name="money"><br><br>
-        <input type="submit" value="Submit">
+        -->
+        <fieldset>
+            <div class="form-group">
+                <label for="email">User Email:</label>
+                <input type="text" class="form-control" id="email" placeholder="email" name="email" th:field="*{arcEmail}">
+            </div>
+            <div class="form-group">
+                <label for="sentTo">Sending Money To (provide email):</label>
+                <input type="text" class="form-control" id="sentTo" placeholder="sentTo" name="sentTo" th:field="*{desEmail}">
+            </div>
+            <div class="form-group">
+                <label for="money">Amount of Money:</label>
+                <input type="text" class="form-control" id="money" placeholder="money" name="money" th:field="*{amtEmail}">
+            </div>
+
+
+            <!--
+            <label for="accnum">Account number:</label><br>
+            <input type="retriever" id="accnum" name="accnum"><br><br>
+            -->
+            <div class="form-actions" style="margin-top: 12px;">
+                <input type="submit" value="Submit">
+                <div>
+
+
+
+                    <fieldset>
     </form>
+
+
+
+    <a href="/user//EmailPhoneTransfer">Submit another message</a>
+
+
     <script>
         $(".dropdown-menu li a").click(function(){
             $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');

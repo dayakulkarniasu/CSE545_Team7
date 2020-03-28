@@ -1,38 +1,47 @@
 package com.sbs.sbsgroup7.service;
 
-import com.sbs.sbsgroup7.model.Request;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Service;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
-@Service
+import com.sbs.sbsgroup7.DataSource.RequestRepository;
+import com.sbs.sbsgroup7.dao.RequestDaoInterface;
+import com.sbs.sbsgroup7.dao.UserDaoInterface;
+import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.Request;
+import com.sbs.sbsgroup7.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
+
+
+@Repository
 public class RequestService {
 
+    private final UserDaoInterface userDao;
+    private final RequestDaoInterface requestDao;
+
     @Autowired
-    JdbcTemplate template;
+    private RequestRepository requestRepository;
 
-    public List<Request> findAll() {
-        String sql = "select * from request";
-        RowMapper<Request> rm = new RowMapper<Request>() {
-            @Override
-            public Request mapRow(ResultSet resultSet, int i) throws SQLException {
-                Request request = new Request(resultSet.getString("request_id"),
-                        resultSet.getString("status"),
-                        resultSet.getString("requested_user"),
-                        resultSet.getString("approved_user"),
-                        resultSet.getString("src_acct"),
-                        resultSet.getString("description"),
-                        resultSet.getString("request_type"));
+    @Autowired
+    public RequestService(@Qualifier("user") UserDaoInterface userDao, @Qualifier("request")RequestDaoInterface requestDao) {
+        this.userDao = userDao;
+        this.requestDao = requestDao;
+    }
 
-                return request;
-            }
-        };
+    public Request createRequest(User requestedUser, Request request){
+        Request r = new Request();
+        r.setStatus("Pending");
+        r.setDescription("null");
+        r.setRequestType(request.getRequestType());
+        r.setApprovedUser("null");
+        r.setRequestedUser(requestedUser.getUserId());
+        r.setSourceAccount("null");
 
-        return template.query(sql, rm);
+        requestRepository.save(r);
+        return r;
+    }
+
+    public List<Account> findAll() {
+        return requestDao.findAll();
     }
 }
