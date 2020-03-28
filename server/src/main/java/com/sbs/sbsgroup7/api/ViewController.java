@@ -1,7 +1,5 @@
 package com.sbs.sbsgroup7.api;
 
-import com.sbs.sbsgroup7.model.Account;
-import com.sbs.sbsgroup7.model.Request;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class ViewController {
@@ -27,6 +24,9 @@ public class ViewController {
 
     @Autowired
     RequestService requestService;
+
+    @Autowired
+    AccountService accountService;
 
     @RequestMapping("/home")
     public String index(Model model) {
@@ -69,12 +69,6 @@ public class ViewController {
 //        return "role";
 //    }
 
-    @GetMapping("/userHome")
-    public String userHome()
-    {
-        return "userHome";
-    }
-
     @GetMapping("/403")
     public String error403() {
         return "error/403";
@@ -92,35 +86,18 @@ public class ViewController {
         return "redirect:/login?logout";
     }
 
-
-    @RequestMapping("/accounts")
-    public String accounts() {
-        return "accounts";
-    }
-
+//    @RequestMapping("/accounts")
+//    public String approveRequests(Model model) {
+//        model.addAttribute("accounts", accountService.findAll());
+//
+//        return "user/accounts";
+//    }
 
     @RequestMapping("/EmailPhoneTransfer")
     public String EmailPhoneTransfer() {
         return "EmailPhoneTransfer";
     }
 
-    @RequestMapping("/requestTransfers")
-    public String requestTransfers() {
-        return "requestTransfers";
-    }
-
-    @RequestMapping("/approveTransfers")
-    public String approveTransfers() {
-        return "approveTransfers";
-    }
-
-    //Only viewable by Tier-2 employees (approving bank account requests)
-    @RequestMapping("/approveRequests")
-    public String approveRequests(Model model) {
-        model.addAttribute("requests", requestService.findAll());
-
-        return "approveRequests";
-    }
     @RequestMapping("/appointment")
     public String appointment() {
         return "appointment";
@@ -132,20 +109,4 @@ public class ViewController {
 
         return "transactions";
     }*/
-
-//    @GetMapping("/createRequest")
-//    public String createRequest(Model model){
-//        model.addAttribute("request", new Request());
-//        return "createAccount";
-//    }
-//
-//    @PostMapping("/createRequest")
-//    public String createRequest(@ModelAttribute("user") Request request){
-//        try {
-//            requestService.createRequest(userService.getLoggedUser(), request);
-//            return "accountRequestSent";
-//        } catch(Exception e) {
-//            return e.getMessage();
-//        }
-//    }
 }
