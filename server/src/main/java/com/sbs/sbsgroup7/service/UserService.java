@@ -97,6 +97,7 @@ public class UserService {
 
     public User findByUsername(String username) {
         //userDao.openCurrentSession();
+        System.out.println("inside the find by username function with the username as : " + username );
         User user = userDao.findByUsername(username);
         //userDao.closeCurrentSession();
         return user;

@@ -23,11 +23,11 @@ public class Transaction {
 
     @Column(name = "srcAcct")
     @NotNull
-    private String srcAcct;
+    private Long srcAcct;
 
     @Column(name = "dstAcct")
     @NotNull
-    private String dstAcct;
+    private Long dstAcct;
 
     @Column(name = "amount")
     @NotNull
@@ -60,8 +60,8 @@ public class Transaction {
 
 
     public Transaction(){}
-    public  Transaction(@JsonProperty("srcAcct") String srcAcct,
-                        @JsonProperty("dstAcct") String dstAcct,
+    public  Transaction(@JsonProperty("srcAcct") Long srcAcct,
+                        @JsonProperty("dstAcct") Long dstAcct,
                         @JsonProperty("amount") double amount){
         this.srcAcct  = srcAcct;
         this.dstAcct = dstAcct;
@@ -80,15 +80,15 @@ public class Transaction {
         this.transactionID=transactionID;
     }
 
-    public String getSrcAcct() { return srcAcct;}
+    public Long getSrcAcct() { return srcAcct;}
 
-    public void setSrcAcct(String srcAcct) {
+    public void setSrcAcct(Long srcAcct) {
         this.srcAcct = srcAcct;
     }
 
-    public String getDstAcct() { return dstAcct;}
+    public Long getDstAcct() { return dstAcct;}
 
-    public void setDstAcct(String dstAcct) {
+    public void setDstAcct(Long dstAcct) {
         this.dstAcct = dstAcct;
     }
 

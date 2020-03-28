@@ -37,6 +37,7 @@ public class UserDao implements UserDaoInterface<User, String> {
 
     @Override
     public User findByUsername(String userName) {
+        System.out.println("in the find by   username function with the username as : "+ userName);
         return userRepository.findByEmail(userName).orElse(null);
     }
 

@@ -1,6 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.DataSource.UserRepository;
+import com.sbs.sbsgroup7.dao.UserDaoInterface;
 import com.sbs.sbsgroup7.model.Account;
 import com.sbs.sbsgroup7.model.EmailPhoneTransfer;
 import com.sbs.sbsgroup7.model.Transaction;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -84,17 +86,55 @@ public class ViewController {
         }
     }
 
-    UserRepository userRepo;
+
     @GetMapping("/EmailPhoneTransfer")
     public String EPTransfer(Model model){
         model.addAttribute("EPTransfer", new EmailPhoneTransfer());
         return "EmailPhoneTransfer";
     }
-
+    UserDaoInterface try1; UserDaoInterface try2;
+    @Autowired
+    UserService userserv;
+    @Autowired
+    UserService userserv1;
     @PostMapping("/EmailPhoneTransfer")
     public String EPTransfer(@ModelAttribute("EPTransfer") EmailPhoneTransfer EPTransfer){
         try {
-            //Optional<User> trial = userRepo.findByEmail(EPTransfer.getArcEmail());
+
+            //UserRepository userRepo;
+                //find the userid inusers to then get the account number to then use account number
+
+
+            //User getAccinfo = try1.findByUsername(EPTransfer.getArcEmail());
+            //User getAccinfo2 = try2.findByUsername(EPTransfer.getDesEmail());
+            System.out.println("in the post method and the email getter value is: " + EPTransfer.getArcEmail());
+           //  userserv.findByUsername("dayakulkarni@gmail.com");
+            User getAccinfo = userserv.findByUsername(EPTransfer.getArcEmail());
+            System.out.println("outside the getacctinfo method: " + getAccinfo.getFirstName() );
+
+            User getAccinfo2 = userserv1.findByUsername(EPTransfer.getDesEmail());
+
+            System.out.println("outside the getacctinfo2 method: " + getAccinfo.getFirstName() );
+
+           //System.out.println("in the post method and the email getter value is: " + EPTransfer.getArcEmail());
+            //this is list so just grab one value for now
+
+            List<Account> list1 = getAccinfo.getAccounts();
+            List<Account> list2 =getAccinfo2.getAccounts();
+
+            System.out.println("the list 1 account info is: " + list1.get(0).getAccountNumber());
+            System.out.println("the list 2 account info is: " + list2.get(0).getAccountNumber());
+
+            Transaction tran = new Transaction();
+
+            tran.setAmount(EPTransfer.getAmtEmail());
+            tran.setSrcAcct(list1.get(0).getAccountNumber());
+            tran.setDstAcct(list2.get(0).getAccountNumber());
+
+            transactionService.createTransaction(tran);
+
+
+           // Optional<User> trial = userRepo.findByEmail(EPTransfer.getArcEmail());
             //System.out.println("in the post method and the trial value is: " + trial);
             return "EmailPhoneTransfer";
             //transactionService.createTransaction(transferForm);
