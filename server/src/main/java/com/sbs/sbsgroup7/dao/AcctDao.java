@@ -29,11 +29,11 @@ public class AcctDao implements AcctDaoInterface<Account, String> {
 //        acctRepository.save(accountEntity);
 //    }
 //
-//    @Override
-//    public List<Account> findAll() {
-//        List<Account> accounts = new ArrayList<Account>();
-//        Iterable<Account> it = acctRepository.findAll();
-//        it.forEach(accounts::add);
-//        return accounts;
-//    }
+    @Override
+    public List<Account> findAll() {
+        List<Account> accounts = new ArrayList<Account>();
+        Iterable<Account> it = acctRepository.findAll();
+        it.forEach(accounts::add);
+        return accounts;
+    }
 }

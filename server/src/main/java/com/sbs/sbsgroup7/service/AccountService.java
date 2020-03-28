@@ -110,9 +110,13 @@ public class AccountService {
         return acctRepository.findByAccountNumber(accountNumber);
     }
 
-    public void updateAccountType(Long accountNumber, String accountType){
-        Account account=getAccountByAccountNumber(accountNumber);
+    public void updateAccountType(Long accountNumber, String accountType) {
+        Account account = getAccountByAccountNumber(accountNumber);
         account.setAccountType(accountType);
+    }
+
+    public List<Account> findAll() {
+        return acctDao.findAll();
     }
 
 }

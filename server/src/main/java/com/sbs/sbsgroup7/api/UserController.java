@@ -1,9 +1,14 @@
 package com.sbs.sbsgroup7.api;
 
+
 import com.sbs.sbsgroup7.model.Account;
 import com.sbs.sbsgroup7.model.CreditDebit;
+
+import com.sbs.sbsgroup7.model.Request;
+
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.AccountService;
+import com.sbs.sbsgroup7.service.RequestService;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +20,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RequestMapping("/user")
-//@RestController
 @Controller
 public class UserController {
 
@@ -23,6 +27,9 @@ public class UserController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private RequestService requestService;
 
     @Autowired
     public UserController(UserService userService)
@@ -33,6 +40,7 @@ public class UserController {
     public String userHome(){
         return "user/home" ;
     }
+
 
     @GetMapping("/accounts")
     @ResponseBody
@@ -63,25 +71,6 @@ public class UserController {
 
     }
 
-//    @GetMapping("/credit")
-//    public String credit(Model model){
-//        model.addAttribute("credit", new CreditDebit());
-//        return "user/credit";
-//    }
-//
-//    @PostMapping("/credit")
-//    public String credit(@ModelAttribute("credit") CreditDebit creditDebit){
-//        User user = userService.getLoggedUser();
-//        try {
-//            if(!(creditDebit.getTransferType().equals("CREDIT")))
-//                throw new Exception("invalid");
-//            accountService.creditDebitTransaction(user,creditDebit);
-//            return "redirect:user/accounts";
-//        } catch(Exception e) {
-//            return "redirect:user/error";
-//        }
-//
-//    }
 
     @GetMapping("/creditdebit")
     public String debit(Model model){
@@ -101,7 +90,6 @@ public class UserController {
 
     }
 
-
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
         userService.add(user);
@@ -111,11 +99,6 @@ public class UserController {
     public void update(@NotNull @Validated @RequestBody User user){
         userService.update(user);
     }
-
-//    @GetMapping(path = "/{id}")
-//    public User getUserById(@PathVariable("id") String id) {
-//        return userService.findById(id);
-//    }
 
     @DeleteMapping(path="/remove/{id}")
     public void deleteUserById(@PathVariable("id") String id){
@@ -133,5 +116,26 @@ public class UserController {
 
 
 
+
+
+    @DeleteMapping(path="/removeAll")
+    public void deleteAll(){
+        userService.deleteAll();
+    }
+
+
+
+//    @RequestMapping("/accounts")
+//    public String approveRequests(Model model) {
+//        model.addAttribute("accounts", accountService.findAll());
+//
+//        return "user/accounts";
+//    }
+
+
+    @RequestMapping("/requestTransfers")
+    public String requestTransfers() {
+        return "user/requestTransfers";
+    }
 
 }

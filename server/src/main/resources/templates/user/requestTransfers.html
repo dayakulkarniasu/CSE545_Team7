@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
@@ -15,14 +15,11 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-<!--            <li class="nav-item active">-->
-<!--                <a th:href="@{home}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
             <li class="nav-item">
-                <a th:href="@{/accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/creditdebit}" class="nav-link">CREDIT/DEBIT</a>
+                <a th:href="@{/user/creditdebit}" class="nav-link">CREDIT/DEBIT</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/requestTransfers}" class="nav-link">Request Transfers</a>
