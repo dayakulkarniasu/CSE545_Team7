@@ -42,34 +42,33 @@ public class UserController {
     }
 
 
-    @GetMapping("/accounts")
-    @ResponseBody
-    public List<Account> userAccounts()
-    {
-        User user=userService.getLoggedUser();
-        return accountService.getAccountsByUser(user);
+    @RequestMapping("/accounts")
+    public String approveRequests(Model model) {
+        model.addAttribute("accounts", accountService.findAll());
+
+        return "user/accounts";
     }
 
+    //requesting new bank account creations
     @GetMapping("/createAccount")
     public String createAccount(Model model){
-        model.addAttribute("account", new Account());
-        return "createAccount";
+        model.addAttribute("request", new Request());
+        return "user/createAccount";
     }
-
     @PostMapping("/createAccount")
-    public String createAccount(@ModelAttribute("request") Account account){
+    public String createAccount(@ModelAttribute("request") Request request){
         try {
             User user = userService.getLoggedUser();
-            accountService.createAccount(user, account);
+            requestService.createRequest(user, request);
 
-            System.out.println(user.getUserId() + " added to account");
+            System.out.println(user.getUserId() + " created bank account request");
 
-            return "accountRequestSent";
+            return "user/accountRequestSent";
         } catch(Exception e) {
             return e.getMessage();
         }
-
     }
+
 
 
     @GetMapping("/creditdebit")

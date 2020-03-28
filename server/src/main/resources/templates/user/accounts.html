@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
@@ -15,23 +15,17 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-<!--            <li class="nav-item active">-->
-<!--                <a th:href="@{userHome}" class="navbar-brand" href="#">Home</a>(current)</span></a>-->
-<!--            </li>-->
             <li class="nav-item">
                 <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/user/creditdebit}" class="nav-link">CREDIT/DEBIT</a>
+                <a th:href="@{/user/creditdebit}" class="nav-link">Credit/Debit Funds</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/user/requestTransfers}" class="nav-link">Request Transfers</a>
             </li>
-<!--            <li class="nav-item">-->
-<!--                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>-->
-<!--            </li>-->
             <li class="nav-item">
-                <a th:href="@{logout}" class="nav-link">logout</a>
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
             </li>
         </ul>
     </div>
@@ -48,39 +42,32 @@
     <br>
     <br>
 
-    <div class="card" style="width: 25rem;">
-        <div class="card-body">
-            <h5 class="card-title">Checking Account</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</p>
-            <a href="#" class="card-link">Debit</a>
-            <a href="#" class="card-link">Download Statement</a>
-        </div>
-    </div>
+    <table class="table">
+        <tr>
+            <th>Account #</th>
+            <th>Account Type</th>
+            <th>Balance</th>
+        </tr>
+        <tr th:each = "account: ${accounts}">
+            <td th:text="${account.accountNumber}"></td>
+            <td th:text="${account.accountType}"></td>
+            <td th:text="${account.balance}"></td>
+            <td><button type="button" class="btn btn-primary">Download Statement</button></td>
+        </tr>
+    </table>
+
+<!--    <div class="card" style="width: 25rem;" th:each="account: ${accounts}">-->
+<!--        <div class="card-body">-->
+<!--            <h5 class="card-title" th:text="${account.accountType}"></h5>-->
+<!--            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</p>-->
+<!--            <a href="#" class="card-link" th:text="${account.accountType}">Debit</a>-->
+<!--            <a href="#" class="card-link">Download Statement</a>-->
+<!--        </div>-->
+<!--    </div>-->
 
     <br>
-
-    <div class="card" style="width: 25rem;">
-        <div class="card-body">
-            <h5 class="card-title">Savings Account</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</p>
-            <a href="#" class="card-link">Debit</a>
-            <a href="#" class="card-link">Download Statement</a>
-        </div>
-    </div>
-
     <br>
 
-    <div class="card" style="width: 25rem;">
-        <div class="card-body">
-            <h5 class="card-title">Credit Account</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</p>
-            <a href="#" class="card-link">Credit</a>
-            <a href="#" class="card-link">Download Statement</a>
-        </div>
-    </div>
 </main>
 
 </body>
