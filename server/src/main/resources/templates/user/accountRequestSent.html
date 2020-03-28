@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{userHome}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,13 +16,10 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a th:href="@{/accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/requestTransfers}" class="nav-link">Request Transfers</a>
-            </li>
-            <li class="nav-item">
-                <a th:href="@{/approveTransfers}" class="nav-link">Approve Transfers</a>
+                <a th:href="@{/user/requestTransfers}" class="nav-link">Request Transfers</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Logout</a>
@@ -30,31 +27,13 @@
         </ul>
     </div>
 </nav>
-
 <br>
 <br>
 <br>
-
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Approve Bank Account Creation Requests</h1>
-
-        <table class="table">
-            <tr>
-                <th>Request ID</th>
-                <th>Requested User</th>
-                <th>Account Type</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            <tr th:each = "request: ${requests}">
-                <td th:text="${request.requestId}"></td>
-                <td th:text="${request.requestedUser}"></td>
-                <td th:text="${request.requestType}"></td>
-                <td th:text="${request.status}"></td>
-                <td><button type="button" class="btn btn-primary">Approve</button></td>
-            </tr>
-        </table>
+        <h1>Your request has been sent! </h1>
+        <h2>Please wait until it has been approved...</h2>
     </div>
 </main>
 

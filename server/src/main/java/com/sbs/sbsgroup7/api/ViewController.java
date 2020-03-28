@@ -1,7 +1,5 @@
 package com.sbs.sbsgroup7.api;
 
-import com.sbs.sbsgroup7.model.Account;
-import com.sbs.sbsgroup7.model.Request;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @Controller
 public class ViewController {
@@ -72,12 +69,6 @@ public class ViewController {
 //        return "role";
 //    }
 
-    @GetMapping("/userHome")
-    public String userHome()
-    {
-        return "userHome";
-    }
-
     @GetMapping("/403")
     public String error403() {
         return "error/403";
@@ -95,21 +86,16 @@ public class ViewController {
         return "redirect:/login?logout";
     }
 
-    @RequestMapping("/accounts")
-    public String approveRequests(Model model) {
-        model.addAttribute("accounts", accountService.findAll());
-
-        return "accounts";
-    }
+//    @RequestMapping("/accounts")
+//    public String approveRequests(Model model) {
+//        model.addAttribute("accounts", accountService.findAll());
+//
+//        return "user/accounts";
+//    }
 
     @RequestMapping("/EmailPhoneTransfer")
     public String EmailPhoneTransfer() {
         return "EmailPhoneTransfer";
-    }
-
-    @RequestMapping("/requestTransfers")
-    public String requestTransfers() {
-        return "requestTransfers";
     }
 
     @RequestMapping("/appointment")

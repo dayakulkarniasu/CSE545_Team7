@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{userHome}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/tier2/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,13 +16,13 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a th:href="@{/accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/tier2/viewAccounts}" class="nav-link">View Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/requestTransfers}" class="nav-link">Request Transfers</a>
+                <a th:href="@{/tier2/approveRequests}" class="nav-link">Approve Requests</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/approveTransfers}" class="nav-link">Approve Transfers</a>
+                <a th:href="@{/tier2/approveTransfers}" class="nav-link">Approve Transfers</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Logout</a>
@@ -30,12 +30,31 @@
         </ul>
     </div>
 </nav>
+
 <br>
 <br>
 <br>
+
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Your request has been sent! Please wait until it has been approved...</h1>
+        <h1>Users' Accounts</h1>
+
+        <table class="table">
+            <tr>
+                <th>User ID</th>
+                <th>Account #</th>
+                <th>Account Type</th>
+                <th>Balance</th>
+            </tr>
+            <tr th:each = "account: ${accounts}">
+                <td th:text="${account.user.getEmail()}"></td>
+                <td th:text="${account.accountNumber}"></td>
+                <td th:text="${account.accountType}"></td>
+                <td th:text="${account.balance}"></td>
+                <td><button type="button" class="btn btn-primary">Edit</button></td>
+                <td><button type="button" class="btn btn-primary">Delete</button></td>
+            </tr>
+        </table>
     </div>
 </main>
 

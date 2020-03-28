@@ -27,10 +27,12 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/accounts").hasAnyAuthority("ADMIN", "TIER_ONE", "TIER_TWO")
-                .antMatchers("/home").hasAnyAuthority("ADMIN", "TIER_ONE", "TIER_TWO", "USER", "ORG")
-                .antMatchers("/dashboard").hasAnyAuthority("ADMIN", "TIER_ONE", "TIER_TWO", "USER", "ORG")
+                .antMatchers("/accounts").hasAnyAuthority("ADMIN", "TIER1", "TIER2")
+                .antMatchers("/home").hasAnyAuthority("ADMIN", "TIER1", "TIER2", "USER", "ORG")
                 .antMatchers("/").permitAll()
+                .antMatchers("/tier1/**").hasAnyAuthority("TIER1")
+                .antMatchers("/tier2/**").hasAnyAuthority("TIER2")
+                .antMatchers("/admin/**").hasAnyAuthority("ADMIN")
                 .and()
                     .formLogin()
                     .loginPage("/login")  //Loginform all can access ..
@@ -38,7 +40,7 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                     .failureUrl("/login?error")
                     .permitAll()
                 .and()
-                    .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/");
+                    .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login");
 
     }
 
