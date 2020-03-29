@@ -127,10 +127,11 @@ public class UserService {
         User sameUser = getLoggedUser();
         //User updateUser = new User();
         //updateUser.setUserId(sameUser.getUserId());
+        sameUser.setEmail(user.getEmail());
         sameUser.setAddress(user.getAddress());
-        sameUser.setDob(user.getDob());
-        sameUser.setFirstName(user.getFirstName());
-        sameUser.setLastName(user.getLastName());
+//        sameUser.setDob(user.getDob());
+//        sameUser.setFirstName(user.getFirstName());
+//        sameUser.setLastName(user.getLastName());
         sameUser.setPhone(user.getPhone());
         sameUser.setSsn(user.getSsn());
         //System.out.println("Hi" +updateUser.getUserId());
