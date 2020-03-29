@@ -33,21 +33,13 @@ public class Tier2Controller {
         return "tier2/home" ;
     }
 
-//    //Tier-2 employees can approve bank account requests
-//    @RequestMapping("/approveRequests")
-//    public String approveRequests(Model model) {
-//        model.addAttribute("requests", requestService.findAll());
-//
-//        return "tier2/approveRequests";
-//    }
+
     //Tier-2 employees can approve bank account requests
     @GetMapping("/approveRequests")
     public String approveRequests(Model model){
         model.addAttribute("requests", requestService.findAll());
         return "tier2/approveRequests";
     }
-//    @PostMapping("/createRequestedAccount/{requestId}")
-//    public String approveRequests(@ModelAttribute("requestId") String requestId){
     @PostMapping("/approveRequests")
     public String approveRequests(@RequestParam("requestId") String requestId){
         try {
@@ -62,12 +54,12 @@ public class Tier2Controller {
             //create account
             accountService.createAccount(requestedUser, a);
 
-            //delete request entry !!!!!! for some reason, when approve button is pressed, all entries disappear???
-//            requestService.deleteRequest(reqId);
+            //delete request entry
+            requestService.deleteByRequestId(reqId);
 
             System.out.println(requestedUser.getUserId() + "'s account has been created");
 
-            return "tier2/approveRequests";
+            return "redirect:/tier2/approveRequests";
         } catch(Exception e) {
             return e.getMessage();
         }

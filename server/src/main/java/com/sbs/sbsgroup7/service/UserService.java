@@ -107,8 +107,6 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        System.out.println("!!! inside findByUserId in UserService");
-        System.out.println("userID::: " + userId);
         return userRepository.findByUserId(userId);
     }
 

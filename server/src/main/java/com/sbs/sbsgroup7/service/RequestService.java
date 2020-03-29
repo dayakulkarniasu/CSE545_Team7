@@ -42,12 +42,10 @@ public class RequestService {
     }
 
     public Request findRequestById(long requestId) {
-        System.out.println("inside findRequestById in RequestService");
-        System.out.println("requestId::: " + requestId);
         return requestRepository.findByRequestId(requestId);
     }
 
-    public void deleteRequest(long requestId){
+    public void deleteByRequestId(long requestId){
         requestRepository.deleteByRequestId(requestId);
     }
 
