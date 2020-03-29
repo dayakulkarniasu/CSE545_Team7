@@ -91,7 +91,8 @@ public class UserController {
 
     @GetMapping("/updateProfile")
     public String updateProfile(Model model){
-        model.addAttribute("updateProf", new User());
+        User currentUser = userService.getLoggedUser();
+        model.addAttribute("updateProf", currentUser);
         return "user/updateProfile";
     }
 
