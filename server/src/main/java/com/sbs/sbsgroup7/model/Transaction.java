@@ -21,6 +21,17 @@ public class Transaction {
     @Column(name = "transactionTime",nullable = false)
     private Instant transactionTime;
 
+    public void setModifiedTime(Instant modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public Instant getModifiedTime() {
+        return modifiedTime;
+    }
+
+    @Column(name = "modifiedTime",nullable = true)
+    private Instant modifiedTime;
+
     @NotNull
     @Min(1)
     @Column(name = "amount",nullable = false)
@@ -48,6 +59,7 @@ public class Transaction {
     public Instant getTransactionTime() {
         return transactionTime;
     }
+
 
     public Double getAmount() {
         return amount;

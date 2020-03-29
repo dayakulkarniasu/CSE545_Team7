@@ -38,6 +38,34 @@
 <main role="main" class="container">
     <div class="starter-template">
         <h1>Approve Transfers</h1>
+
+        <table class="table">
+            <tr>
+                <th>UserId</th>
+                <th>Source Account #</th>
+                <th>Destination Account #</th>
+                <th>Available source balance</th>
+                <th>amount</th>
+                <th>Transfer Type</th>
+            </tr>
+            <tr th:each = "transfer: ${transfers}">
+                <td th:text="${transfer.getTransactionOwner().getEmail()}"></td>
+                <td th:text="${transfer.getFromAccount().getAccountNumber()}"></td>
+                <td th:text="${transfer.getToAccount().getAccountNumber()}"></td>
+                <td th:text="${transfer.fromAccount.getBalance()}"></td>
+                <td th:text="${transfer.getAmount()}"></td>
+                <td th:text="${transfer.getTransactionType()}"></td>
+
+                <td>
+                    <form action="#" th:action="@{/tier2/approveTransfers}" method="post">
+                        <input type="hidden" name="transactionId" id="transactionId" th:value="${transfer.getTransactionId()}" />
+                        <td><button type="submit" class="btn btn-primary" value="approved" name="action">Approve</button></td>
+                        <td><button type="submit" class="btn btn-primary" value="declined" name="action">Decline</button></td>
+                    </form>
+                </td>
+
+            </tr>
+        </table>
     </div>
 </main>
 

@@ -36,6 +36,17 @@ public class Request {
     @Column(name = "description",nullable = true)
     private String description;
 
+    @Column(name="modifiedTime", nullable = true)
+    private Instant modifiedTime;
+
+    public void setModifiedTime(Instant modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public Instant getModifiedTime() {
+        return modifiedTime;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }

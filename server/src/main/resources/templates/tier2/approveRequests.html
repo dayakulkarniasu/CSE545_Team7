@@ -43,22 +43,18 @@
             <tr>
                 <th>Request ID</th>
                 <th>Requested User</th>
-                <th>Account Type</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th>Request Type</th>
             </tr>
             <tr th:each = "request: ${requests}">
-                <td th:text="${request.requestId}"></td>
-                <td th:text="${request.requestedUser}"></td>
-                <td th:text="${request.requestType}"></td>
-                <td th:text="${request.status}"></td>
+                <td th:text="${request.getRequestId()}"></td>
+                <td th:text="${request.getRequestedUser().getEmail()}"></td>
+                <td th:text="${request.getRequestType()}"></td>
 <!--                <td><button type="button" class="btn btn-primary">Approve</button></td>-->
                 <td>
                     <form action="#" th:action="@{/tier2/approveRequests}" method="post">
-                        <input type="hidden" name="requestId" id="requestId" th:value="${request.requestId}" />
-                        <button type="submit" name="submit" value="value" class="btn btn-primary">
-                            Approve
-                        </button>
+                        <input type="hidden" name="requestId" id="requestId" th:value="${request.getRequestId()}" />
+                        <td><button type="submit" class="btn btn-primary" value="approved" name="action">Approve</button></td>
+                        <td><button type="submit" class="btn btn-primary" value="declined" name="action">Decline</button></td>
                     </form>
                 </td>
             </tr>

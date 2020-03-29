@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.List;
 
 
 @Repository
@@ -45,8 +46,12 @@ public class RequestService {
     public void deleteByRequestId(long requestId){
         requestRepository.deleteByRequestId(requestId);
     }
-//
-//    public List<Account> findAll() {
-//        return requestDao.findAll();
-//    }
+
+    public List<Request> findAll() {
+        return requestRepository.findAll();
+    }
+    public List<Request> findpendingRequests(){
+        return requestRepository.findByRequestStatus("pending");
+    }
+
 }

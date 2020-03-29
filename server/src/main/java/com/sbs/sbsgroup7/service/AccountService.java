@@ -134,6 +134,7 @@ public class AccountService {
                 transaction.setTransactionOwner(user);
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("credit");
+                transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
                 source.setBalance(balance+amount);
                 acctRepository.save(source);
@@ -170,6 +171,7 @@ public class AccountService {
                 transaction.setTransactionOwner(user);
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("debit");
+                transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
                 source.setBalance(balance-amount);
                 acctRepository.save(source);
@@ -205,10 +207,12 @@ public class AccountService {
                 transaction.setTransactionOwner(user);
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("transferfunds");
+                transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
                 source.setBalance(balance-amount);
                 destination.setBalance(destination.getBalance()+amount);
                 acctRepository.save(source);
+                acctRepository.save(destination);
             }
             else{
                 Transaction transaction=new Transaction();
@@ -246,6 +250,19 @@ public class AccountService {
 
     public List<Account> findAll() {
         return acctDao.findAll();
+    }
+
+    public List<Transaction> findAllTransactions(){
+        return transRepository.findAll();
+
+    }
+
+    public List<Transaction> findPendingTransactions(){
+        return transRepository.findByTransactionStatus("pending");
+    }
+
+    public Transaction findByTransactionId(Long id){
+        return transRepository.findByTransactionId(id);
     }
 
 }
