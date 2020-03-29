@@ -37,12 +37,12 @@ TODO:
 - [Springboot: Getting Started with Bootstrap](https://www.youtube.com/watch?v=iz1-nVkwReQ&t=297s)
 
 ## Authors
+- Aneesh Gangadhar
+- Maneesha Poluri
 - Semira Chung
 - Daya Kulkarni
 - Alyssa Goldstein
-- Maneesha Poluri
 - Yash Sarvaiya
-- Aneesh Gangadhar
 - Akanksha Magod
 - Saumil Dixit
 - Ganesh Betha

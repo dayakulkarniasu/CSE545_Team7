@@ -1,5 +1,6 @@
 ## Instructions to Get Started
 
+
 ### Installation
 #### IntelliJ Ultimate
 * Download [IntelliJ IDE](https://www.jetbrains.com/idea/download/#section=mac) (Ultimate Edition is preferred since it comes with built-in support for Spring Boot) 
@@ -39,3 +40,5 @@
 * ADMIN: ```insert into user values("4", 1, "address4", "1974-01-01 00:00:01", "user4", "batman", "wayne", "pass", "666", "ADMIN", 444);```
 * USER: ```insert into user values("5", 1, "address5", "1975-01-01 00:00:01", "user5", "hulk", "green", "pass", "555", "USER", 555);```
 * ORG: ```insert into user values("6", 1, "address6", "1976-01-01 00:00:01", "user6", "thor", "ragnarock", "pass", "444", "ORG", 666);```
+
+
