@@ -1,5 +1,6 @@
 package com.sbs.sbsgroup7;
 
+import com.sbs.sbsgroup7.DataSource.UserRepository;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -9,8 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackageClasses = UserRepository.class)
 public class Sbsgroup7Application {
 
 	public static void main(String[] args) {
@@ -39,7 +42,7 @@ public class Sbsgroup7Application {
 		connector.setScheme("http");
 		connector.setPort(8080);
 		connector.setSecure(false);
-		connector.setRedirectPort(8090);
+		connector.setRedirectPort(8443);
 		return connector;
 	}
 

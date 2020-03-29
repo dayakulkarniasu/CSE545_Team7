@@ -36,6 +36,21 @@ public class UserDao implements UserDaoInterface<User, String> {
     }
 
     @Override
+    public User findByUserId(String id) {
+        return userRepository.findByUserId(id);
+    }
+
+    @Override
+    public User findByUsername(String userName) {
+        return userRepository.findByEmail(userName).orElse(null);
+    }
+
+    @Override
+    public void save(User userEntity) {
+        userRepository.save(userEntity);
+    }
+
+    @Override
     public void delete(User userEntity) {
         userRepository.delete(userEntity);
     }

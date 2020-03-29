@@ -1,37 +1,34 @@
-package com.sbs.sbsgroup7.security;
+package com.sbs.sbsgroup7.model;
 
 import com.sbs.sbsgroup7.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class userDetailsImpl implements UserDetails {
-    private String  userName;
+public class bankUserDetails implements UserDetails {
+
+    private String username;
     private String password;
-    private boolean active;
-    private List<GrantedAuthority> authorities;
+    private List<GrantedAuthority> authorityList;
 
-    public userDetailsImpl(User user) {
-        this.userName = user.getUserName();
+    public bankUserDetails(User user) {
+        this.username = user.getUserName();
         this.password = user.getPassword();
-        this.active = user.getActive();
-        this.authorities = Arrays.stream(user.getRole().split("."))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-
-
+        this.authorityList = Arrays.asList(new SimpleGrantedAuthority(user.getRole()));
+//        this.authorityList = Arrays.stream(user.getRole().split(","))
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+      return authorityList;
+//        return Arrays.asList(new SimpleGrantedAuthority());
     }
 
     @Override
@@ -41,7 +38,7 @@ public class userDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userName;
+        return username;
     }
 
     @Override
@@ -61,6 +58,6 @@ public class userDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return active;
+        return true;
     }
 }

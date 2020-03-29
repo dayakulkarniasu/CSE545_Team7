@@ -13,6 +13,12 @@ public interface UserDaoInterface<T, Id extends Serializable> {
 
     public User findById(Id id);
 
+    public User findByUserId(String id);
+
+    public User findByUsername(String userName);
+
+    public void save(T userEntity);
+
     public void delete(T userEntity);
 
     public List<User> findAll();

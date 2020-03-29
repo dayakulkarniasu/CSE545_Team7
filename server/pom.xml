@@ -11,6 +11,7 @@
 	<groupId>com.sbs</groupId>
 	<artifactId>sbsgroup7</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>sbsgroup7</name>
 	<description>Secure Banking System</description>
 
@@ -82,6 +83,15 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -98,7 +108,10 @@
 					<execution>
 						<goals>
 							<goal>
-								run
+								repackage
+							</goal>
+							<goal>
+								start
 							</goal>
 						</goals>
 					</execution>
