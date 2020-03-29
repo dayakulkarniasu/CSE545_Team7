@@ -41,6 +41,16 @@ public class RequestService {
         return r;
     }
 
+    public Request findRequestById(long requestId) {
+        System.out.println("inside findRequestById in RequestService");
+        System.out.println("requestId::: " + requestId);
+        return requestRepository.findByRequestId(requestId);
+    }
+
+    public void deleteRequest(long requestId){
+        requestRepository.deleteByRequestId(requestId);
+    }
+
     public List<Account> findAll() {
         return requestDao.findAll();
     }

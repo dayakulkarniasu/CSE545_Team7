@@ -47,10 +47,16 @@ public class AccountService {
 
 
     public Account createAccount(User user,  Account account){
+        //should have a check for if that account already exists
+
         Account a = new Account();
         a.setBalance(100.00);
         a.setAccountType(account.getAccountType());
         a.setUser(user);
+
+        System.out.println("!!!!! inside createAccount() !!!!");
+        System.out.println("accountType::: " + a.getAccountType());
+        System.out.println("userid::: " + a.getUser().getUserId());
 
         acctRepository.save(a);
         return a;

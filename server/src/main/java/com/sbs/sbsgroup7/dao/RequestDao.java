@@ -6,6 +6,7 @@ import java.util.List;
 import com.sbs.sbsgroup7.DataSource.RequestRepository;
 
 import com.sbs.sbsgroup7.model.Request;
+import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +19,21 @@ public class RequestDao implements RequestDaoInterface<Request, String> {
     @Override
     public void save(Request requestEntity) {
         requestRepository.save(requestEntity);
+    }
+
+    @Override
+    public void delete(Request requestEntity) {
+        requestRepository.delete(requestEntity);
+    }
+
+    @Override
+    public void deleteByRequestId(long requestId) {
+        requestRepository.deleteByRequestId(requestId);
+    }
+
+    @Override
+    public Request findByRequestId(long id) {
+        return requestRepository.findByRequestId(id);
     }
 
     @Override

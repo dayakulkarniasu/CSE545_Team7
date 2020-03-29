@@ -12,7 +12,7 @@ public class Request {
     @Id
     @Column(name = "requestId",nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long requestId;
+    private long requestId;
 
 //    @Column(name = "createdTime")
 //    @NotNull
@@ -42,7 +42,7 @@ public class Request {
     @NotNull
     private String requestType;
 
-    public Request(@JsonProperty("requestId") Long requestId,
+    public Request(@JsonProperty("requestId") long requestId,
                    @JsonProperty("status") String status,
                    @JsonProperty("requestedUser") String requestedUser,
                    @JsonProperty("approvedUser") String approvedUser,
@@ -62,7 +62,7 @@ public class Request {
 
     }
 
-    public Long getRequestId() {
+    public long getRequestId() {
         return requestId;
     }
 
@@ -81,7 +81,7 @@ public class Request {
     public String getRequestType() { return requestType; }
 
 
-    public void setRequestId(Long requestId) {
+    public void setRequestId(long requestId) {
         this.requestId=requestId;
     }
 

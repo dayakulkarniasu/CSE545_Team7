@@ -106,6 +106,12 @@ public class UserService {
         return user;
     }
 
+    public User findByUserId(String userId) {
+        System.out.println("!!! inside findByUserId in UserService");
+        System.out.println("userID::: " + userId);
+        return userRepository.findByUserId(userId);
+    }
+
     public void delete(String username) {
         //userDao.openCurrentSessionwithTransaction();
         User user = userDao.findByUsername(username);
