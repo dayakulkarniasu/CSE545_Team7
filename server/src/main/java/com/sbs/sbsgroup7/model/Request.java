@@ -1,101 +1,96 @@
 package com.sbs.sbsgroup7.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.time.Instant;
+
 
 @Entity
-@Table(name = "request")
 public class Request {
+
     @Id
     @Column(name = "requestId",nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long requestId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long requestId;
 
-//    @Column(name = "createdTime")
-//    @NotNull
-//    private Timestamp createdTime;
-
-    @Column(name = "status")
     @NotNull
-    private String status;
-
-    @Column(name = "requestedUser")
-    @NotNull
-    private String requestedUser;
-
-    @Column(name = "approvedUser")
-    @NotNull
-    private String approvedUser;
-
-    @Column(name = "sourceAccount")
-    @NotNull
-    private String sourceAccount;
-
-    @Column(name = "description")
-    @NotNull
-    private String description;
-
-    @Column(name = "requestType")
-    @NotNull
+    @Column(name = "requestType",nullable = false)
     private String requestType;
 
-    public Request(@JsonProperty("requestId") long requestId,
-                   @JsonProperty("status") String status,
-                   @JsonProperty("requestedUser") String requestedUser,
-                   @JsonProperty("approvedUser") String approvedUser,
-                   @JsonProperty("sourceAccount") String sourceAccount,
-                   @JsonProperty("description") String description,
-                   @JsonProperty("requestType") String requestType){
-        this.requestId=requestId;
-        this.status=status;
-        this.requestedUser = requestedUser;
-        this.approvedUser=approvedUser;
-        this.sourceAccount=sourceAccount;
-        this.description=description;
-        this.requestType=requestType;
+    @Column(name = "requestedTime",nullable = false)
+    private Instant requestedTime;
+
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable=false)
+    @NotNull
+    private User requestedUser;
+
+    @ManyToOne
+    @JoinColumn
+    private User approvedUser;
+
+    @NotNull
+    @Column(name = "requestStatus",nullable = false)
+    private String requestStatus;
+
+    @Column(name = "description",nullable = true)
+    private String description;
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Request(){
-
+    public String getDescription() {
+        return description;
     }
 
-    public long getRequestId() {
+    public Request(){}
+
+    public Long getRequestId() {
         return requestId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getRequestType() {
+        return requestType;
     }
 
-    public String getRequestedUser() { return requestedUser; }
-
-    public String getApprovedUser() { return approvedUser; }
-
-    public String getSourceAccount() { return sourceAccount; }
-
-    public String getDescription() { return description; }
-
-    public String getRequestType() { return requestType; }
-
-
-    public void setRequestId(long requestId) {
-        this.requestId=requestId;
+    public Instant getRequestedTime() {
+        return requestedTime;
     }
 
-    public void setStatus(String status) {
-        this.status=status;
+    public User getRequestedUser() {
+        return requestedUser;
     }
 
-    public void setRequestedUser(String requestedUser) { this.requestedUser=requestedUser; }
+    public User getApprovedUser() {
+        return approvedUser;
+    }
 
-    public void setApprovedUser(String approvedUser) { this.approvedUser=approvedUser; }
+    public String getRequestStatus() {
+        return requestStatus;
+    }
 
-    public void setSourceAccount(String sourceAccount) { this.sourceAccount=sourceAccount; }
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
+    }
 
-    public void setDescription(String description) { this.description=description; }
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
+    }
 
-    public void setRequestType(String requestType) { this.requestType=requestType; }
+    public void setRequestedTime(Instant requestedTime) {
+        this.requestedTime = requestedTime;
+    }
+
+    public void setRequestedUser(User requestedUser) {
+        this.requestedUser = requestedUser;
+    }
+
+    public void setApprovedUser(User approvedUser) {
+        this.approvedUser = approvedUser;
+    }
+
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
+    }
 }

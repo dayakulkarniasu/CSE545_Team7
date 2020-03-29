@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface RequestRepository extends JpaRepository<Request, String> {
     Request findByRequestId(long requestId);
-
-    @Modifying
-    @Transactional
+//
+//    @Modifying
+//    @Transactional
     @Query(value="delete from Request r where r.requestId = ?1")
     void deleteByRequestId(long requestId);
 }

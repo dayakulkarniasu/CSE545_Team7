@@ -109,6 +109,7 @@ public class UserService {
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId);
     }
+    public User findByUserId(User user){ return userRepository.findByUserId(user.getUserId());}
 
     public void delete(String username) {
         //userDao.openCurrentSessionwithTransaction();

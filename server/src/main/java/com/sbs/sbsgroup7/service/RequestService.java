@@ -1,7 +1,6 @@
 package com.sbs.sbsgroup7.service;
 
-import java.util.List;
-
+//import com.sbs.sbsgroup7.DataSource.RequestRepository;
 import com.sbs.sbsgroup7.DataSource.RequestRepository;
 import com.sbs.sbsgroup7.dao.RequestDaoInterface;
 import com.sbs.sbsgroup7.dao.UserDaoInterface;
@@ -12,31 +11,29 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+
 
 @Repository
 public class RequestService {
 
-    private final UserDaoInterface userDao;
-    private final RequestDaoInterface requestDao;
+    //private final UserDaoInterface userDao;
 
     @Autowired
     private RequestRepository requestRepository;
 
-    @Autowired
-    public RequestService(@Qualifier("user") UserDaoInterface userDao, @Qualifier("request")RequestDaoInterface requestDao) {
-        this.userDao = userDao;
-        this.requestDao = requestDao;
+    public RequestService(RequestRepository requestRepository) {
+        this.requestRepository=requestRepository;
+
     }
 
     public Request createRequest(User requestedUser, Request request){
         Request r = new Request();
-        r.setStatus("Pending");
-        r.setDescription("null");
+        r.setRequestedUser(requestedUser);
+        r.setApprovedUser(null);
         r.setRequestType(request.getRequestType());
-        r.setApprovedUser("null");
-        r.setRequestedUser(requestedUser.getUserId());
-        r.setSourceAccount("null");
-
+        r.setRequestedTime(Instant.now());
+        r.setRequestStatus("pending");
         requestRepository.save(r);
         return r;
     }
@@ -48,8 +45,8 @@ public class RequestService {
     public void deleteByRequestId(long requestId){
         requestRepository.deleteByRequestId(requestId);
     }
-
-    public List<Account> findAll() {
-        return requestDao.findAll();
-    }
+//
+//    public List<Account> findAll() {
+//        return requestDao.findAll();
+//    }
 }

@@ -6,6 +6,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -29,9 +30,33 @@ public class Account {
     @NotNull
     private double balance;
 
+
+    @OneToMany(mappedBy = "fromAccount")
+    private List<Transaction> debitTransactions;
+
+
+    @OneToMany(mappedBy = "toAccount")
+    private List<Transaction> creditTransactions;
+
+    public void setDebitTransactions(List<Transaction> debitTransactions) {
+        this.debitTransactions = debitTransactions;
+    }
+
+    public void setCreditTransactions(List<Transaction> creditTransactions) {
+        this.creditTransactions = creditTransactions;
+    }
+
+    public List<Transaction> getDebitTransactions() {
+        return debitTransactions;
+    }
+
+    public List<Transaction> getCreditTransactions() {
+        return creditTransactions;
+    }
+
     public Account(@JsonProperty("accountNumber") Long accountNumber,
-                @JsonProperty("accountType") String accountType,
-                @JsonProperty("balance") double balance){
+                   @JsonProperty("accountType") String accountType,
+                   @JsonProperty("balance") double balance){
         this.accountNumber=accountNumber;
         this.accountType = accountType;
         this.balance=balance;

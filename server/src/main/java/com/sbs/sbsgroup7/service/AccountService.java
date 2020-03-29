@@ -1,18 +1,18 @@
 package com.sbs.sbsgroup7.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.dao.AcctDaoInterface;
 import com.sbs.sbsgroup7.dao.UserDaoInterface;
 import com.sbs.sbsgroup7.errors.PhoneUsedException;
 import com.sbs.sbsgroup7.errors.RoleException;
 import com.sbs.sbsgroup7.errors.SsnUsedException;
-import com.sbs.sbsgroup7.model.Account;
-import com.sbs.sbsgroup7.model.CreditDebit;
-import com.sbs.sbsgroup7.model.User;
+import com.sbs.sbsgroup7.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -30,6 +30,12 @@ public class AccountService {
 
     @Autowired
     private AcctRepository acctRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TransRepository transRepository;
 
 
     @Autowired
@@ -68,11 +74,12 @@ public class AccountService {
         List<Account> useraccts = acctRepository.findByUser(user);
         for(Account useracct : useraccts){
             if(useracct.getAccountNumber()==creditDebit.getAccountNumber()){
-                if(creditDebit.getTransferType().equals("CREDIT"))
-                    creditAmount(useracct, creditDebit.getAmount());
-                else if(creditDebit.getTransferType().equals("DEBIT"))
-                    debitAmount(useracct,creditDebit.getAmount());
-                return;
+                    if (creditDebit.getTransferType().equals("CREDIT"))
+                        creditAmount(useracct, creditDebit.getAmount(), useracct, user);
+                    else if (creditDebit.getTransferType().equals("DEBIT"))
+                        debitAmount(useracct, creditDebit.getAmount(), useracct, user);
+                    return;
+
             }
 
         }
@@ -80,29 +87,149 @@ public class AccountService {
 
     }
 
+    public void transferFunds(User user, TransactionPage transactionPage) throws Exception{
+        List<Account> useraccts = acctRepository.findByUser(user);
+        Account targetAcc=acctRepository.findByAccountNumber(transactionPage.getToAcc());
+        if(targetAcc==null){
+            throw new Exception("Target account is invalid");
+        }
+        for(Account useracct : useraccts){
+            if(useracct.getAccountNumber()==transactionPage.getFromAcc()){
+                debitTransfers(useracct,transactionPage.getAmount(), targetAcc, user);
+                return;
+            }
 
-    public void creditAmount(Account account, double amount) throws Exception{
+        }
+        throw new Exception("Source Account is invalid");
+
+    }
+    public void emailTransfer(User user, EmailPage emailPage) throws Exception{
+        List<Account> useraccts = acctRepository.findByUser(user);
+        User targetuser= userRepository.findByEmail(emailPage.getEmailId()).orElse(null);
+        if(targetuser==null){
+            throw new Exception("Target email is invalid");
+        }
+        Account targetAcc=acctRepository.findOneByUser(targetuser);
+        for(Account useracct : useraccts){
+            if(useracct.getAccountNumber()==emailPage.getFromAcc()){
+                debitTransfers(useracct,emailPage.getAmount(), targetAcc, user);
+                return;
+            }
+
+        }
+        throw new Exception("Source Account is invalid");
+
+    }
+
+
+    public void creditAmount(Account source, double amount, Account destination,User user) throws Exception{
         try{
-            double balance=account.getBalance();
-            account.setBalance(balance+amount);
-            acctRepository.save(account);
+            double balance=source.getBalance();
+            if(amount<1000){
+                Transaction transaction=new Transaction();
+                transaction.setAmount(amount);
+                transaction.setFromAccount(source);
+                transaction.setToAccount(destination);
+                transaction.setTransactionStatus("approved");
+                transaction.setTransactionOwner(user);
+                transaction.setTransactionTime(Instant.now());
+                transaction.setTransactionType("credit");
+                transRepository.save(transaction);
+                source.setBalance(balance+amount);
+                acctRepository.save(source);
+            }
+            else{
+                Transaction transaction=new Transaction();
+                transaction.setAmount(amount);
+                transaction.setFromAccount(source);
+                transaction.setToAccount(destination);
+                transaction.setTransactionStatus("pending");
+                transaction.setTransactionOwner(user);
+                transaction.setTransactionTime(Instant.now());
+                transaction.setTransactionType("credit");
+                transRepository.save(transaction);
+
+            }
         }
         catch(Exception e){
-            throw new Exception("Credit transaction failed to account "+account.getAccountNumber(),e);
+            throw new Exception("Credit transaction failed to account "+source.getAccountNumber(),e);
         }
     }
 
-    public void debitAmount(Account account, double amount) throws Exception{
+    public void debitAmount(Account source, double amount, Account destination,User user) throws Exception{
         try{
-            double balance=account.getBalance();
+            double balance=source.getBalance();
             if(balance<amount)
                 throw new Exception("Insufficient funds to debit");
-            account.setBalance(balance-amount);
-            acctRepository.save(account);
+            if(amount<1000){
+                Transaction transaction=new Transaction();
+                transaction.setAmount(amount);
+                transaction.setFromAccount(source);
+                transaction.setToAccount(destination);
+                transaction.setTransactionStatus("approved");
+                transaction.setTransactionOwner(user);
+                transaction.setTransactionTime(Instant.now());
+                transaction.setTransactionType("debit");
+                transRepository.save(transaction);
+                source.setBalance(balance-amount);
+                acctRepository.save(source);
+            }
+            else{
+                Transaction transaction=new Transaction();
+                transaction.setAmount(amount);
+                transaction.setFromAccount(source);
+                transaction.setToAccount(destination);
+                transaction.setTransactionStatus("pending");
+                transaction.setTransactionOwner(user);
+                transaction.setTransactionTime(Instant.now());
+                transaction.setTransactionType("debit");
+                transRepository.save(transaction);
+            }
         }catch(Exception e){
-            throw new Exception("Debit transaction failed from account "+account.getAccountNumber(),e);
+            throw new Exception("Debit transaction failed from account "+source.getAccountNumber(),e);
         }
     }
+
+
+    public void debitTransfers(Account source, double amount, Account destination,User user) throws Exception{
+        try{
+            double balance=source.getBalance();
+            if(balance<amount)
+                throw new Exception("Insufficient funds to debit");
+            if(amount<1000){
+                Transaction transaction=new Transaction();
+                transaction.setAmount(amount);
+                transaction.setFromAccount(source);
+                transaction.setToAccount(destination);
+                transaction.setTransactionStatus("approved");
+                transaction.setTransactionOwner(user);
+                transaction.setTransactionTime(Instant.now());
+                transaction.setTransactionType("transferfunds");
+                transRepository.save(transaction);
+                source.setBalance(balance-amount);
+                destination.setBalance(destination.getBalance()+amount);
+                acctRepository.save(source);
+            }
+            else{
+                Transaction transaction=new Transaction();
+                transaction.setAmount(amount);
+                transaction.setFromAccount(source);
+                transaction.setToAccount(destination);
+                transaction.setTransactionStatus("pending");
+                transaction.setTransactionOwner(user);
+                transaction.setTransactionTime(Instant.now());
+                transaction.setTransactionType("transferfunds");
+                transRepository.save(transaction);
+
+            }
+        }catch(Exception e){
+            throw new Exception("Debit transaction failed from account "+source.getAccountNumber(),e);
+        }
+    }
+
+
+
+
 
     public List<Account> getAccountsByUser(User user){
         return acctRepository.findByUser(user);

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import com.sbs.sbsgroup7.model.Transaction;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -60,26 +60,9 @@ public class UserController {
         try {
             User user = userService.getLoggedUser();
             requestService.createRequest(user, request);
-
             System.out.println(user.getUserId() + " created bank account request");
 
             return "user/accountRequestSent";
-        } catch(Exception e) {
-            return e.getMessage();
-        }
-    }
-
-    @GetMapping("/requestTransfers")
-    public String transfer(Model model){
-        model.addAttribute("transaction", new Transaction());
-        return "user/requestTransfers";
-    }
-
-    @PostMapping("/requestTransfers")
-    public String transfer(@ModelAttribute("transaction") Transaction transferForm){
-        try {
-            transactionService.createTransaction(transferForm);
-            return "user/requestTransfers";
         } catch(Exception e) {
             return e.getMessage();
         }
@@ -102,6 +85,41 @@ public class UserController {
         }
 
     }
+    @GetMapping("/transferFunds")
+    public String transferFunds(Model model){
+        model.addAttribute("transfer", new TransactionPage());
+        return "user/transferFunds";
+    }
+
+    @PostMapping("/transferFunds")
+    public String transferFunds(@ModelAttribute("transfer") TransactionPage transactionPage) {
+        User user = userService.getLoggedUser();
+        try {
+            accountService.transferFunds(user, transactionPage);
+            return "redirect:/user/accounts";
+        } catch (Exception e) {
+            return "redirect:/user/error";
+        }
+    }
+
+    @GetMapping("/emailTransfer")
+    public String emailTransfer(Model model){
+        model.addAttribute("email", new EmailPage());
+        return "user/emailTransfer";
+    }
+
+    @PostMapping("/emailTransfer")
+    public String emailTransfer(@ModelAttribute("email") EmailPage emailPage) {
+        User user = userService.getLoggedUser();
+        try {
+            accountService.emailTransfer(user, emailPage);
+            return "redirect:/user/accounts";
+        } catch (Exception e) {
+            return "redirect:/user/error";
+        }
+    }
+
+
 
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
@@ -126,65 +144,6 @@ public class UserController {
 //        model.addAttribute("name", "John");
 //        return "index";
 //    }
-
-
-    @GetMapping("/EmailPhoneTransfer")
-    public String EPTransfer(Model model){
-        model.addAttribute("EPTransfer", new EmailPhoneTransfer());
-        return "user/EmailPhoneTransfer";
-    }
-
-    @Autowired
-    UserService userserv;
-    @Autowired
-    UserService userserv1;
-    @PostMapping("/EmailPhoneTransfer")
-    public String EPTransfer(@ModelAttribute("EPTransfer") EmailPhoneTransfer EPTransfer){
-        try {
-
-            //UserRepository userRepo;
-            //find the userid inusers to then get the account number to then use account number
-
-
-            //User getAccinfo = try1.findByUsername(EPTransfer.getArcEmail());
-            //User getAccinfo2 = try2.findByUsername(EPTransfer.getDesEmail());
-           // System.out.println("in the post method and the email getter value is: " + EPTransfer.getArcEmail());
-            //  userserv.findByUsername("dayakulkarni@gmail.com");
-            User getAccinfo = userserv.findByUsername(EPTransfer.getArcEmail());
-           // System.out.println("outside the getacctinfo method: " + getAccinfo.getFirstName() );
-
-            User getAccinfo2 = userserv1.findByUsername(EPTransfer.getDesEmail());
-
-           // System.out.println("outside the getacctinfo2 method: " + getAccinfo.getFirstName() );
-
-            //System.out.println("in the post method and the email getter value is: " + EPTransfer.getArcEmail());
-            //this is list so just grab one value for now
-
-            List<Account> list1 = getAccinfo.getAccounts();
-            List<Account> list2 =getAccinfo2.getAccounts();
-
-          //  System.out.println("the list 1 account info is: " + list1.get(0).getAccountNumber());
-           // System.out.println("the list 2 account info is: " + list2.get(0).getAccountNumber());
-
-            Transaction tran = new Transaction();
-
-            tran.setAmount(EPTransfer.getAmtEmail());
-            tran.setSrcAcct(list1.get(0).getAccountNumber());
-            tran.setDstAcct(list2.get(0).getAccountNumber());
-
-            transactionService.createTransaction(tran);
-
-
-            // Optional<User> trial = userRepo.findByEmail(EPTransfer.getArcEmail());
-            //System.out.println("in the post method and the trial value is: " + trial);
-            return "user/EmailPhoneTransfer";
-            //transactionService.createTransaction(transferForm);
-            // return "accounts";
-        } catch(Exception e) {
-            return e.getMessage();
-        }
-    }
-
 
     @DeleteMapping(path="/removeAll")
     public void deleteAll(){

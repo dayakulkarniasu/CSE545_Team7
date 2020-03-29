@@ -1,127 +1,124 @@
 package com.sbs.sbsgroup7.model;
 
-
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-
-import java.util.List;
-import java.util.UUID;
+import java.time.Instant;
 
 @Entity
 public class Transaction {
 
     @Id
-    @Column(name = "transactionID",nullable = false)
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
-    private String transactionID;
+    @Column(name = "transactionId",nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long transactionId;
 
-    @Column(name = "srcAcct")
     @NotNull
-    private Long srcAcct;
+    @Column(name = "transactionType",nullable = false)
+    private String transactionType;
 
-    @Column(name = "dstAcct")
     @NotNull
-    private Long dstAcct;
+    @Column(name = "transactionTime",nullable = false)
+    private Instant transactionTime;
 
-    @Column(name = "amount")
     @NotNull
-    private double amount;
+    @Min(1)
+    @Column(name = "amount",nullable = false)
+    private Double amount;
 
-    @Column(name = "createdTime")
+    @ManyToOne
+    @JoinColumn(name = "userId", nullable=false)
     @NotNull
-    private int createdTime;
+    private User transactionOwner;
 
-    @Column(name = "status")
-    @NotNull
-    private String status;
 
-    @Column(name = "commitTime")
-    @NotNull
-    private int commitTime;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Account fromAccount;
 
-    @Column(name = "description")
+
+    public Long getTransactionId() {
+        return transactionId;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public Instant getTransactionTime() {
+        return transactionTime;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public User getTransactionOwner() {
+        return transactionOwner;
+    }
+
+    public Account getFromAccount() {
+        return fromAccount;
+    }
+
+    public Account getToAccount() {
+        return toAccount;
+    }
+
+    public String getTransactionStatus() {
+        return transactionStatus;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setTransactionId(Long transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public void setTransactionTime(Instant transactionTime) {
+        this.transactionTime = transactionTime;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public void setTransactionOwner(User transactionOwner) {
+        this.transactionOwner = transactionOwner;
+    }
+
+    public void setFromAccount(Account fromAccount) {
+        this.fromAccount = fromAccount;
+    }
+
+    public void setToAccount(Account toAccount) {
+        this.toAccount = toAccount;
+    }
+
+    public void setTransactionStatus(String transactionStatus) {
+        this.transactionStatus = transactionStatus;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Account toAccount;
+
     @NotNull
+    @Column(name = "transactionStatus",nullable = false)
+    private String transactionStatus;
+
+    @Column(name = "description",nullable = true)
     private String description;
-/*
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "srcAcct", referencedColumnName = "accountNumber")
-    private List<SessionLog> sessionLog;
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = Account.class)
-    @JoinColumn(name = "srcAcct")
-    private List<Account> accounts;
-*/
 
 
-    public Transaction(){}
-    public  Transaction(@JsonProperty("srcAcct") Long srcAcct,
-                        @JsonProperty("dstAcct") Long dstAcct,
-                        @JsonProperty("amount") double amount){
-        this.srcAcct  = srcAcct;
-        this.dstAcct = dstAcct;
-        this.amount  = amount;
-        /*
-        this.createdTime  =createdTime;
-        this.status  =status;
-        this.commitTime  =commitTime;
-        this.description  =description;
-        */
-    }
-
-    public String getTID() { return transactionID; }
-
-    public void setTID(String transactionID){
-        this.transactionID=transactionID;
-    }
-
-    public Long getSrcAcct() { return srcAcct;}
-
-    public void setSrcAcct(Long srcAcct) {
-        this.srcAcct = srcAcct;
-    }
-
-    public Long getDstAcct() { return dstAcct;}
-
-    public void setDstAcct(Long dstAcct) {
-        this.dstAcct = dstAcct;
-    }
-
-    public double getAmount() { return amount; }
-
-    public void setAmount(double amount){
-        this.amount=amount;
-    }
-    public double getCreateTime() { return createdTime; }
-
-    public void setCreatedTime(int createdTime){
-        this.createdTime=createdTime;
-    }
-    public int getCommitTime (){ return commitTime; }
-
-    public void setCommitTime(int commitTime){
-        this.commitTime=commitTime;
-    }
-    public String getStatus(){ return status; }
-
-    public void setStatus(String status){
-        this.status=status;
-    }
-
-    public String getDescription(){ return description; }
-
-    public void setDescription(String description){
-        this.description=description;
-    }
-
-    /*public void setSessionLog(List<SessionLog> sessionLog) {
-        this.sessionLog = sessionLog;
-    }
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
-    }*/
 }

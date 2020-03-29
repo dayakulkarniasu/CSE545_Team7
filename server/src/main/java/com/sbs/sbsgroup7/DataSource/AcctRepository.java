@@ -17,5 +17,8 @@ public interface AcctRepository extends CrudRepository<Account, Long> {
     @Query("select acc from Account acc where acc.user =:user")
     List<Account> findByUser(@Param("user") User user);
 
+    @Query("select acc from Account acc where acc.user =:user")
+    Account findOneByUser(@Param("user") User user);
+
 
 }

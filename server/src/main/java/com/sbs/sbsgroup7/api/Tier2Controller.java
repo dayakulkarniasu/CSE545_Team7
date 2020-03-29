@@ -1,14 +1,9 @@
 package com.sbs.sbsgroup7.api;
 
-import com.sbs.sbsgroup7.dao.UserDao;
-import com.sbs.sbsgroup7.model.Account;
-import com.sbs.sbsgroup7.model.Request;
-import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.AccountService;
 import com.sbs.sbsgroup7.service.RequestService;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,35 +30,35 @@ public class Tier2Controller {
 
 
     //Tier-2 employees can approve bank account requests
-    @GetMapping("/approveRequests")
-    public String approveRequests(Model model){
-        model.addAttribute("requests", requestService.findAll());
-        return "tier2/approveRequests";
-    }
-    @PostMapping("/approveRequests")
-    public String approveRequests(@RequestParam("requestId") String requestId){
-        try {
-            long reqId = Long.parseLong(requestId); //request ID from UI
-
-            //create user
-            Request r = requestService.findRequestById(reqId);
-            User requestedUser = userService.findByUserId(r.getRequestedUser());
-            Account a = new Account();
-            a.setAccountType(r.getRequestType());
-
-            //create account
-            accountService.createAccount(requestedUser, a);
-
-            //delete request entry
-            requestService.deleteByRequestId(reqId);
-
-            System.out.println(requestedUser.getUserId() + "'s account has been created");
-
-            return "redirect:/tier2/approveRequests";
-        } catch(Exception e) {
-            return e.getMessage();
-        }
-    }
+//    @GetMapping("/approveRequests")
+//    public String approveRequests(Model model){
+//        model.addAttribute("requests", requestService.findAll());
+//        return "tier2/approveRequests";
+//    }
+//    @PostMapping("/approveRequests")
+//    public String approveRequests(@RequestParam("requestId") String requestId){
+//        try {
+//            long reqId = Long.parseLong(requestId); //request ID from UI
+//
+//            //create user
+//            Request r = requestService.findRequestById(reqId);
+//            User requestedUser = userService.findByUserId(r.getRequestedUser());
+//            Account a = new Account();
+//            a.setAccountType(r.getRequestType());
+//
+//            //create account
+//            accountService.createAccount(requestedUser, a);
+//
+//            //delete request entry
+//            requestService.deleteByRequestId(reqId);
+//
+//            System.out.println(requestedUser.getUserId() + "'s account has been created");
+//
+//            return "redirect:/tier2/approveRequests";
+//        } catch(Exception e) {
+//            return e.getMessage();
+//        }
+//    }
 
 
 

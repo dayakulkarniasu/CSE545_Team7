@@ -5,6 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ public class User {
 
     @Column(name = "email")
     @NotNull
+    @Email
     private String email;
 
     @Column(name = "phone")
@@ -60,9 +62,40 @@ public class User {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private List<SessionLog> sessionLog;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = Account.class)
-    @JoinColumn(name = "userId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Account> accounts;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "requestedUser")
+    private List<Request> requests;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionOwner")
+    private List<Transaction> transactions;
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
+
+
+
+    public List<Request> getRequests() {
+        return requests;
+
+    }
+//    @OneToMany(cascade = CascadeType.ALL, targetEntity = Request.class)
+//    @JoinColumn(name = "userId")
+//    private List<Request> requests;
 
 
     private boolean active;
