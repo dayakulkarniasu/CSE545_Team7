@@ -1,6 +1,8 @@
 package com.sbs.sbsgroup7.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,7 +16,7 @@ import java.util.Set;
 @Table(name = "user")
 public class User {
     @Id
-    @Column(name = "userId",nullable = false)
+    @Column(name = "userId",nullable = true)
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String userId;
@@ -95,7 +97,7 @@ public class User {
                 @JsonProperty("address") String address,
                 @JsonProperty("active") boolean active
                 ){
-        this.userId=userId;
+        //this.userId=userId;
         this.firstName=firstName;
         this.lastName = lastName;
         this.email=email;

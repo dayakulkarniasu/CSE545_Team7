@@ -123,21 +123,20 @@ public class UserService {
         //userDao.closeCurrentSessionwithTransaction();
     }
 
-    public void updateInformation(User user){
+    public User updateInformation(User user){
         User sameUser = getLoggedUser();
-        User updateUser = new User();
-        updateUser.setUserId(sameUser.getUserId());
-        updateUser.setAddress(user.getAddress());
-        updateUser.setDob(user.getDob());
-        updateUser.setFirstName(user.getFirstName());
-        updateUser.setLastName(user.getLastName());
-        updateUser.setPhone(user.getPhone());
-        updateUser.setSsn(user.getSsn());
-        updateUser.setEmail(sameUser.getEmail());
-        updateUser.setPassword(sameUser.getPassword());
-        updateUser.setRole(sameUser.getRole());
-        System.out.println("Hi" +updateUser.getUserId());
-        userRepository.save(updateUser);
+        //User updateUser = new User();
+        //updateUser.setUserId(sameUser.getUserId());
+        sameUser.setAddress(user.getAddress());
+        sameUser.setDob(user.getDob());
+        sameUser.setFirstName(user.getFirstName());
+        sameUser.setLastName(user.getLastName());
+        sameUser.setPhone(user.getPhone());
+        sameUser.setSsn(user.getSsn());
+        //System.out.println("Hi" +updateUser.getUserId());
+        System.out.println("Hi" +sameUser.getUserId());
+        userRepository.save(sameUser);
+        return sameUser;
     }
 
     public User getLoggedUser() {
