@@ -38,6 +38,17 @@ public class Account {
     @OneToMany(mappedBy = "toAccount")
     private List<Transaction> creditTransactions;
 
+    @OneToMany(mappedBy="account")
+    private List<Cheque> cheque;
+
+    public void setCheque(List<Cheque> cheque) {
+        this.cheque = cheque;
+    }
+
+    public List<Cheque> getCheque() {
+        return cheque;
+    }
+
     public void setDebitTransactions(List<Transaction> debitTransactions) {
         this.debitTransactions = debitTransactions;
     }

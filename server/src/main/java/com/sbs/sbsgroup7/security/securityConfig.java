@@ -33,6 +33,8 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/home")
                     .hasAnyAuthority("ADMIN", "TIER1", "TIER2", "USER", "ORG")
                 .antMatchers("/").permitAll()
+                .antMatchers("/user/**")
+                    .hasAnyAuthority("USER", "ORG")
                 .antMatchers("/tier1/**")
                     .hasAnyAuthority("TIER1")
                 .antMatchers("/tier2/**")

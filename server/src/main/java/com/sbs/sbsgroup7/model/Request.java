@@ -6,6 +6,7 @@ import java.time.Instant;
 
 
 @Entity
+@Table(name="request")
 public class Request {
 
     @Id

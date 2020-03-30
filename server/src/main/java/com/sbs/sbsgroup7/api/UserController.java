@@ -44,7 +44,8 @@ public class UserController {
 
     @RequestMapping("/accounts")
     public String approveRequests(Model model) {
-        model.addAttribute("accounts", accountService.findAll());
+        User user=userService.getLoggedUser();
+        model.addAttribute("accounts", accountService.getAccountsByUser(user));
 
         return "user/accounts";
     }
