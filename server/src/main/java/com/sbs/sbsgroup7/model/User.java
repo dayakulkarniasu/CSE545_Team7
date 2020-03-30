@@ -5,8 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -22,19 +21,27 @@ public class User {
 
     @Column(name = "firstName")
     @NotNull
+    @NotEmpty(message = "Required*")
+    @Size(min=2, max=30, message="First name must be between 2 and 30 characters")
     private String firstName;
 
     @Column(name = "lastName")
     @NotNull
+    @NotEmpty(message = "Required*")
+    @Size(min=2, max=30, message="Last name must be between 2 and 30 characters")
     private String lastName;
 
     @Column(name = "email")
     @NotNull
+    @NotEmpty(message = "Required*")
     @Email
+    @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Email address is invalid")
     private String email;
 
     @Column(name = "phone")
     @NotNull
+    @NotEmpty(message = "Required*")
+    @Pattern(regexp="^[0-9][0-9]{2}-[0-9]{3}-[0-9]{4}$", message="Phone numbers must be in this format: 480-123-4567")
     private String phone;
 
     @Column(name = "roles")
@@ -43,19 +50,25 @@ public class User {
 
     @Column(name = "password")
     @NotNull
+    @NotEmpty(message = "Required*")
+    @Size(min=6, max=20, message="Password must be at 6-20 characters long")
     private String password;
 
     @Column(name = "ssn" , unique = true)
     @NotNull
+    @NotEmpty(message = "Required*")
+    @Pattern(regexp = "^[0-9][0-9]{2}-[0-9]{2}-[0-9]{4}$", message="SSN must use numbers in this format: XXX-YY-ZZZZ")
     private String ssn;
 
     @Column(name = "dob")
-    @NotNull
+    @NotNull(message = "Required*")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @Past
     private Date dob;
 
     @Column(name = "address")
     @NotNull
+    @NotEmpty(message = "Required*")
     private String address;
 
     @OneToMany(cascade = CascadeType.ALL)
