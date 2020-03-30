@@ -16,80 +16,89 @@
             <legend class="border-bottom mb-4" >Registration Page</legend>
             <div class="form-group">
                 <label for="firstName">First Name:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
                 <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" name="First Name" th:field="*{firstName}">
+                <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
             </div>
             <div class="form-group">
                 <label for="Last Name">Last Name:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
                 <input type="text" class="form-control" id="Last Name" placeholder="Enter Last Name" name="Last Name" th:field="*{lastName}">
+                <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                 <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" th:field="*{email}">
+                <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
             </div>
             <div class="form-group">
                 <label for="pwd">Password:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
                 <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" th:field="*{password}">
+                <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
             </div>
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
                 <input type="Password" class="form-control" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" >
             </div>
             <div class="form-group">
                 <label for="phone">Phone Number:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
                 <input type="text" class="form-control" id="phone" placeholder="Format: xxx-yyy-zzzz" name="phone" th:field="*{phone}">
+                <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
             </div>
+            <div class="dropdown">
+                <label for="role">Role:</label>
+                <select id="role" placeholder="" name="role" th:field="*{role}" class="form-control">
+                    <option th:value="null" th:text="Select">Select</option>
+                    <option th:value="USER" th:text="User">User</option>
+                    <option th:value="ORG" th:text="Merchant">Merchant</option>
+                </select>
+                <span class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+            </div>
+            <br>
             <div class="form-group">
                 <label for="ssn">SSN:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}"></span>
                 <input type="text" class="form-control" id="ssn" placeholder="Format: xxx-yy-zzzz" name="ssn" th:field="*{ssn}">
+                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}"></span>
             </div>
             <div class="form-group">
                 <label for="dob">Date of Birth:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></span>
                 <input type="date" class="form-control" id="dob" placeholder="Format: yyyy-mm-dd" name="dob" th:field="*{dob}">
+                <span class="text-danger" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></span>
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
-                <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
                 <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:field="*{address}">
+                <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
     </form>
     </fieldset>
 </div>
-<script type="text/javascript">
-    var password=document.getElementById("password");
-    var confirmPassword=document.getElementById("confirmPassword");
+<!--<script type="text/javascript">-->
+<!--    var password=document.getElementById("password");-->
+<!--    var confirmPassword=document.getElementById("confirmPassword");-->
 
-    password.onfocus = function() {
-        document.getElementById("message").style.display = "block";
-    }
-    password.onblur = function() {
-        document.getElementById("message").style.display = "none";
-    }
+<!--    password.onfocus = function() {-->
+<!--        document.getElementById("message").style.display = "block";-->
+<!--    }-->
+<!--    password.onblur = function() {-->
+<!--        document.getElementById("message").style.display = "none";-->
+<!--    }-->
 
-    function validatePassword() {
+<!--    function validatePassword() {-->
 
-        if (password.value.length == 0)
-        {
-            confirmPassword.setCustomValidity("Passwords Empty");
-        }
-        else if(password.value != confirmPassword.value) {
-            confirmPassword.setCustomValidity("Passwords Don't Match");
-        } else {
-            confirmPassword.setCustomValidity('');
-        }
+<!--        if (password.value.length == 0)-->
+<!--        {-->
+<!--            confirmPassword.setCustomValidity("Passwords Empty");-->
+<!--        }-->
+<!--        else if(password.value != confirmPassword.value) {-->
+<!--            confirmPassword.setCustomValidity("Passwords Don't Match");-->
+<!--        } else {-->
+<!--            confirmPassword.setCustomValidity('');-->
+<!--        }-->
 
-    }
-    password.onchange = validatePassword;
-    confirmPassword.onkeyup = validatePassword;
-</script>
+<!--    }-->
+<!--    password.onchange = validatePassword;-->
+<!--    confirmPassword.onkeyup = validatePassword;-->
+<!--</script>-->
 
 </body>
 </html>
