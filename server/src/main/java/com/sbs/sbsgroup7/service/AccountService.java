@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.ChequeRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.dao.AcctDaoInterface;
@@ -36,6 +37,9 @@ public class AccountService {
 
     @Autowired
     private TransRepository transRepository;
+
+    @Autowired
+    private ChequeRepository chequeRepository;
 
 
     @Autowired
@@ -264,5 +268,10 @@ public class AccountService {
     public Transaction findByTransactionId(Long id){
         return transRepository.findByTransactionId(id);
     }
+
+    public List<Cheque> findChequeByAccount(Account account){
+        return chequeRepository.findByAccount(account);
+    }
+
 
 }

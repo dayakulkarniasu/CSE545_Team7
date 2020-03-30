@@ -43,7 +43,7 @@ public class UserController {
 
 
     @RequestMapping("/accounts")
-    public String approveRequests(Model model) {
+    public String getAccounts(Model model) {
         User user=userService.getLoggedUser();
         model.addAttribute("accounts", accountService.getAccountsByUser(user));
 
@@ -68,6 +68,29 @@ public class UserController {
             return e.getMessage();
         }
     }
+    @GetMapping("/viewCheque/{id}")
+    public String viewCheques(@PathVariable("id") Long id, Model model){
+        User user=userService.getLoggedUser();
+        List<Account> accts=accountService.getAccountsByUser(user);
+        Account account=accountService.getAccountByAccountNumber(id);
+        for (Account acct: accts){
+            if(acct==account){
+                List<Cheque> cheques=accountService.findChequeByAccount(account);
+                model.addAttribute("cheques", cheques);
+                return "user/viewCheque";
+            }
+        }
+        return "redirect:/user/error";
+    }
+
+//    @PostMapping("/viewCheque")
+//    public String viewCheques(@RequestParam("accountNumber") Long accountNumber, Model model){
+//        Account account=accountService.getAccountByAccountNumber(accountNumber);
+//        model.addAttribute("cheques", accountService.findChequeByAccount(account));
+//        return "user/viewCheque";
+//    }
+
+
 
     @GetMapping("/creditdebit")
     public String debit(Model model){
