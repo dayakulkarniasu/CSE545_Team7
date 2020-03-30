@@ -38,7 +38,7 @@ public class UserService {
     }
 
     public User registerUser(User user){
-        return registerUser(user, "USER");
+        return registerUser(user, user.getRole());
     }
 
     public User registerUser(User user, String role){
@@ -78,10 +78,9 @@ public class UserService {
     }
 
     public void validateUserRole(String role){
-        if(!(role=="USER")){
+        if(!(role.equals("USER") || role.equals("ORG"))){
             throw new RoleException();
         }
-
     }
 
 
