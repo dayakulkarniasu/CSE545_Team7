@@ -38,6 +38,7 @@ public class bankUserDetailsService implements UserDetailsService {
         userRepository.save(user.get());
         SystemLog systemLog = new SystemLog();
         systemLog.setMessage(userName + " logged in");
+        systemLog.setTimestamp(new Date());
         systemLogRepository.save(systemLog);
 
 
