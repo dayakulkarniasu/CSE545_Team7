@@ -38,8 +38,7 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1 th:inline="text">Hello :
-            [[${#httpServletRequest.remoteUser}]]!</h1>
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
         <br>
         <h3>Welcome to Sparky's bank</h3>
         <p class="lead">Where privacy and security are our #1 priority.</p>

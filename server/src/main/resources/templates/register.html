@@ -4,12 +4,43 @@
     <title>Register</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a th:href="@{home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <!--            <li class="nav-item active">-->
+            <!--                <a th:href="@{home}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a th:href="@{accounts}" class="nav-link">Accounts</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a th:href="@{requestTransfers}" class="nav-link">Request Transfers</a>-->
+            <!--            </li>-->
+            <!--            <li class="nav-item">-->
+            <!--                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>-->
+            <!--            </li>-->
+            <li class="nav-item">
+                <a th:href="@{login}" class="nav-link">Login</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{register}" class="nav-link">Register</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+<main class="container">
 <div class="content-section col-md-8">
     <form action="#" th:action="@{/register}" th:object="${user}" method="post">
         <fieldset class="form-group">
@@ -68,10 +99,11 @@
                 <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:field="*{address}">
                 <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     </fieldset>
 </div>
+</main>
 <!--<script type="text/javascript">-->
 <!--    var password=document.getElementById("password");-->
 <!--    var confirmPassword=document.getElementById("confirmPassword");-->
@@ -99,6 +131,17 @@
 <!--    password.onchange = validatePassword;-->
 <!--    confirmPassword.onkeyup = validatePassword;-->
 <!--</script>-->
-
+<footer class="page-footer font-small unique-color-dark pt-4" style="color: #fff; background-color: #343a40; margin-top: 3%">
+    <div class="container">
+        <ul class="list-unstyled text-center py-2">
+            <li>
+                <h5 class="mb-1">Sparky's Bank</h5>
+            </li>
+            <li>
+                <p>&copy; Sparky's Bank | Design by Group 7</p>
+            </li>
+        </ul>
+    </div>
+</footer>
 </body>
 </html>
