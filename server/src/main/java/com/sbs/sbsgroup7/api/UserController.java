@@ -44,7 +44,8 @@ public class UserController {
 
     @RequestMapping("/accounts")
     public String approveRequests(Model model) {
-        model.addAttribute("accounts", accountService.findAll());
+        User user = userService.getLoggedUser();
+        model.addAttribute("accounts", accountService.findByUser(user));
 
         return "user/accounts";
     }
@@ -79,7 +80,12 @@ public class UserController {
         User user = userService.getLoggedUser();
         try {
             accountService.creditDebitTransaction(user,creditDebit);
-            return "redirect:/user/accounts";
+            if(creditDebit.getAmount() >= 1000) {
+                return "user/accountRequestSent";
+            }
+            else {
+                return "redirect:/user/accounts";
+            }
         } catch(Exception e) {
             return "redirect:/user/error";
         }
@@ -96,7 +102,12 @@ public class UserController {
         User user = userService.getLoggedUser();
         try {
             accountService.transferFunds(user, transactionPage);
-            return "redirect:/user/accounts";
+            if (transactionPage.getAmount() >= 1000) {
+                return "user/accountRequestSent";
+            }
+            else {
+                return "redirect:/user/accounts";
+            }
         } catch (Exception e) {
             return "redirect:/user/error";
         }
@@ -113,12 +124,16 @@ public class UserController {
         User user = userService.getLoggedUser();
         try {
             accountService.emailTransfer(user, emailPage);
-            return "redirect:/user/accounts";
+            if (emailPage.getAmount() >= 1000) {
+                return "user/accountRequestSent";
+            }
+            else {
+                return "redirect:/user/accounts";
+            }
         } catch (Exception e) {
             return "redirect:/user/error";
         }
     }
-
 
 
     @PostMapping("/add")
@@ -148,6 +163,11 @@ public class UserController {
     @DeleteMapping(path="/removeAll")
     public void deleteAll(){
         userService.deleteAll();
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "user/error";
     }
 
 

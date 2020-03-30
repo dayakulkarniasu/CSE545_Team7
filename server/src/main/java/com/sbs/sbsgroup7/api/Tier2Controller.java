@@ -84,6 +84,26 @@ public class Tier2Controller {
         return "tier2/viewAccounts";
     }
 
+    @PostMapping("/viewAccounts")
+    public String viewAccounts(@RequestParam("accountNumber") Long accountNumber,
+                                   @RequestParam(value="action", required=true) String action  ) {
+        Account account = accountService.findByAccountNumber(accountNumber);
+
+        if (action.equals("edit")) {
+//            transaction.setTransactionStatus("edit");
+//            transaction.setModifiedTime(Instant.now());
+//            transRepository.save(transaction);
+//            source.setBalance(source.getBalance()-transaction.getAmount());
+//            destination.setBalance(destination.getBalance()+transaction.getAmount());
+//            acctRepository.save(source);
+//            acctRepository.save(destination);
+        } else if (action.equals("delete")) {
+            System.out.println("!!! accountNumber: " + accountNumber);
+            accountService.deleteByAccountNumber(accountNumber);
+        }
+        return "redirect:/tier2/viewAccounts";
+    }
+
     //Tier-2 employees can view accounts to edit, delete
     @GetMapping("/approveTransfers")
     public String approveTransfers(Model model) {

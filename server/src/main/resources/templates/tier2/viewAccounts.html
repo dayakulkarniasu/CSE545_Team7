@@ -51,8 +51,14 @@
                 <td th:text="${account.accountNumber}"></td>
                 <td th:text="${account.accountType}"></td>
                 <td th:text="${account.balance}"></td>
-                <td><button type="button" class="btn btn-primary">Edit</button></td>
-                <td><button type="button" class="btn btn-primary">Delete</button></td>
+
+                <td>
+                    <form action="#" th:action="@{/tier2/viewAccounts}" method="post">
+                        <input type="hidden" name="accountNumber" id="accountNumber" th:value="${account.getAccountNumber()}" />
+                        <td><button type="submit" class="btn btn-primary" value="edit" name="action">Edit</button></td>
+                        <td><button type="submit" class="btn btn-primary" value="delete" name="action">Delete</button></td>
+                    </form>
+                </td>
             </tr>
         </table>
     </div>

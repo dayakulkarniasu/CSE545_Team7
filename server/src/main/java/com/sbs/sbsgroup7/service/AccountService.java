@@ -74,10 +74,12 @@ public class AccountService {
         List<Account> useraccts = acctRepository.findByUser(user);
         for(Account useracct : useraccts){
             if(useracct.getAccountNumber()==creditDebit.getAccountNumber()){
-                    if (creditDebit.getTransferType().equals("CREDIT"))
+                    if (creditDebit.getTransferType().equals("CREDIT")) {
                         creditAmount(useracct, creditDebit.getAmount(), useracct, user);
-                    else if (creditDebit.getTransferType().equals("DEBIT"))
+                    }
+                    else if (creditDebit.getTransferType().equals("DEBIT")) {
                         debitAmount(useracct, creditDebit.getAmount(), useracct, user);
+                    }
                     return;
 
             }
@@ -194,10 +196,11 @@ public class AccountService {
 
 
     public void debitTransfers(Account source, double amount, Account destination,User user) throws Exception{
-        try{
-            double balance=source.getBalance();
-            if(balance<amount)
-                throw new Exception("Insufficient funds to debit");
+        try {
+            double balance = source.getBalance();
+            if (balance < amount){
+            throw new Exception("Insufficient funds to debit");
+            }
             if(amount<1000){
                 Transaction transaction=new Transaction();
                 transaction.setAmount(amount);
@@ -252,9 +255,22 @@ public class AccountService {
         return acctDao.findAll();
     }
 
+    public List<Account> findByUser(User user) {
+        return acctRepository.findByUser(user);
+    }
+
+    public Account findByAccountNumber(Long accountNumber) {
+        return acctRepository.findByAccountNumber(accountNumber);
+    }
+
     public List<Transaction> findAllTransactions(){
         return transRepository.findAll();
 
+    }
+
+    public void deleteByAccountNumber(long accountNumber){
+        System.out.println("!!!! account service: " + accountNumber);
+        acctRepository.deleteByAccountNumber(accountNumber);
     }
 
     public List<Transaction> findPendingTransactions(){
