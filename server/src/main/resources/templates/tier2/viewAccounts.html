@@ -43,22 +43,25 @@
             <tr>
                 <th>User ID</th>
                 <th>Account #</th>
-                <th>Account Type</th>
                 <th>Balance</th>
+                <th>Account Type</th>
             </tr>
             <tr th:each = "account: ${accounts}">
                 <td th:text="${account.user.getEmail()}"></td>
                 <td th:text="${account.accountNumber}"></td>
-                <td th:text="${account.accountType}"></td>
                 <td th:text="${account.balance}"></td>
 
-                <td>
-                    <form action="#" th:action="@{/tier2/viewAccounts}" method="post">
-                        <input type="hidden" name="accountNumber" id="accountNumber" th:value="${account.getAccountNumber()}" />
-                        <td><button type="submit" class="btn btn-primary" value="edit" name="action">Edit</button></td>
-                        <td><button type="submit" class="btn btn-primary" value="delete" name="action">Delete</button></td>
-                    </form>
-                </td>
+                <form action="#" th:action="@{/tier2/viewAccounts}" method="post">
+                    <td>
+                        <select class="btn btn-primary dropdown-toggle" name="type" id="type">
+                            <option th:each="type : ${accountTypes}" th:value="${type}" th:text="${type}" th:selected="${type.equals(account.getAccountType())}"></option>
+                        </select>
+                    </td>
+                    <input type="hidden" name="accountNumber" id="accountNumber" th:value="${account.getAccountNumber()}" />
+<!--                    <input type="hidden" name="type" id="type" th:value="${account.getAccountType()}" />-->
+                    <td><button type="submit" class="btn btn-primary" value="edit" name="action">Submit Changes</button></td>
+                    <td><button type="submit" class="btn btn-danger" value="delete" name="action">Delete</button></td>
+                </form>
             </tr>
         </table>
     </div>

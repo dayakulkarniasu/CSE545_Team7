@@ -269,8 +269,12 @@ public class AccountService {
     }
 
     public void deleteByAccountNumber(long accountNumber){
-        System.out.println("!!!! account service: " + accountNumber);
         acctRepository.deleteByAccountNumber(accountNumber);
+    }
+
+    public void editByAccountNumber(long accountNumber, String accountType){
+        System.out.println("!!!! account service: " + accountNumber);
+        acctRepository.editByAccountNumber(accountNumber, accountType);
     }
 
     public List<Transaction> findPendingTransactions(){

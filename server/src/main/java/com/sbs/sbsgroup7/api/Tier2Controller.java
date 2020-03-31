@@ -12,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -79,27 +82,24 @@ public class Tier2Controller {
     //Tier-2 employees can view accounts to edit, delete
     @GetMapping("/viewAccounts")
     public String viewAccounts(Model model) {
+        List<String> accountTypes = new ArrayList<>();
+        accountTypes.add("Checkings");
+        accountTypes.add("Savings");
+        accountTypes.add("Credit");
         model.addAttribute("accounts", accountService.findAll());
+        model.addAttribute("accountTypes", accountTypes);
 
         return "tier2/viewAccounts";
     }
-
     @PostMapping("/viewAccounts")
-    public String viewAccounts(@RequestParam("accountNumber") Long accountNumber,
+    public String viewAccounts(@RequestParam("accountNumber") Long accountNumber, @Valid String type,
                                    @RequestParam(value="action", required=true) String action  ) {
-        Account account = accountService.findByAccountNumber(accountNumber);
-
         if (action.equals("edit")) {
-//            transaction.setTransactionStatus("edit");
-//            transaction.setModifiedTime(Instant.now());
-//            transRepository.save(transaction);
-//            source.setBalance(source.getBalance()-transaction.getAmount());
-//            destination.setBalance(destination.getBalance()+transaction.getAmount());
-//            acctRepository.save(source);
-//            acctRepository.save(destination);
+            accountService.editByAccountNumber(accountNumber, type);
+            System.out.println("Editing Account# " + accountNumber + "'s type to " + type);
         } else if (action.equals("delete")) {
-            System.out.println("!!! accountNumber: " + accountNumber);
             accountService.deleteByAccountNumber(accountNumber);
+            System.out.println("Deleting Account # " + accountNumber);
         }
         return "redirect:/tier2/viewAccounts";
     }
@@ -110,7 +110,6 @@ public class Tier2Controller {
         model.addAttribute("transfers",accountService.findPendingTransactions());
         return "tier2/approveTransfers";
     }
-
     @PostMapping("/approveTransfers")
     public String approveTransfers(@RequestParam("transactionId") Long transactionId,
                                    @RequestParam(value="action", required=true) String action  ) {
@@ -126,17 +125,11 @@ public class Tier2Controller {
             destination.setBalance(destination.getBalance()+transaction.getAmount());
             acctRepository.save(source);
             acctRepository.save(destination);
-
-
         } else if (action.equals("declined")) {
             transaction.setTransactionStatus("declined");
             transaction.setModifiedTime(Instant.now());
             transRepository.save(transaction);
-
         }
         return "redirect:/tier2/approveTransfers";
-
     }
-
-
 }

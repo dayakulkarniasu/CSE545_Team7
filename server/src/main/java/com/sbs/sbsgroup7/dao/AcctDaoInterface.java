@@ -16,4 +16,6 @@ public interface AcctDaoInterface<T, Id extends Serializable> {
 
     public void deleteByAccountNumber(long accountNumber);
 
+    public void editByAccountNumber(long accountNumber, String accountType);
+
 }

@@ -27,5 +27,10 @@ public interface AcctRepository extends CrudRepository<Account, Long> {
     @Query(value="delete from Account a where a.accountNumber = ?1")
     void deleteByAccountNumber(long accountNumber);
 
+    @Transactional
+    @Modifying
+    @Query(value="update Account set accountType = ?2 where accountNumber = ?1")
+    void editByAccountNumber(long accountNumber, String accountType);
+
 
 }
