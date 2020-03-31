@@ -31,15 +31,17 @@ public class bankUserDetailsService implements UserDetailsService {
 
         user.orElseThrow(() -> new UsernameNotFoundException("Username not found " + userName));
 
-        SessionLog sessionLog = new SessionLog();
-        sessionLog.setUserId(user.get().getUserId());
-        sessionLog.setTimestamp(new Date());
-        user.get().setSessionLog(Arrays.asList(sessionLog));
-        userRepository.save(user.get());
-        SystemLog systemLog = new SystemLog();
-        systemLog.setMessage(userName + " logged in");
-        systemLog.setTimestamp(new Date());
-        systemLogRepository.save(systemLog);
+        if (user != null) {
+            SessionLog sessionLog = new SessionLog();
+            sessionLog.setUserId(user.get().getUserId());
+            sessionLog.setTimestamp(new Date());
+            user.get().setSessionLog(Arrays.asList(sessionLog));
+            userRepository.save(user.get());
+            SystemLog systemLog = new SystemLog();
+            systemLog.setMessage(userName + " logged in");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+        }
 
 
         return user.map(bankUserDetails::new).get();

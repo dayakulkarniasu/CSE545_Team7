@@ -1,6 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
 
+import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.AccountService;
@@ -8,6 +9,7 @@ import com.sbs.sbsgroup7.service.RequestService;
 import com.sbs.sbsgroup7.service.TransactionService;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @Controller
@@ -32,12 +36,32 @@ public class UserController {
     private TransactionService transactionService;
 
     @Autowired
+    private SessionLogRepository sessionLogRepository;
+
+    @Autowired
     public UserController(UserService userService)
     {
         this.userService=userService;
     }
+
     @RequestMapping("/home")
-    public String userHome(){
+    public String userHome(Model model){
+        User user = userService.getLoggedUser();
+        List<SessionLog> sessionLogs = sessionLogRepository.findAll();
+        if (sessionLogs != null) {
+            sessionLogs = sessionLogs
+                    .stream()
+                    .filter(e -> e.getUserId() != null)
+                    .filter(e -> e.getUserId().equals(user.getUserId()))
+                    .sorted((s1, s2) -> s1.getTimestamp().compareTo(s2.getTimestamp()))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("lastAccess", sessionLogs.get(0).getTimestamp());
+
+        } else {
+            model.addAttribute("lastAccess", "Never");
+        }
+
         return "user/home" ;
     }
 
