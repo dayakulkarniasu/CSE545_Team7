@@ -1,22 +1,25 @@
+public class User_Controller
 package com.sbs.sbsgroup7.api;
 
+        import com.sbs.sbsgroup7.model.Account;
+        import com.sbs.sbsgroup7.model.User;
+        import com.sbs.sbsgroup7.service.TransactionService;
+        import com.sbs.sbsgroup7.service.AccountService;
+        import com.sbs.sbsgroup7.service.UserService;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.stereotype.Controller;
+        import org.springframework.ui.Model;
+        import org.springframework.validation.annotation.Validated;
+        import org.springframework.web.bind.annotation.*;
+        import java.util.Random;
 
-import com.sbs.sbsgroup7.model.*;
+        Random rand = new Random();
 
-import com.sbs.sbsgroup7.service.AccountService;
-import com.sbs.sbsgroup7.service.RequestService;
-import com.sbs.sbsgroup7.service.TransactionService;
-import com.sbs.sbsgroup7.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
+        import javax.validation.constraints.NotNull;
+        import java.util.List;
 
 @RequestMapping("/user")
+//@RestController
 @Controller
 public class UserController {
 
@@ -24,102 +27,16 @@ public class UserController {
 
     @Autowired
     private AccountService accountService;
-
-    @Autowired
-    private RequestService requestService;
-
     @Autowired
     private TransactionService transactionService;
+
+
 
     @Autowired
     public UserController(UserService userService)
     {
         this.userService=userService;
     }
-    @RequestMapping("/home")
-    public String userHome(){
-        return "user/home" ;
-    }
-
-
-    @RequestMapping("/accounts")
-    public String approveRequests(Model model) {
-        model.addAttribute("accounts", accountService.findAll());
-
-        return "user/accounts";
-    }
-
-    //requesting new bank account creations
-    @GetMapping("/createAccount")
-    public String createAccount(Model model){
-        model.addAttribute("request", new Request());
-        return "user/createAccount";
-    }
-    @PostMapping("/createAccount")
-    public String createAccount(@ModelAttribute("request") Request request){
-        try {
-            User user = userService.getLoggedUser();
-            requestService.createRequest(user, request);
-            System.out.println(user.getUserId() + " created bank account request");
-
-            return "user/accountRequestSent";
-        } catch(Exception e) {
-            return e.getMessage();
-        }
-    }
-
-    @GetMapping("/creditdebit")
-    public String debit(Model model){
-        model.addAttribute("creditdebit", new CreditDebit());
-        return "user/creditdebit";
-    }
-
-    @PostMapping("/creditdebit")
-    public String debit(@ModelAttribute("creditdebit") CreditDebit creditDebit){
-        User user = userService.getLoggedUser();
-        try {
-            accountService.creditDebitTransaction(user,creditDebit);
-            return "redirect:/user/accounts";
-        } catch(Exception e) {
-            return "redirect:/user/error";
-        }
-
-    }
-    @GetMapping("/transferFunds")
-    public String transferFunds(Model model){
-        model.addAttribute("transfer", new TransactionPage());
-        return "user/transferFunds";
-    }
-
-    @PostMapping("/transferFunds")
-    public String transferFunds(@ModelAttribute("transfer") TransactionPage transactionPage) {
-        User user = userService.getLoggedUser();
-        try {
-            accountService.transferFunds(user, transactionPage);
-            return "redirect:/user/accounts";
-        } catch (Exception e) {
-            return "redirect:/user/error";
-        }
-    }
-
-    @GetMapping("/emailTransfer")
-    public String emailTransfer(Model model){
-        model.addAttribute("email", new EmailPage());
-        return "user/emailTransfer";
-    }
-
-    @PostMapping("/emailTransfer")
-    public String emailTransfer(@ModelAttribute("email") EmailPage emailPage) {
-        User user = userService.getLoggedUser();
-        try {
-            accountService.emailTransfer(user, emailPage);
-            return "redirect:/user/accounts";
-        } catch (Exception e) {
-            return "redirect:/user/error";
-        }
-    }
-
-
 
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
@@ -130,6 +47,11 @@ public class UserController {
     public void update(@NotNull @Validated @RequestBody User user){
         userService.update(user);
     }
+
+//    @GetMapping(path = "/{id}")
+//    public User getUserById(@PathVariable("id") String id) {
+//        return userService.findById(id);
+//    }
 
     @DeleteMapping(path="/remove/{id}")
     public void deleteUserById(@PathVariable("id") String id){
@@ -151,15 +73,65 @@ public class UserController {
     }
 
 
+    @GetMapping("/createAccount")
+    public String createAccount(Model model){
+        model.addAttribute("account", new Account());
+        return "createAccount";
+    }
 
-//    @RequestMapping("/accounts")
-//    public String approveRequests(Model model) {
-//        model.addAttribute("accounts", accountService.findAll());
-//
-//        return "user/accounts";
-//    }
+    @PostMapping("/createAccount")
+    public String createAccount(@ModelAttribute("request") Account account){
+        try {
+            User user = userService.getLoggedUser();
+            accountService.createAccount(user, account);
 
+            System.out.println(user.getUserId() + " added to account");
 
+            return "accountRequestSent";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+
+    }
+    @GetMapping("/debitAccount")
+    public String debitAccount(Model model){
+        model.addAttribute("transaction", new Transaction());
+        return "debitAccount";
+    }
+    @PostMapping("/debitAccount")
+    public String debitAccount(@ModelAttribute("transactionrequest") Account account){
+        try {
+            User user = userService.getLoggedUser();
+
+            transactionService.debitAccount(user,account);
+
+            System.out.println(user.getUserId() + " debited from account");
+
+            return "debitRequestSent";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+
+    }
+    @GetMapping("/creditAccount")
+    public String creditAccount(Model model){
+        model.addAttribute("transaction", new Transaction());
+        return "creditAccount";
+    }
+    @PostMapping("/creditAccount")
+    public String creditAccount(@ModelAttribute("transactionrequest") Transaction transaction,@ModelAttribute("accountrequest") Account account){
+        try {
+            User user = userService.getLoggedUser();
+
+            transactionService.debitAccount(user, transaction,account);
+
+            System.out.println(user.getUserId() + " credited from account");
+            return "creditRequestSent";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
+
+    }
 
 
 }
