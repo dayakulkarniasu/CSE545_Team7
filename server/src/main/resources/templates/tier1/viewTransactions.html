@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/tier2/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/tier1/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,47 +16,46 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/tier1/viewAccounts}" class="nav-link">View Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/user/creditdebit}" class="nav-link">Credit/Debit Funds</a>
+                <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/user/transferFunds}" class="nav-link">Transfer Funds</a>
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
-            </li>
-            <li class="nav-item">
-                <a th:href="@{/logout}" class="nav-link">Log Out</a>
+                <a th:href="@{/logout}" class="nav-link">Logout</a>
             </li>
         </ul>
     </div>
-</nav>
 
-<br>
-<br>
-<br>
+</nav>
 
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Your Accounts</h1>
-    </div>
+        <h1>Transactions</h1>
 
-    <br>
         <table class="table">
             <tr>
-                <th>Check #</th>
-                <th>Account #</th>
-
+                <th>UserId</th>
+                <th>Source Acc #</th>
+                <th>Destination Acc #</th>
+                <th>amount</th>
+                <th>Transaction Type</th>
+                <th>Transaction Status</th>
             </tr>
-            <tr th:each = "cheque: ${cheques}">
-                <td th:text="${cheque.getCheckNumber()}"></td>
-                <td th:text="${cheque.getAccount().getAccountNumber()}"></td>
+            <tr th:each = "transfer: ${transfers}">
+                <td th:text="${transfer.getTransactionOwner().getEmail()}"></td>
+                <td th:text="${transfer.getFromAccount().getAccountNumber()}"></td>
+                <td th:text="${transfer.getToAccount().getAccountNumber()}"></td>
+                <td th:text="${transfer.getAmount()}"></td>
+                <td th:text="${transfer.getTransactionType()}"></td>
+                <td th:text="${transfer.getTransactionStatus()}"></td>
+
             </tr>
         </table>
     </div>
 </main>
-
 </body>
 </html>

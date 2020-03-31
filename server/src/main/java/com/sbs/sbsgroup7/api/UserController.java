@@ -61,7 +61,7 @@ public class UserController {
         try {
             User user = userService.getLoggedUser();
             requestService.createRequest(user, request);
-            System.out.println(user.getUserId() + " created bank account request");
+//            System.out.println(user.getUserId() + " created bank account request");
 
             return "user/accountRequestSent";
         } catch(Exception e) {
@@ -83,14 +83,20 @@ public class UserController {
         return "redirect:/user/error";
     }
 
-//    @PostMapping("/viewCheque")
-//    public String viewCheques(@RequestParam("accountNumber") Long accountNumber, Model model){
-//        Account account=accountService.getAccountByAccountNumber(accountNumber);
-//        model.addAttribute("cheques", accountService.findChequeByAccount(account));
-//        return "user/viewCheque";
-//    }
-
-
+    @RequestMapping("/requestCheque/{id}")
+    public String requestCheques(@PathVariable("id") Long id){
+            User user = userService.getLoggedUser();
+            Account account=accountService.getAccountByAccountNumber(id);
+            List<Account> accts=accountService.getAccountsByUser(user);
+            for (Account acct: accts){
+                if(acct==account){
+                   Request request=new Request();
+                    requestService.createChequeRequest(user, acct, request);
+                    return "user/chequeRequestSent";
+                    }
+                }
+            return "redirect:/user/error";
+    }
 
     @GetMapping("/creditdebit")
     public String debit(Model model){

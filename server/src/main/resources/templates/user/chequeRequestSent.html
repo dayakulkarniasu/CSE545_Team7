@@ -38,41 +38,9 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Your Accounts</h1>
-        <a th:href="@{/user/createAccount}" class="btn btn-link" href="#">Create an Account</a>
+        <h1>Your Cheque request has been sent! </h1>
+        <h2>Please wait until it has been processed...</h2>
     </div>
-
-    <br>
-    <br>
-
-    <table class="table">
-        <tr>
-            <th>Account #</th>
-            <th>Account Type</th>
-            <th>Balance</th>
-        </tr>
-        <tr th:each = "account: ${accounts}">
-            <td th:text="${account.accountNumber}"></td>
-            <td th:text="${account.accountType}"></td>
-            <td th:text="${account.balance}"></td>
-            <td><a th:href="@{/user/viewCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">View Cheques</a></td>
-            <td><a th:href="@{/user/statement/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Statement</a></td>
-            <td><td><a th:href="@{/user/requestCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Request Cheques</a></td></td>
-        </tr>
-    </table>
-
-<!--    <div class="card" style="width: 25rem;" th:each="account: ${accounts}">-->
-<!--        <div class="card-body">-->
-<!--            <h5 class="card-title" th:text="${account.accountType}"></h5>-->
-<!--            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</p>-->
-<!--            <a href="#" class="card-link" th:text="${account.accountType}">Debit</a>-->
-<!--            <a href="#" class="card-link">Download Statement</a>-->
-<!--        </div>-->
-<!--    </div>-->
-
-    <br>
-    <br>
-
 </main>
 
 </body>

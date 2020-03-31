@@ -47,7 +47,7 @@ public class Tier2Controller {
 //    Tier-2 employees can approve bank account requests
     @GetMapping("/approveRequests")
     public String approveRequests(Model model){
-        model.addAttribute("requests", requestService.findpendingRequests());
+        model.addAttribute("requests", requestService.findPendingRequests());
         return "tier2/approveRequests";
     }
     @PostMapping("/approveRequests")
@@ -94,21 +94,30 @@ public class Tier2Controller {
     @PostMapping("/approveTransfers")
     public String approveTransfers(@RequestParam("transactionId") Long transactionId,
                                    @RequestParam(value="action", required=true) String action  ) {
+
         Transaction transaction = accountService.findByTransactionId(transactionId);
         Account source = transaction.getFromAccount();
         Account destination = transaction.getToAccount();
 
         if (action.equals("approved")) {
+            if(transaction.getTransactionType().equals("credit")){
+                destination.setBalance(destination.getBalance()+transaction.getAmount());
+            }
+            else if(transaction.getTransactionType().equals("debit")){
+                source.setBalance(source.getBalance()-transaction.getAmount());
+            }
+            else if(transaction.getTransactionType().equals("transferfunds")){
+                source.setBalance(source.getBalance()-transaction.getAmount());
+                destination.setBalance(destination.getBalance()+transaction.getAmount());
+            }
             transaction.setTransactionStatus("approved");
             transaction.setModifiedTime(Instant.now());
             transRepository.save(transaction);
-            source.setBalance(source.getBalance()-transaction.getAmount());
-            destination.setBalance(destination.getBalance()+transaction.getAmount());
             acctRepository.save(source);
             acctRepository.save(destination);
 
-
-        } else if (action.equals("declined")) {
+        }
+        else if (action.equals("declined")) {
             transaction.setTransactionStatus("declined");
             transaction.setModifiedTime(Instant.now());
             transRepository.save(transaction);

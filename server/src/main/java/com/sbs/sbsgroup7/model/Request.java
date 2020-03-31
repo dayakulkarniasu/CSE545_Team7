@@ -11,7 +11,7 @@ public class Request {
 
     @Id
     @Column(name = "requestId",nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long requestId;
 
     @NotNull
@@ -29,6 +29,18 @@ public class Request {
     @ManyToOne
     @JoinColumn
     private User approvedUser;
+
+    @ManyToOne
+    @JoinColumn(nullable = true)
+    private Account account;
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
 
     @NotNull
     @Column(name = "requestStatus",nullable = false)

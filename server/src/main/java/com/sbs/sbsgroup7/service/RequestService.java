@@ -39,19 +39,41 @@ public class RequestService {
         return r;
     }
 
-    public Request findRequestById(long requestId) {
+    public Request createChequeRequest(User requestedUser, Account account, Request request){
+        Request r = new Request();
+        r.setRequestedUser(requestedUser);
+        r.setApprovedUser(null);
+        r.setRequestType("cheque");
+        r.setRequestedTime(Instant.now());
+        r.setRequestStatus("pending");
+        r.setAccount(account);
+        requestRepository.save(r);
+        return r;
+    }
+
+    public Request findRequestById(long requestId)
+    {
         return requestRepository.findByRequestId(requestId);
     }
 
-    public void deleteByRequestId(long requestId){
+    public void deleteByRequestId(long requestId)
+    {
         requestRepository.deleteByRequestId(requestId);
     }
 
-    public List<Request> findAll() {
+    public List<Request> findAll()
+    {
         return requestRepository.findAll();
     }
-    public List<Request> findpendingRequests(){
+    public List<Request> findPendingRequests()
+    {
         return requestRepository.findByRequestStatus("pending");
     }
+
+    public List<Request> findPendingChequeRequests()
+    {
+        return requestRepository.findByRequestStatusAndRequestType("pending", "cheque");
+    }
+
 
 }

@@ -18,4 +18,6 @@ public interface RequestRepository extends JpaRepository<Request, String> {
     void deleteByRequestId(long requestId);
 
     List<Request> findByRequestStatus(String requestStatus);
+
+    List<Request> findByRequestStatusAndRequestType(String requestStatus, String requestType);
 }
