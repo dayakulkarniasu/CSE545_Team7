@@ -40,20 +40,29 @@
     <div class="starter-template">
         <h1>Technical Account Access</h1>
 
+
         <table class="table">
             <tr>
-                <th>Username</th>
-                <th>Tier</th>
+                <th>UserID</th>
                 <th>Email</th>
-                <th>Account Status</th>
+                <th>Phone</th>
+                <th>SSN</th>
+                <th>Address</th>
             </tr>
-            <tr th:each = "account: ${accounts}">
-                <td th:text="${account.accountNumber}"></td>
-                <td th:text="${account.accountType}"></td>
-                <td th:text="${account.balance}"></td>
-                <td><button type="button" class="btn btn-primary">Download Statement</button></td>
+            <tr th:each = "update: ${updates}">
+                <td th:text="${update.getUserId()}"></td>
+                <td th:text="${update.getEmail()}"></td>
+                <td th:text="${update.getPhone()}"></td>
+                <td th:text="${update.getSsn()}"></td>
+                <td th:text="${update.getAddress()}"></td>
+                <form action="#" th:action="@{/admin/approveUpdates}" method="post">
+                    <input type="hidden" name="userId" id="userId" th:value="${update.getUserId()}" />
+                    <td><button type="submit" class="btn btn-primary" value="approved" name="action">Approve</button></td>
+                    <td><button type="submit" class="btn btn-danger" value="declined" name="action">Decline</button></td>
+                </form>
             </tr>
         </table>
+
     </div>
 </main>
 

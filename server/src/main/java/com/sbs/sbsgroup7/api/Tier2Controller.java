@@ -149,7 +149,7 @@ public class Tier2Controller {
         }
         try {
             User user = userService.getLoggedUser();
-            userService.approveProfileUpdates(user, employeeInfo);
+            userService.requestProfileUpdates(user, employeeInfo);
 
             return "tier2/updateProfileRequest";
         } catch(Exception e) {
