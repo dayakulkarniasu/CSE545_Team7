@@ -8,6 +8,7 @@ import com.sbs.sbsgroup7.errors.PhoneUsedException;
 import com.sbs.sbsgroup7.errors.RoleException;
 import com.sbs.sbsgroup7.errors.SsnUsedException;
 import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.EmployeeInfo;
 import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -134,6 +135,10 @@ public class UserService {
 //    public List<Account> getAccounts() {
 //        return acctDao.getAccounts();
 //    }
+
+    public void approveProfileUpdates(User user, EmployeeInfo employeeInfo) {
+        //ANEESH
+    }
 
 
     public User getLoggedUser() {

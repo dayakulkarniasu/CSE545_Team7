@@ -24,4 +24,10 @@ public class AdminController {
 
         return "admin/logs";
     }
+
+    @RequestMapping("/technicalAccountAccess")
+    public String technicalAccountAccess(Model model) {
+
+        return "admin/technicalAccountAccess";
+    }
 }

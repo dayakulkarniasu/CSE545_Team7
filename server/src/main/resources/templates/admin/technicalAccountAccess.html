@@ -33,26 +33,27 @@
         </ul>
     </div>
 </nav>
-
 <br>
 <br>
 <br>
-
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>System Logs</h1>
+        <h1>Technical Account Access</h1>
 
         <table class="table">
             <tr>
-                <th>Log Message</th>
-                <th>Timestamp</th>
+                <th>Username</th>
+                <th>Tier</th>
+                <th>Email</th>
+                <th>Account Status</th>
             </tr>
-            <tr th:each = "log: ${logs}">
-                <td th:text="${log.getMessage()}"></td>
-                <td th:text="${log.getTimestamp()}"></td>
+            <tr th:each = "account: ${accounts}">
+                <td th:text="${account.accountNumber}"></td>
+                <td th:text="${account.accountType}"></td>
+                <td th:text="${account.balance}"></td>
+                <td><button type="button" class="btn btn-primary">Download Statement</button></td>
             </tr>
         </table>
-
     </div>
 </main>
 

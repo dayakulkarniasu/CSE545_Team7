@@ -10,6 +10,7 @@ import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -131,5 +132,28 @@ public class Tier2Controller {
             transRepository.save(transaction);
         }
         return "redirect:/tier2/approveTransfers";
+    }
+
+    @RequestMapping("/updateProfile")
+    public String updateProfile(Model model){
+        model.addAttribute("userInfo", userService.getLoggedUser());
+        model.addAttribute("employeeInfo", new EmployeeInfo());
+        return "tier2/updateProfile";
+    }
+
+    @PostMapping("/updateProfile")
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
+        if (result.hasErrors()) {
+            result.getAllErrors().stream().forEach(System.out::println);
+            return "tier2/updateProfile";
+        }
+        try {
+            User user = userService.getLoggedUser();
+            userService.approveProfileUpdates(user, employeeInfo);
+
+            return "tier2/updateProfileRequest";
+        } catch(Exception e) {
+            return e.getMessage();
+        }
     }
 }
