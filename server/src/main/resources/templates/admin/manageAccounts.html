@@ -35,27 +35,25 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Technical Account Access</h1>
+        <h1>Manage Employee Accounts</h1>
 
 
         <table class="table">
             <tr>
                 <th>UserID</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>SSN</th>
-                <th>Address</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Role</th>
             </tr>
-            <tr th:each = "update: ${updates}">
-                <td th:text="${update.getUserId()}"></td>
-                <td th:text="${update.getEmail()}"></td>
-                <td th:text="${update.getPhone()}"></td>
-                <td th:text="${update.getSsn()}"></td>
-                <td th:text="${update.getAddress()}"></td>
-                <form action="#" th:action="@{/admin/approveUpdates}" method="post">
-                    <input type="hidden" name="userId" id="userId" th:value="${update.getUserId()}" />
-                    <td><button type="submit" class="btn btn-primary" value="approved" name="action">Approve</button></td>
-                    <td><button type="submit" class="btn btn-danger" value="declined" name="action">Decline</button></td>
+            <tr th:each = "employee: ${employees}">
+                <td th:text="${employee.getUserId()}"></td>
+                <td th:text="${employee.getFirstName()}"></td>
+                <td th:text="${employee.getLastName()}"></td>
+                <td th:text="${employee.getRole()}"></td>
+                <form action="#" th:action="@{/admin/manageAccount}" method="post">
+                    <input type="hidden" name="userId" id="userId" th:value="${employee.getUserId()}" />
+                    <td><button type="submit" class="btn btn-primary" value="modify" name="action">Modify</button></td>
+                    <td><button type="submit" class="btn btn-danger" value="delete" name="action">Delete</button></td>
                 </form>
             </tr>
         </table>
