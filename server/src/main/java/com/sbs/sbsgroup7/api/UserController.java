@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
@@ -100,8 +102,12 @@ public class UserController {
     }
 
     @PostMapping("/creditdebit")
-    public String debit(@ModelAttribute("creditdebit") CreditDebit creditDebit){
+    public String debit(@Valid @ModelAttribute("creditdebit") CreditDebit creditDebit, BindingResult result){
         User user = userService.getLoggedUser();
+        if (result.hasErrors()) {
+            result.getAllErrors().stream().forEach(System.out::println);
+            return "user/creditDebit";
+        }
         try {
             accountService.creditDebitTransaction(user,creditDebit);
             if(creditDebit.getAmount() >= 1000) {
@@ -122,8 +128,12 @@ public class UserController {
     }
 
     @PostMapping("/transferFunds")
-    public String transferFunds(@ModelAttribute("transfer") TransactionPage transactionPage) {
+    public String transferFunds(@Valid @ModelAttribute("transfer") TransactionPage transactionPage, BindingResult result) {
         User user = userService.getLoggedUser();
+        if (result.hasErrors()) {
+            result.getAllErrors().stream().forEach(System.out::println);
+            return "user/transferFunds";
+        }
         try {
             accountService.transferFunds(user, transactionPage);
             if (transactionPage.getAmount() >= 1000) {
@@ -144,8 +154,12 @@ public class UserController {
     }
 
     @PostMapping("/emailTransfer")
-    public String emailTransfer(@ModelAttribute("email") EmailPage emailPage) {
+    public String emailTransfer(@Valid @ModelAttribute("email") EmailPage emailPage, BindingResult result) {
         User user = userService.getLoggedUser();
+        if (result.hasErrors()) {
+            result.getAllErrors().stream().forEach(System.out::println);
+            return "user/emailTransfer";
+        }
         try {
             accountService.emailTransfer(user, emailPage);
             if (emailPage.getAmount() >= 1000) {
