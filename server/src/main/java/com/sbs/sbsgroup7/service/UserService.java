@@ -78,7 +78,7 @@ public class UserService {
     }
 
     public void validateUserRole(String role){
-        if(!(role.equals("USER") || role.equals("ORG"))){
+        if(!(role.equals("USER") || role.equals("MERCHANT") || role.equals("TIER1") || role.equals("TIER2"))){
             throw new RoleException();
         }
     }

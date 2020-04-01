@@ -20,4 +20,6 @@ public interface RequestRepository extends JpaRepository<Request, String> {
     List<Request> findByRequestStatus(String requestStatus);
 
     List<Request> findByRequestStatusAndRequestType(String requestStatus, String requestType);
+
 }
+

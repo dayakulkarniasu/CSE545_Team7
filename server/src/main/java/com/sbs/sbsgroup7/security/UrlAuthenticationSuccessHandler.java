@@ -52,7 +52,7 @@ public class UrlAuthenticationSuccessHandler implements AuthenticationSuccessHan
 
         Map<String, String> roleTargetUrlMap = new HashMap<>();
         roleTargetUrlMap.put("USER","/user/home");
-        roleTargetUrlMap.put("ORG", "/user/home");
+        roleTargetUrlMap.put("MERCHANT", "/merchant/home");
         roleTargetUrlMap.put("TIER1","/tier1/home");
         roleTargetUrlMap.put("TIER2","/tier2/home");
         roleTargetUrlMap.put("ADMIN", "/admin/home");

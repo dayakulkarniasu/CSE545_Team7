@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/merchant/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,16 +16,16 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
+                <a th:href="@{/merchant/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/user/creditdebit}" class="nav-link">Credit/Debit Funds</a>
+                <a th:href="@{/merchant/creditdebit}" class="nav-link">Credit/Debit Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/user/transferFunds}" class="nav-link">Transfer Funds</a>
+                <a th:href="@{/merchant/transferFunds}" class="nav-link">Transfer Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
+                <a th:href="@{/merchant/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Log Out</a>
@@ -33,28 +33,13 @@
         </ul>
     </div>
 </nav>
-
 <br>
 <br>
 <br>
-
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Your Accounts</h1>
-    </div>
-
-    <br>
-        <table class="table">
-            <tr>
-                <th>Check #</th>
-                <th>Account #</th>
-
-            </tr>
-            <tr th:each = "cheque: ${cheques}">
-                <td th:text="${cheque.getCheckNumber()}"></td>
-                <td th:text="${cheque.getAccount().getAccountNumber()}"></td>
-            </tr>
-        </table>
+        <h1>Your Cheque request has been sent! </h1>
+        <h2>Please wait until it has been processed...</h2>
     </div>
 </main>
 

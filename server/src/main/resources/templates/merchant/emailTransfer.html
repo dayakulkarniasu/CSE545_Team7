@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sparky's Bank</title>
+    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a th:href="@{merchant/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a th:href="@{/merchant/accounts}" class="nav-link">Accounts</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/creditdebit}" class="nav-link">Credit/Debit Funds</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/transferFunds}" class="nav-link">Transfer Funds</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/emailTransfer}" class="nav-link">Email Transfer</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>Transfer amount through Email</h1>
+
+
+        <form role="form" th:action="@{/merchant/emailTransfer}" th:object="${email}" method="post">
+
+            <div class="form-group">
+                <label for="fromAcc"> From Account Number:</label>
+                <input type="text" class="form-control" id="fromAcc" placeholder="Enter your Account Number" name="fromAcc" th:field="*{fromAcc}">
+            </div>
+            <div class="form-group">
+                <label for="emailId"> To destination EmailID:</label>
+                <input type="text" class="form-control" id="emailId" placeholder="To Email ID" name="emailId" th:field="*{emailId}">
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="text" class="form-control" id="amount" placeholder="Enter Amount" name="amount" th:field="*{amount}">
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="description" class="form-control" id="description" placeholder="Enter description" name="description" th:field="*{description}">
+            </div>
+
+
+            <!--            <select th:field="*{transferType}" class="form-control">-->
+            <!--                <option th:value="Select" th:text="Select">Select</option>-->
+            <!--                <option th:value="CREDIT" th:text="CREDIT">CREDIT</option>-->
+            <!--                <option th:value="DEBIT" th:text="DEBIT">DEBIT</option>-->
+            <!--            </select>-->
+
+            <!--        Once this button is pressed, the type of account to be open is sent to a Requests (?) table where only-->
+            <!--        Tier-2 employees can view. That table is then viewed in Approve Transfers page for only Tier-2-->
+            <!--        <a th:href="@{accountRequestSent}" class="btn btn-info" href="#">Request</a>-->
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+        <!--        <script>-->
+        <!--            $(".dropdown-menu li a").click(function(){-->
+        <!--                $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');-->
+        <!--                $(this).parents(".dropdown").find('.btn').val($(this).data('value'));-->
+        <!--            });-->
+        <!--        </script>-->
+
+        <br>
+        <br>
+    </div>
+
+
+
+</main>
+</body>
+</html>
