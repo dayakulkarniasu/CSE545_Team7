@@ -1,20 +1,22 @@
 package com.sbs.sbsgroup7.model;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 public class EmailPage {
 
-    @Min(1)
-    @NotNull
+    @NotNull(message="Required*")
+    @DecimalMin(value= "1.00", message="Must be at least $1.00")
+    @DecimalMax(value="99999.99", message="Cannot exceed $99,999.99")
+    @Digits(integer=6, fraction=2, message="Please enter the correct amount of cents")
     private double amount;
 
-    @NotNull
+    @NotNull(message="Required*")
     private Long fromAcc;
 
-    @NotNull
+    @NotNull(message = "Required*")
+    @NotEmpty(message = "Required*")
     @Email
+    @Pattern(regexp = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", message="Email address is in incorrect form")
     private String emailId;
 
     private String description;
@@ -48,7 +50,6 @@ public class EmailPage {
     public Long getFromAcc() {
         return fromAcc;
     }
-
 
     public String getDescription() {
         return description;

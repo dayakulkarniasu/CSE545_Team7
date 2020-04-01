@@ -1,18 +1,19 @@
 package com.sbs.sbsgroup7.model;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 public class TransactionPage {
 
-    @Min(1)
-    @NotNull
+    @NotNull(message="Required*")
+    @DecimalMin(value= "1.00", message="Must be at least $1.00")
+    @DecimalMax(value="99999.99", message="Cannot exceed $99,999.99")
+    @Digits(integer=6, fraction=2, message="Please enter the correct amount of cents")
     private double amount;
 
-    @NotNull
+    @NotNull(message="Required*")
     private Long fromAcc;
 
-    @NotNull
+    @NotNull(message="Required*")
     private Long toAcc;
 
     private String description;

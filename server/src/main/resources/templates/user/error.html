@@ -43,16 +43,19 @@
             <h2>Your submission could not be made</h2>
             <br>
             <br>
-            <h2>Remember that <b>Transfer Funds, Credit/Debit Funds, and Email/Phone Transfers</b> cannot exceed balance</h2>
+            <h3>One of the following errors could've occurred: </h3>
+            <ul>
+                <li><b>Transfer Funds</b> exceeded available balance</li>
+                <li><b>Credit/Debit Funds</b> exceeded available balance</li>
+                <li><b>Email/Phone Transfer Funds</b> exceeded available balance</li>
+                <li>The <b>account number</b> you used does not exist</li>
+                <li>The <b>email address</b> you used does not exist</li>
+            </ul>
             <br>
             <br>
-<!--            <h4 th:text="${'Status: ' + status + '  Error: ' + error}"></h4>-->
-<!--            <br>-->
-<!--            <br>-->
             <input class="btn btn-light" type="button" value="Go Back and Redo" onclick="history.back(-1)" />
         </div>
     </div>
 </main>
-
 </body>
 </html>
