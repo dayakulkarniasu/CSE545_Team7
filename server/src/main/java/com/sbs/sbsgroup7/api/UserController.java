@@ -3,10 +3,7 @@ package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.model.*;
 
-import com.sbs.sbsgroup7.service.AccountService;
-import com.sbs.sbsgroup7.service.RequestService;
-import com.sbs.sbsgroup7.service.TransactionService;
-import com.sbs.sbsgroup7.service.UserService;
+import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +24,9 @@ public class UserController {
 
     @Autowired
     private RequestService requestService;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     @Autowired
     private TransactionService transactionService;
@@ -178,6 +178,38 @@ public class UserController {
     @DeleteMapping(path="/removeAll")
     public void deleteAll(){
         userService.deleteAll();
+    }
+
+
+    @GetMapping("/createAppointment")
+    public String createAppointment(Model model){
+        model.addAttribute("scheduleApp", new Appointment());
+        return "user/appointment";
+    }
+
+    @PostMapping("/createAppointment")
+    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment){
+        User user = userService.getLoggedUser();
+        System.out.println(user.getUserId());
+        appointmentService.createAppointment(user, appointment);
+
+        return "user/createdAppointment";
+    }
+
+    @GetMapping("/updateProfile")
+    public String updateProfile(Model model){
+        User currentUser = userService.getLoggedUser();
+        model.addAttribute("updateProf", currentUser);
+        return "user/updateProfile";
+    }
+
+    @PostMapping("/updateProfile")
+    public String createAppointment(@ModelAttribute("updateProf") User user){
+        //User sameUser = userService.getLoggedUser();
+        //System.out.println(user.getUserId());
+        userService.updateInformation(user);
+
+        return "user/profileUpdated";
     }
 
 

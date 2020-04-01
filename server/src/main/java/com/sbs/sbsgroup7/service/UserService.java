@@ -145,5 +145,22 @@ public class UserService {
         return userRepository.findByEmail(loggedUserName).orElse(null);
     }
 
+    public User updateInformation(User user){
+        User sameUser = getLoggedUser();
+        //User updateUser = new User();
+        //updateUser.setUserId(sameUser.getUserId());
+        sameUser.setEmail(user.getEmail());
+        sameUser.setAddress(user.getAddress());
+//        sameUser.setDob(user.getDob());
+//        sameUser.setFirstName(user.getFirstName());
+//        sameUser.setLastName(user.getLastName());
+        sameUser.setPhone(user.getPhone());
+        sameUser.setSsn(user.getSsn());
+        //System.out.println("Hi" +updateUser.getUserId());
+        System.out.println("Hi" +sameUser.getUserId());
+        userRepository.save(sameUser);
+        return sameUser;
+    }
+
 
 }
