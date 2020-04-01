@@ -12,7 +12,7 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+<!--    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -34,14 +34,14 @@
                 <a th:href="@{/logout}" class="nav-link">Log Out</a>
             </li>
         </ul>
-    </div>
+ -->   </div>
 </nav>
 <br>
 <br>
 <br>
 <main class="container">
 
-    <div class="jumbotron">
+    <div class="jumbotron" style="background-color: #deecf9">
 
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
         <hr>
