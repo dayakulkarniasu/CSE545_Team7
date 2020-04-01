@@ -142,11 +142,7 @@ public class Tier2Controller {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
-        if (result.hasErrors()) {
-            result.getAllErrors().stream().forEach(System.out::println);
-            return "tier2/updateProfile";
-        }
+    public String updateProfile(@ModelAttribute("employeeInfo") EmployeeInfo employeeInfo){
         try {
             User user = userService.getLoggedUser();
             userService.requestProfileUpdates(user, employeeInfo);
