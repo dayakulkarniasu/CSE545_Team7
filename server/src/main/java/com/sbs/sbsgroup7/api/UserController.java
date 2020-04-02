@@ -30,9 +30,6 @@ public class UserController {
     private AppointmentService appointmentService;
 
     @Autowired
-    private TransactionService transactionService;
-
-    @Autowired
     private AppointmentRepository appointmentRepository;
 
     @Autowired
@@ -43,13 +40,6 @@ public class UserController {
     @RequestMapping("/home")
     public String userHome(){
         return "user/home" ;
-    }
-
-    @RequestMapping("/profile")
-    public String userProfile(Model model){
-        User user = userService.getLoggedUser();
-        model.addAttribute("profile", user);
-        return "user/profile";
     }
 
 
@@ -160,36 +150,23 @@ public class UserController {
         }
     }
 
-
-
-    @PostMapping("/add")
-    public void addUser(@NotNull @Validated @RequestBody User user){
-        userService.add(user);
+    @GetMapping("/cashierCheque")
+    public String cashierCheques(Model model){
+        model.addAttribute("cash", new CashierCheque());
+        return "user/cashiercheque";
     }
 
-    @PutMapping ("/update")
-    public void update(@NotNull @Validated @RequestBody User user){
-        userService.update(user);
+    @PostMapping("/cashierCheque")
+    public String cashierCheques(@ModelAttribute("cash") CashierCheque cashierCheque){
+        User user=userService.getLoggedUser();
+        Boolean b=accountService.cashierCheque(user,cashierCheque);
+        if(b==true)
+            return "/user/chequeRequestSent";
+        else{
+            return "/user/cashError";
+        }
     }
 
-    @DeleteMapping(path="/remove/{id}")
-    public void deleteUserById(@PathVariable("id") String id){
-        userService.delete(id);
-    }
-
-    @GetMapping(path = "/")
-    public List<User> getAllUsers(){
-        return userService.findAll();
-    }
-//    public String getAllUsers(Model model) {
-//        model.addAttribute("name", "John");
-//        return "index";
-//    }
-
-    @DeleteMapping(path="/removeAll")
-    public void deleteAll(){
-        userService.deleteAll();
-    }
 
 
     @GetMapping("/createAppointment")
@@ -245,14 +222,6 @@ public class UserController {
             return "user/viewAppointment";
         }
     }
-
-//    @RequestMapping("/accounts")
-//    public String approveRequests(Model model) {
-//        model.addAttribute("accounts", accountService.findAll());
-//
-//        return "user/accounts";
-//    }
-
 
 
 

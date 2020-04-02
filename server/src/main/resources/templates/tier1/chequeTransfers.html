@@ -35,41 +35,45 @@
         </ul>
     </div>
 
-
 </nav>
+
+<br>
+<br>
+<br>
+
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Approve Cheque Requests</h1>
+        <h1>Approve Transfers</h1>
 
         <table class="table">
             <tr>
-                <th>Request ID</th>
-                <th>Requested User</th>
-                <th>Account </th>
-                <th>Request Type</th>
+                <th>UserId</th>
+                <th>Source Account #</th>
+                <th>Destination Account #</th>
+                <th>Available source balance</th>
+                <th>Transaction Type</th>
+                <th>amount</th>
             </tr>
-            <tr th:each = "request: ${crequests}">
-                <td th:text="${request.getRequestId()}"></td>
-                <td th:text="${request.getRequestedUser().getEmail()}"></td>
-                <td th:text="${request.getAccount().getAccountNumber()}"></td>
-                <td th:text="${request.getRequestType()}"></td>
-                <!--                <td><button type="button" class="btn btn-primary">Approve</button></td>-->
+            <tr th:each = "transfer: ${transfers}">
+                <td th:text="${transfer.getTransactionOwner().getEmail()}"></td>
+                <td th:text="${transfer.getFromAccount().getAccountNumber()}"></td>
+                <td th:text="${transfer.getToAccount().getAccountNumber()}"></td>
+                <td th:text="${transfer.fromAccount.getBalance()}"></td>
+                <td th:text="${transfer.getAmount()}"></td>
+                <td th:text="${transfer.getTransactionType()}"></td>
+
                 <td>
-                    <form action="#" th:action="@{/tier1/approvecRequests}" method="post">
-                        <input type="hidden" name="requestId" id="requestId" th:value="${request.getRequestId()}" />
+                    <form action="#" th:action="@{/tier1/chequeTransfers}" method="post">
+                        <input type="hidden" name="transactionId" id="transactionId" th:value="${transfer.getTransactionId()}" />
                 <td><button type="submit" class="btn btn-primary" value="approved" name="action">Approve</button></td>
                 <td><button type="submit" class="btn btn-primary" value="declined" name="action">Decline</button></td>
                 </form>
                 </td>
+
             </tr>
         </table>
     </div>
 </main>
-
-
-
-
-
 
 </body>
 </html>

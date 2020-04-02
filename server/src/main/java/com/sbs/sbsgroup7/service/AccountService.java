@@ -246,6 +246,34 @@ public class AccountService {
         }
     }
 
+    public Boolean cashierCheque(User user, CashierCheque cashierCheque){
+        Cheque cheque=chequeRepository.findByCheckNumber(cashierCheque.getCheckNumber()).orElse(null);
+        System.out.println(cheque.getCheckNumber());
+        if(cheque==null){
+            return false;
+        }
+        Double balance=cheque.getAccount().getBalance();
+        System.out.println(balance);
+        Account destination=acctRepository.findByAccountNumber(cashierCheque.getToAcc());
+        System.out.println(destination.getAccountNumber());
+        if(balance<cashierCheque.getAmount()){
+            return false;
+        }
+        if(destination == null){
+            return false;
+        }
+        Transaction transaction=new Transaction();
+        transaction.setAmount(cashierCheque.getAmount());
+        transaction.setFromAccount(cheque.getAccount());
+        transaction.setToAccount(destination);
+        transaction.setTransactionStatus("pending");
+        transaction.setTransactionOwner(user);
+        transaction.setTransactionTime(Instant.now());
+        transaction.setTransactionType("cheque");
+        transRepository.save(transaction);
+        return true;
+    }
+
 
 
 
@@ -274,7 +302,14 @@ public class AccountService {
 
 
     public List<Transaction> findPendingTransactions(){
-        return transRepository.findByTransactionStatus("pending");
+        List<Transaction> transactions= transRepository.findByTransactionStatus("pending");
+        List<Transaction>  transactionList= new ArrayList<>();
+        for (Transaction transaction: transactions) {
+            if(!transaction.getTransactionType().equals("cheque")){
+                transactionList.add(transaction);
+            }
+        }
+        return transactionList;
     }
 
     public Transaction findByTransactionId(Long id){
@@ -283,6 +318,17 @@ public class AccountService {
 
     public List<Cheque> findChequeByAccount(Account account){
         return chequeRepository.findByAccount(account);
+    }
+
+    public List<Transaction> findPendingChequeTransactions(){
+        List<Transaction> transactions= transRepository.findByTransactionStatus("pending");
+        List<Transaction>  transactionList= new ArrayList<>();
+        for (Transaction transaction: transactions) {
+            if(transaction.getTransactionType().equals("cheque")){
+                transactionList.add(transaction);
+            }
+        }
+        return transactionList;
     }
 
 

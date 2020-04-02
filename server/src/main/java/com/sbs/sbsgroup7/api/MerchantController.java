@@ -27,8 +27,6 @@ public class MerchantController {
     @Autowired
     private RequestService requestService;
 
-    @Autowired
-    private TransactionService transactionService;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
