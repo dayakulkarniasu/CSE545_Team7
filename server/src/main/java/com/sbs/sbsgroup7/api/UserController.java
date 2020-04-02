@@ -1,6 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
 
+import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
 import com.sbs.sbsgroup7.model.*;
 
@@ -8,11 +9,13 @@ import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/user")
 @Controller
@@ -33,6 +36,9 @@ public class UserController {
     private TransactionService transactionService;
 
     @Autowired
+    private SessionLogRepository sessionLogRepository;
+
+    @Autowired
     private AppointmentRepository appointmentRepository;
 
     @Autowired
@@ -40,8 +46,25 @@ public class UserController {
     {
         this.userService=userService;
     }
+
     @RequestMapping("/home")
-    public String userHome(){
+    public String userHome(Model model){
+        User user = userService.getLoggedUser();
+        List<SessionLog> sessionLogs = sessionLogRepository.findAll();
+        if (sessionLogs != null) {
+            sessionLogs = sessionLogs
+                    .stream()
+                    .filter(e -> e.getUserId() != null)
+                    .filter(e -> e.getUserId().equals(user.getUserId()))
+                    .sorted((s1, s2) -> s1.getTimestamp().compareTo(s2.getTimestamp()))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("lastAccess", sessionLogs.get(0).getTimestamp());
+
+        } else {
+            model.addAttribute("lastAccess", "Never");
+        }
+
         return "user/home" ;
     }
 
@@ -52,8 +75,10 @@ public class UserController {
         return "user/profile";
     }
 
-
     @RequestMapping("/accounts")
+//    public String approveRequests(Model model) {
+//        User user = userService.getLoggedUser();
+//        model.addAttribute("accounts", accountService.findByUser(user));
     public String getAccounts(Model model) {
         User user=userService.getLoggedUser();
         model.addAttribute("accounts", accountService.getAccountsByUser(user));
@@ -72,8 +97,6 @@ public class UserController {
         try {
             User user = userService.getLoggedUser();
             requestService.createRequest(user, request);
-//            System.out.println(user.getUserId() + " created bank account request");
-
             return "user/accountRequestSent";
         } catch(Exception e) {
             return e.getMessage();
@@ -116,11 +139,20 @@ public class UserController {
     }
 
     @PostMapping("/creditdebit")
-    public String debit(@ModelAttribute("creditdebit") CreditDebit creditDebit){
+    public String debit(@Valid @ModelAttribute("creditdebit") CreditDebit creditDebit, BindingResult result){
         User user = userService.getLoggedUser();
+        if (result.hasErrors()) {
+            result.getAllErrors().stream().forEach(System.out::println);
+            return "user/creditDebit";
+        }
         try {
             accountService.creditDebitTransaction(user,creditDebit);
-            return "redirect:/user/accounts";
+            if(creditDebit.getAmount() >= 1000) {
+                return "user/accountRequestSent";
+            }
+            else {
+                return "redirect:/user/accounts";
+            }
         } catch(Exception e) {
             return "redirect:/user/error";
         }
@@ -133,11 +165,20 @@ public class UserController {
     }
 
     @PostMapping("/transferFunds")
-    public String transferFunds(@ModelAttribute("transfer") TransactionPage transactionPage) {
+    public String transferFunds(@Valid @ModelAttribute("transfer") TransactionPage transactionPage, BindingResult result) {
         User user = userService.getLoggedUser();
+        if (result.hasErrors()) {
+            result.getAllErrors().stream().forEach(System.out::println);
+            return "user/transferFunds";
+        }
         try {
             accountService.transferFunds(user, transactionPage);
-            return "redirect:/user/accounts";
+            if (transactionPage.getAmount() >= 1000) {
+                return "user/accountRequestSent";
+            }
+            else {
+                return "redirect:/user/accounts";
+            }
         } catch (Exception e) {
             return "redirect:/user/error";
         }
@@ -150,16 +191,24 @@ public class UserController {
     }
 
     @PostMapping("/emailTransfer")
-    public String emailTransfer(@ModelAttribute("email") EmailPage emailPage) {
+    public String emailTransfer(@Valid @ModelAttribute("email") EmailPage emailPage, BindingResult result) {
         User user = userService.getLoggedUser();
+        if (result.hasErrors()) {
+            result.getAllErrors().stream().forEach(System.out::println);
+            return "user/emailTransfer";
+        }
         try {
             accountService.emailTransfer(user, emailPage);
-            return "redirect:/user/accounts";
+            if (emailPage.getAmount() >= 1000) {
+                return "user/accountRequestSent";
+            }
+            else {
+                return "redirect:/user/accounts";
+            }
         } catch (Exception e) {
             return "redirect:/user/error";
         }
     }
-
 
 
     @PostMapping("/add")
@@ -181,14 +230,15 @@ public class UserController {
     public List<User> getAllUsers(){
         return userService.findAll();
     }
-//    public String getAllUsers(Model model) {
-//        model.addAttribute("name", "John");
-//        return "index";
-//    }
 
     @DeleteMapping(path="/removeAll")
     public void deleteAll(){
         userService.deleteAll();
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "user/error";
     }
 
 
@@ -221,8 +271,6 @@ public class UserController {
 
     @PostMapping("/updateProfile")
     public String createAppointment(@ModelAttribute("updateProf") User user){
-        //User sameUser = userService.getLoggedUser();
-        //System.out.println(user.getUserId());
         userService.updateInformation(user);
 
         return "user/profileUpdated";
@@ -245,15 +293,4 @@ public class UserController {
             return "user/viewAppointment";
         }
     }
-
-//    @RequestMapping("/accounts")
-//    public String approveRequests(Model model) {
-//        model.addAttribute("accounts", accountService.findAll());
-//
-//        return "user/accounts";
-//    }
-
-
-
-
 }

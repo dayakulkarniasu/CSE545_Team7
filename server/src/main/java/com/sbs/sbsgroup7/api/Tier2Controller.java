@@ -2,6 +2,7 @@ package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
 import com.sbs.sbsgroup7.DataSource.RequestRepository;
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
 import com.sbs.sbsgroup7.service.AccountService;
@@ -10,9 +11,14 @@ import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 @Controller
@@ -37,6 +43,9 @@ public class Tier2Controller {
 
     @Autowired
     private RequestRepository requestRepository;
+
+    @Autowired
+    private SystemLogRepository systemLogRepository;
 
     @RequestMapping("/home")
     public String userHome(){
@@ -63,12 +72,22 @@ public class Tier2Controller {
             a.setAccountType(request.getRequestType());
             accountService.createAccount(request.getRequestedUser(), a);
             requestRepository.save(request);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(approvedUser.getEmail() + " approved " + request.getRequestedUser().getEmail() + "'s " + request.getRequestType() + " account creation request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
         }
         else if (action.equals("declined")) {
             request.setRequestStatus("declined");
             request.setApprovedUser(approvedUser);
             request.setModifiedTime(Instant.now());
             requestRepository.save(request);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(approvedUser.getEmail() + " declined " + request.getRequestedUser().getEmail() + "'s " + request.getRequestType() + " account creation request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
 
         }
         return "redirect:/tier2/approveRequests";
@@ -79,9 +98,32 @@ public class Tier2Controller {
     //Tier-2 employees can view accounts to edit, delete
     @GetMapping("/viewAccounts")
     public String viewAccounts(Model model) {
+        List<String> accountTypes = new ArrayList<>();
+        accountTypes.add("Checkings");
+        accountTypes.add("Savings");
+        accountTypes.add("Credit");
         model.addAttribute("accounts", accountService.findAll());
+        model.addAttribute("accountTypes", accountTypes);
 
         return "tier2/viewAccounts";
+    }
+    @PostMapping("/viewAccounts")
+    public String viewAccounts(@RequestParam("accountNumber") Long accountNumber, @Valid String type,
+                                   @RequestParam(value="action", required=true) String action  ) {
+        try {
+            if (action.equals("edit")) {
+                accountService.editByAccountNumber(accountNumber, type);
+                System.out.println("Editing Account# " + accountNumber + "'s type to " + type);
+            } else if (action.equals("delete")) {
+
+                acctRepository.deleteById(accountNumber);
+                System.out.println("Deleting Account # " + accountNumber);
+            }
+            return "redirect:/tier2/viewAccounts";
+        } catch(Exception e) {
+            return "redirect:/tier2/deleteAccountError";
+        }
+
     }
 
     //Tier-2 employees can view accounts to edit, delete
@@ -90,7 +132,6 @@ public class Tier2Controller {
         model.addAttribute("transfers",accountService.findPendingTransactions());
         return "tier2/approveTransfers";
     }
-
     @PostMapping("/approveTransfers")
     public String approveTransfers(@RequestParam("transactionId") Long transactionId,
                                    @RequestParam(value="action", required=true) String action  ) {
@@ -116,16 +157,53 @@ public class Tier2Controller {
             acctRepository.save(source);
             acctRepository.save(destination);
 
-        }
-        else if (action.equals("declined")) {
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(userService.getLoggedUser().getEmail() + " approved " + transaction.getTransactionOwner().getEmail() + "'s transaction request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+
+        } else if (action.equals("declined")) {
             transaction.setTransactionStatus("declined");
             transaction.setModifiedTime(Instant.now());
             transRepository.save(transaction);
 
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(userService.getLoggedUser().getEmail() + " declined " + transaction.getTransactionOwner().getEmail() + "'s transaction request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
         }
         return "redirect:/tier2/approveTransfers";
-
     }
 
+    @RequestMapping("/updateProfile")
+    public String updateProfile(Model model){
+        model.addAttribute("userInfo", userService.getLoggedUser());
+        model.addAttribute("employeeInfo", new EmployeeInfo());
+        return "tier2/updateProfile";
+    }
 
+    @PostMapping("/updateProfile")
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
+        if(result.hasErrors()) {
+            return "redirect:/tier2/error";
+        }
+        try {
+            User user = userService.getLoggedUser();
+            userService.requestProfileUpdates(user, employeeInfo);
+
+            return "tier2/updateProfileRequest";
+        } catch(Exception e) {
+            return "redirect:/tier2/error";
+        }
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "tier2/error";
+    }
+
+    @RequestMapping("/deleteAccountError")
+    public String deleteAccountError(){
+        return "tier2/deleteAccountError";
+    }
 }

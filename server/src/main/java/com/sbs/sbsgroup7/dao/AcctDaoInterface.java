@@ -14,4 +14,8 @@ public interface AcctDaoInterface<T, Id extends Serializable> {
 
     public List<Account> findAll();
 
+    public void deleteByAccountNumber(long accountNumber);
+
+    public void editByAccountNumber(long accountNumber, String accountType);
+
 }

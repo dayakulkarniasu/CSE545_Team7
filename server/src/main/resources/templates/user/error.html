@@ -2,13 +2,13 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Sparky's Bank</title>
+    <title>Error Page</title>
     <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/tier1/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,48 +16,45 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a th:href="@{/tier1/viewAccounts}" class="nav-link">View Accounts</a>
+                <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
+                <a th:href="@{/user/creditdebit}" class="nav-link">Credit/Debit Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
+                <a th:href="@{/user/transferFunds}" class="nav-link">Transfer Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier1/updateProfile}" class="nav-link">Update Profile</a>
+                <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Log Out</a>
             </li>
         </ul>
     </div>
-
 </nav>
-
+<br>
+<br>
+<br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Transactions</h1>
-
-        <table class="table">
-            <tr>
-                <th>UserId</th>
-                <th>Source Acc #</th>
-                <th>Destination Acc #</th>
-                <th>amount</th>
-                <th>Transaction Type</th>
-                <th>Transaction Status</th>
-            </tr>
-            <tr th:each = "transfer: ${transfers}">
-                <td th:text="${transfer.getTransactionOwner().getEmail()}"></td>
-                <td th:text="${transfer.getFromAccount().getAccountNumber()}"></td>
-                <td th:text="${transfer.getToAccount().getAccountNumber()}"></td>
-                <td th:text="${transfer.getAmount()}"></td>
-                <td th:text="${transfer.getTransactionType()}"></td>
-                <td th:text="${transfer.getTransactionStatus()}"></td>
-
-            </tr>
-        </table>
+        <div class="jumbotron alert-danger">
+            <h1><b>Oops... Something Went Wrong</b></h1>
+            <h2>Your submission could not be made</h2>
+            <br>
+            <br>
+            <h3>One of the following errors could've occurred: </h3>
+            <ul>
+                <li><b>Transfer Funds</b> exceeded available balance</li>
+                <li><b>Credit/Debit Funds</b> exceeded available balance</li>
+                <li><b>Email/Phone Transfer Funds</b> exceeded available balance</li>
+                <li>The <b>account number</b> you used does not exist</li>
+                <li>The <b>email address</b> you used does not exist</li>
+            </ul>
+            <br>
+            <br>
+            <input class="btn btn-light" type="button" value="Go Back and Redo" onclick="history.back(-1)" />
+        </div>
     </div>
 </main>
 </body>

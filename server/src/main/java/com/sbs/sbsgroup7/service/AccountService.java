@@ -2,25 +2,20 @@ package com.sbs.sbsgroup7.service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.ChequeRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.dao.AcctDaoInterface;
 import com.sbs.sbsgroup7.dao.UserDaoInterface;
-import com.sbs.sbsgroup7.errors.PhoneUsedException;
-import com.sbs.sbsgroup7.errors.RoleException;
-import com.sbs.sbsgroup7.errors.SsnUsedException;
 import com.sbs.sbsgroup7.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
-import com.sbs.sbsgroup7.errors.EmailUsedException;
 
 
 @Repository
@@ -37,6 +32,9 @@ public class AccountService {
 
     @Autowired
     private TransRepository transRepository;
+
+    @Autowired
+    private SystemLogRepository systemLogRepository;
 
     @Autowired
     private ChequeRepository chequeRepository;
@@ -78,10 +76,12 @@ public class AccountService {
         List<Account> useraccts = acctRepository.findByUser(user);
         for(Account useracct : useraccts){
             if(useracct.getAccountNumber()==creditDebit.getAccountNumber()){
-                    if (creditDebit.getTransferType().equals("CREDIT"))
+                    if (creditDebit.getTransferType().equals("CREDIT")) {
                         creditAmount(useracct, creditDebit.getAmount(), useracct, user);
-                    else if (creditDebit.getTransferType().equals("DEBIT"))
+                    }
+                    else if (creditDebit.getTransferType().equals("DEBIT")) {
                         debitAmount(useracct, creditDebit.getAmount(), useracct, user);
+                    }
                     return;
 
             }
@@ -143,6 +143,12 @@ public class AccountService {
                 transaction.setTransactionType("credit");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " successfully added credit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
+
                 source.setBalance(balance+amount);
                 acctRepository.save(source);
             }
@@ -157,6 +163,10 @@ public class AccountService {
                 transaction.setTransactionType("credit");
                 transRepository.save(transaction);
 
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " requested credit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
             }
         }
         catch(Exception e){
@@ -183,6 +193,12 @@ public class AccountService {
                 transaction.setTransactionType("debit");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " successfully added debit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
+
                 source.setBalance(balance-amount);
                 acctRepository.save(source);
 
@@ -197,6 +213,11 @@ public class AccountService {
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("debit");
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " requested debit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
             }
         }catch(Exception e){
             throw new Exception("Debit transaction failed from account "+source.getAccountNumber(),e);
@@ -205,10 +226,14 @@ public class AccountService {
 
 
     public void debitTransfers(Account source, double amount, Account destination,User user) throws Exception{
+//        try {
+//            double balance = source.getBalance();
+//            if (balance < amount){
+//            throw new Exception("Insufficient funds to debit");
+//            }
         try{
             double balance=source.getBalance();
             if(balance<amount){
-//                System.out.println("Insufficient funds to debit");
                 throw new Exception("Insufficient funds to debit");}
             if(amount<1000){
                 Transaction transaction=new Transaction();
@@ -221,6 +246,12 @@ public class AccountService {
                 transaction.setTransactionType("transferfunds");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " successfully transferred $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
+
 //                System.out.println("transaction done");
                 source.setBalance(balance-amount);
                 destination.setBalance(destination.getBalance()+amount);
@@ -240,6 +271,10 @@ public class AccountService {
                 transRepository.save(transaction);
 //                System.out.println("transfer request done");
 
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " requested transfer of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
             }
         }catch(Exception e){
             throw new Exception("Debit transaction failed from account "+source.getAccountNumber(),e);
@@ -267,11 +302,26 @@ public class AccountService {
         return acctDao.findAll();
     }
 
+    public List<Account> findByUser(User user) {
+        return acctRepository.findByUser(user);
+    }
+
+    public Account findByAccountNumber(Long accountNumber) {
+        return acctRepository.findByAccountNumber(accountNumber);
+    }
+
     public List<Transaction> findAllTransactions(){
         return transRepository.findAll();
 
     }
 
+    public void deleteByAccountNumber(long accountNumber){
+        acctRepository.deleteByAccountNumber(accountNumber);
+    }
+
+    public void editByAccountNumber(long accountNumber, String accountType){
+        acctRepository.editByAccountNumber(accountNumber, accountType);
+    }
 
     public List<Transaction> findPendingTransactions(){
         return transRepository.findByTransactionStatus("pending");
@@ -284,6 +334,4 @@ public class AccountService {
     public List<Cheque> findChequeByAccount(Account account){
         return chequeRepository.findByAccount(account);
     }
-
-
 }
