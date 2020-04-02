@@ -7,11 +7,22 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        function validatePassword() {
+            var firstInput = document.getElementById("pwd").value;
+            var secondInput = document.getElementById("confirmPassword").value;
+
+            if (firstInput !== secondInput || firstInput === "" || secondInput === "") {
+                alert("Passwords do not match - Please make sure you confirm with the correct password!")
+            }
+        }
+    </script>
 </head>
 <body>
 
 <div class="content-section col-md-8">
-    <form action="#" th:action="@{/register}" th:object="${user}" method="post">
+    <form action="#" th:action="@{/register}" th:object="${user}" method="post" onsubmit="return validatePassword()">
         <fieldset class="form-group">
             <legend class="border-bottom mb-4" >Registration Page</legend>
             <div class="form-group">
@@ -71,35 +82,6 @@
             <button type="submit" class="btn btn-default">Submit</button>
         </fieldset>
     </form>
-
 </div>
-<!--<script type="text/javascript">-->
-<!--    var password=document.getElementById("password");-->
-<!--    var confirmPassword=document.getElementById("confirmPassword");-->
-
-<!--    password.onfocus = function() {-->
-<!--        document.getElementById("message").style.display = "block";-->
-<!--    }-->
-<!--    password.onblur = function() {-->
-<!--        document.getElementById("message").style.display = "none";-->
-<!--    }-->
-
-<!--    function validatePassword() {-->
-
-<!--        if (password.value.length == 0)-->
-<!--        {-->
-<!--            confirmPassword.setCustomValidity("Passwords Empty");-->
-<!--        }-->
-<!--        else if(password.value != confirmPassword.value) {-->
-<!--            confirmPassword.setCustomValidity("Passwords Don't Match");-->
-<!--        } else {-->
-<!--            confirmPassword.setCustomValidity('');-->
-<!--        }-->
-
-<!--    }-->
-<!--    password.onchange = validatePassword;-->
-<!--    confirmPassword.onkeyup = validatePassword;-->
-<!--</script>-->
-
 </body>
 </html>
