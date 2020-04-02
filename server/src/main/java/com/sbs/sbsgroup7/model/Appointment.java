@@ -36,12 +36,12 @@ public class Appointment {
     // Start time
     @Column(name = "startTime")
     @NotNull
-    private Date startTime;
+    private String startTime;
 
     //End time
     @Column(name = "endTime")
     @NotNull
-    private Date endTime;
+    private String endTime;
 
     //Contact way
     @Column(name = "contactWay")
@@ -100,13 +100,13 @@ public class Appointment {
 
     public User getUser() { return user; }
 
-    public Date getStartTime() { return startTime ;}
+    public String getStartTime() { return startTime ;}
 
-    public void setStartTime(Date startTime){ this.startTime = startTime; }
+    public void setStartTime(String startTime){ this.startTime = startTime; }
 
-    public Date getEndTime() { return endTime ;}
+    public String getEndTime() { return endTime ;}
 
-    public void setEndTime(Date endTime){ this.endTime = endTime; }
+    public void setEndTime(String endTime){ this.endTime = endTime; }
 
 }
 

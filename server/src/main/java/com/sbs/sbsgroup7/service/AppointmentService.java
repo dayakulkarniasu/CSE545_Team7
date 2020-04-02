@@ -34,9 +34,9 @@ public class AppointmentService {
         app.setDescription(appointment.getDescription());
         app.setTitle(appointment.getTitle());
         app.setUser(user);
-        Date date = new Date();
-        app.setStartTime(date);
-        app.setEndTime(date);
+        //Date date = new Date();
+        app.setStartTime(appointment.getStartTime());
+        app.setEndTime(appointment.getEndTime());
         System.out.println(app.getDescription());
         System.out.println(app.getTitle());
 //        System.out.println(app.getUserId());
