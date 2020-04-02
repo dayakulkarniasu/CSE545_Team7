@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/tier2/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/tier1/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -16,16 +16,16 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a th:href="@{/tier2/viewAccounts}" class="nav-link">View Accounts</a>
+                <a th:href="@{/tier1/viewAccounts}" class="nav-link">View Accounts</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier2/approveRequests}" class="nav-link">Approve Requests</a>
+                <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier2/approveTransfers}" class="nav-link">Approve Transfers</a>
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier2/updateProfile}" class="nav-link">Update Profile</a>
+                <a th:href="@{/tier1/updateProfile}" class="nav-link">Update Profile</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Log Out</a>
