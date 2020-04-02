@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sparky's Bank</title>
+    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a th:href="@{/merchant/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a th:href="@{/merchant/accounts}" class="nav-link">Accounts</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/creditdebit}" class="nav-link">Credit/Debit Funds</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/transferFunds}" class="nav-link">Transfer Funds</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/emailTransfer}" class="nav-link">Email Transfer</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/cashierCheque}" class="nav-link">Cashier Cheque</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/support}" class="nav-link">Help & Support</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>Cashier Cheque </h1>
+
+
+        <form role="form" th:action="@{/merchant/cashierCheque}" th:object="${cash}" method="post">
+
+            <div class="form-group">
+                <label for="checkNumber"> From Cheque with Cheque Number:</label>
+                <input type="text" class="form-control" id="checkNumber" placeholder="Enter your Cheque Number" name="checkNumber" th:field="*{checkNumber}">
+            </div>
+            <div class="form-group">
+                <label for="toAcc"> To destination Account Number:</label>
+                <input type="text" class="form-control" id="toAcc" placeholder="To Account Number" name="toAcc" th:field="*{toAcc}">
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="text" class="form-control" id="amount" placeholder="Enter Amount" name="amount" th:field="*{amount}">
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="description" class="form-control" id="description" placeholder="Enter description" name="description" th:field="*{description}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <br>
+        <br>
+    </div>
+
+
+
+</main>
+
+</body>
+</html>

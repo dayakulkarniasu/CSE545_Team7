@@ -8,25 +8,13 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-<!--            <li class="nav-item active">-->
-<!--                <a th:href="@{home}" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a th:href="@{accounts}" class="nav-link">Accounts</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a th:href="@{requestTransfers}" class="nav-link">Request Transfers</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a th:href="@{approveTransfers}" class="nav-link">Approve Transfers</a>-->
-<!--            </li>-->
             <li class="nav-item">
                 <a th:href="@{login}" class="nav-link">Login</a>
             </li>
@@ -92,18 +80,14 @@
         <p>Sparky's Secure Bank is focused on the most important thing, our customers. We aim to provide every function our customers need while protecting our customers and their data. Important data is encrypted while in transit and at rest. Additionally, we use blockchain technology to help manage transactions. </p>
     </div>
 </main>
-<footer class="page-footer font-small unique-color-dark pt-4" style="color: #fff; background-color: #343a40; margin-top: 3%">
-    <div class="container">
-        <ul class="list-unstyled text-center py-2">
-            <li>
-                <h5 class="mb-1">Sparky's Bank</h5>
-            </li>
-            <li>
-                <p>&copy; Sparky's Bank | Design by Group 7</p>
-            </li>
-        </ul>
+<footer class="buttom-footer py-lg-4 py-md-3 py-sm-3 py-3 " style="color: #fff; background-color: #343a40;">
+
+    <div class="copy-agile-right text-center">
+        <h2 class="my-3">Sparky's Bank</h2>
+        <p>
+            © 2020 Sparky's Bank | Design by Group 7
+        </p>
     </div>
 </footer>
-
 </body>
 </html>

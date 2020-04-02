@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sparky's Bank</title>
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        function validatePassword() {
+            var firstInput = document.getElementById("pwd").value;
+            var secondInput = document.getElementById("confirmPassword").value;
+
+            if (firstInput !== secondInput || firstInput === "" || secondInput === "") {
+                alert("Passwords do not match - Please make sure you confirm with the correct password!")
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a th:href="@{/admin/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a th:href="@{/admin/manageAccounts}" class="nav-link">Manage Accounts</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/registerEmployee}" class="nav-link">Register Employee</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/logs}" class="nav-link">System Log</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/technicalAccountAccess}" class="nav-link">Technical Account Access</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br>
+<div class="content-section col-md-8">
+    <h1>Register an Employee</h1>
+    <form action="#" th:action="@{/admin/registerEmployee}" th:object="${user}" method="post" onsubmit="return validatePassword()">
+        <fieldset class="form-group">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" name="First Name" th:field="*{firstName}">
+                <span class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+            </div>
+            <div class="form-group">
+                <label for="Last Name">Last Name:</label>
+                <input type="text" class="form-control" id="Last Name" placeholder="Enter Last Name" name="Last Name" th:field="*{lastName}">
+                <span class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" th:field="*{email}">
+                <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+            <div class="form-group">
+                <label for="pwd">Password:</label>
+                <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" th:field="*{password}">
+                <span class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="Password" class="form-control" id="confirmPassword" placeholder="Confirm Password" name="confirmPassword" >
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="text" class="form-control" id="phone" placeholder="Format: xxx-yyy-zzzz" name="phone" th:field="*{phone}">
+                <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+            </div>
+            <div class="dropdown">
+                <label for="role">Role:</label>
+                <select id="role" placeholder="" name="role" th:field="*{role}" class="form-control">
+                    <option th:value="null" th:text="Select">Select</option>
+                    <option th:value="TIER1" th:text="Tier1">Tier1 Employee</option>
+                    <option th:value="TIER2" th:text="Tier2">Tier2 Employee</option>
+                </select>
+                <span class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="ssn">SSN:</label>
+                <input type="text" class="form-control" id="ssn" placeholder="Format: xxx-yy-zzzz" name="ssn" th:field="*{ssn}">
+                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}"></span>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of Birth:</label>
+                <input type="date" class="form-control" id="dob" placeholder="Format: yyyy-mm-dd" name="dob" th:field="*{dob}">
+                <span class="text-danger" th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}"></span>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:field="*{address}">
+                <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <br>
+        </fieldset>
+    </form>
+</div>
+</body>
+</html>

@@ -82,7 +82,7 @@
 
 <main role="main" class="container">
     <div class="content-section col-md-8">
-        <h2>Update Profile Information</h2>
+        <h1>Update Profile Information</h1>
 
         <form class="updateProfileForm" id="updateProfileForm" action="#" th:action="@{/tier2/updateProfile}" th:object="${employeeInfo}" method="post">
             <fieldset class="form-group">
@@ -118,9 +118,9 @@
                     <label for="address">Address</label>
                     <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:value="${userInfo.getAddress()}">
                 </div>
-
                 <br>
                 <button type="submit" class="btn btn-primary">Update Changes</button>
+                <br>
             </fieldset>
         </form>
     </div>

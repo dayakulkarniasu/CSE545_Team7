@@ -22,9 +22,12 @@
                 <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Issue Cheques</a>
             </li>
             <li class="nav-item">
+                <a th:href="@{/tier1/chequeTransfers}" class="nav-link">Cheque Transfers</a>
+            </li>
+             <li class="nav-item">
                 <a th:href="@{/tier1/updateProfile}" class="nav-link">Update Profile</a>
             </li>
             <li class="nav-item">
@@ -32,8 +35,12 @@
             </li>
         </ul>
     </div>
-
 </nav>
+
+<br>
+<br>
+<br>
+
 <main role="main" class="container">
     <div class="starter-template">
         <h1>Approve Cheque Requests</h1>
@@ -42,6 +49,7 @@
             <tr>
                 <th>Request ID</th>
                 <th>Requested User</th>
+                <th>Account </th>
                 <th>Request Type</th>
             </tr>
             <tr th:each = "request: ${crequests}">

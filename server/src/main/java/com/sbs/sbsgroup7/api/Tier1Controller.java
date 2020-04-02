@@ -1,5 +1,8 @@
 package com.sbs.sbsgroup7.api;
 
+
+import com.sbs.sbsgroup7.DataSource.*;
+import com.sbs.sbsgroup7.model.*;
 import com.sbs.sbsgroup7.model.EmployeeInfo;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.DataSource.ChequeRepository;
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -44,8 +49,33 @@ public class Tier1Controller {
     @Autowired
     private RequestRepository requestRepository;
 
+    @Autowired
+    private TransRepository transRepository;
+
+    @Autowired
+    private AcctRepository acctRepository;
+
+    @Autowired
+    private SessionLogRepository sessionLogRepository;
+
     @RequestMapping("/home")
-    public String userHome(){
+    public String userHome(Model model){
+        User user = userService.getLoggedUser();
+        List<SessionLog> sessionLogs = sessionLogRepository.findAll();
+        if (sessionLogs != null) {
+            sessionLogs = sessionLogs
+                    .stream()
+                    .filter(e -> e.getUserId() != null)
+                    .filter(e -> e.getUserId().equals(user.getUserId()))
+                    .sorted((s1, s2) -> s1.getTimestamp().compareTo(s2.getTimestamp()))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("lastAccess", sessionLogs.get(0).getTimestamp());
+
+        } else {
+            model.addAttribute("lastAccess", "Never");
+        }
+
         return "tier1/home" ;
     }
 
@@ -57,10 +87,11 @@ public class Tier1Controller {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
-        if (result.hasErrors()) {
-            result.getAllErrors().stream().forEach(System.out::println);
-            return "tier1/updateProfile";
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result) throws Exception {
+        if(result.hasErrors()) {
+            //result.getAllErrors().stream().forEach(System.out::println);
+            throw new Exception(result.getAllErrors().toString());
+            //return "redirect:/tier1/error";
         }
         try {
             User user = userService.getLoggedUser();
@@ -68,8 +99,14 @@ public class Tier1Controller {
 
             return "tier1/updateProfileRequest";
         } catch(Exception e) {
-            return e.getMessage();
+            throw new Exception(e);
+//            return "redirect:/tier1/error";
         }
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "tier2/error";
     }
 
     @GetMapping("/viewAccounts")
@@ -103,6 +140,7 @@ public class Tier1Controller {
                 cheque.setAccount(request.getAccount());
                 cheque.setModifiedTime(request.getModifiedTime());
                 cheque.setRequestedTime(request.getRequestedTime());
+                cheque.setActive(true);
                 chequeRepository.save(cheque);
             }
             requestRepository.save(request);
@@ -117,4 +155,44 @@ public class Tier1Controller {
         return "redirect:/tier1/approvecRequests";
 
     }
+
+
+    @GetMapping("/chequeTransfers")
+    public String approveTransfers(Model model) {
+        model.addAttribute("transfers",accountService.findPendingChequeTransactions());
+        return "tier1/chequeTransfers";
+    }
+
+    @PostMapping("/chequeTransfers")
+    public String approveTransfers(@RequestParam("transactionId") Long transactionId,
+                                   @RequestParam(value="action", required=true) String action  ) {
+
+        Transaction transaction = accountService.findByTransactionId(transactionId);
+        Account source = transaction.getFromAccount();
+        Account destination = transaction.getToAccount();
+
+        if (action.equals("approved")) {
+            if(transaction.getTransactionType().equals("cheque")){
+                source.setBalance(source.getBalance()-transaction.getAmount());
+                destination.setBalance(destination.getBalance()+transaction.getAmount());
+            }
+            transaction.setTransactionStatus("approved");
+            transaction.setModifiedTime(Instant.now());
+            transRepository.save(transaction);
+            acctRepository.save(source);
+            acctRepository.save(destination);
+
+        }
+        else if (action.equals("declined")) {
+            transaction.setTransactionStatus("declined");
+            transaction.setModifiedTime(Instant.now());
+            transRepository.save(transaction);
+
+        }
+        return "redirect:/tier1/chequeTransfers";
+
+    }
+
+
+
 }

@@ -26,10 +26,13 @@
                 <a th:href="@{/merchant/creditdebit}" class="nav-link">Credit/Debit Funds</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/merchant/transferFunds}" class="nav-link">Transfers Funds</a>
+                <a th:href="@{/merchant/transferFunds}" class="nav-link">Transfer Funds</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/merchant/emailTransfer}" class="nav-link">Email Transfer</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/merchant/cashierCheque}" class="nav-link">Cashier Cheque</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/merchant/support}" class="nav-link">Help & Support</a>
@@ -45,11 +48,9 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Credit and debit to your account</h1>
-
+        <h1>Add Credit/Debit Funds to Your Account</h1>
 
         <form role="form" th:action="@{/merchant/creditdebit}" th:object="${creditdebit}" method="post">
-
             <div class="form-group">
                 <label for="accountNumber"> Source Account Number:</label>
                 <input type="text" class="form-control" id="accountNumber" placeholder="Enter Account Number" name="accountNumber" th:field="*{accountNumber}">
@@ -68,18 +69,7 @@
                 <label for="description">Description:</label>
                 <input type="description" class="form-control" id="description" placeholder="Enter description" name="description" th:field="*{description}">
             </div>
-
-
-            <!--            <select th:field="*{transferType}" class="form-control">-->
-            <!--                <option th:value="Select" th:text="Select">Select</option>-->
-            <!--                <option th:value="CREDIT" th:text="CREDIT">CREDIT</option>-->
-            <!--                <option th:value="DEBIT" th:text="DEBIT">DEBIT</option>-->
-            <!--            </select>-->
-
-            <!--        Once this button is pressed, the type of account to be open is sent to a Requests (?) table where only-->
-            <!--        Tier-2 employees can view. That table is then viewed in Approve Transfers page for only Tier-2-->
-            <!--        <a th:href="@{accountRequestSent}" class="btn btn-info" href="#">Request</a>-->
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 
         <script>

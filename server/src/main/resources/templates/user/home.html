@@ -27,8 +27,9 @@
             <li class="nav-item">
                 <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
-            <li>   </li>
-            <li>    </li>
+            <li class="nav-item">
+                <a th:href="@{/user/cashierCheque}" class="nav-link">Cashier Cheque</a>
+            </li>
             <li class="nav-item">
                 <a th:href="@{/user/support}" class="nav-link">Help & Support</a>
             </li>
@@ -45,24 +46,19 @@
     <div class="jumbotron" style="background-color: #deecf9">
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
         <hr>
-        <h3>Welcome to Sparky's bank</h3>
+        <h3>Welcome to Sparky's Bank</h3>
         <p class="lead">Where privacy and security are our #1 priority.</p>
-        <br>
-        <br>
-
+        <p class="info">Your Last Login: <span th:text="${lastAccess}"></span></p>
     </div>
 
-
     <div class="container">
-        <!--        <div class="row">
-                    <h2>Some Title</h2>
-                </div>
-        -->
         <div class="block">
             <div class="row">
                 <div class="span4">
                     <img class="img-left" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRkmqHTaH5MASwxNglNko9U_SMy70hrx0qaDCDjX-1n5T8ktfXf"/>
-                    <div class="content-heading"><h3>Features available through our website: </h3></div>
+                    <br>
+                    <br>
+                    <div class="content-heading"><h4>Features available through our website: </h4></div>
                     <p>View, Debit, Credit your accounts</p>
                     <p>Transfer funds by account number, email, or phone number</p>
                     <p>Schedule an appointment with a representative at our help center</p>
@@ -71,18 +67,17 @@
         </div>
     </div>
 </main>
-<footer class="page-footer font-small unique-color-dark pt-4" style="color: #fff; background-color: #343a40; margin-top: 3%">
-    <div class="container">
-        <ul class="list-unstyled text-center py-2">
-            <li>
-                <h5 class="mb-1">Sparky's Bank</h5>
-            </li>
-            <li>
-                <p>&copy; Sparky's Bank | Design by Group 7</p>
-            </li>
-        </ul>
+
+<br>
+<br>
+
+<footer class="buttom-footer py-lg-4 py-md-3 py-sm-3 py-3 " style="color: #fff; background-color: #343a40; bottom: 0; width: 100%;">
+    <div class="copy-agile-right text-center">
+        <h2 class="my-3">Sparky's Bank</h2>
+        <p>
+            © 2020 Sparky's Bank | Design by Group 7
+        </p>
     </div>
 </footer>
-
 </body>
 </html>

@@ -71,6 +71,9 @@
                 <a th:href="@{/admin/manageAccounts}" class="nav-link">Manage Accounts</a>
             </li>
             <li class="nav-item">
+                <a th:href="@{/admin/registerEmployee}" class="nav-link">Register Employee</a>
+            </li>
+            <li class="nav-item">
                 <a th:href="@{/admin/logs}" class="nav-link">System Log</a>
             </li>
             <li class="nav-item">
@@ -88,7 +91,6 @@
 <main role="main" class="container">
     <div class="starter-template">
         <h1>Manage Employee Accounts</h1>
-
 
         <form class="profileForm" id="profileForm" action="#" th:action="@{/admin/updateEmployeeProfile}" method="post">
             <fieldset class="form-group">

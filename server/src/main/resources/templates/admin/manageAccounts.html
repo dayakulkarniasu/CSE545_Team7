@@ -19,6 +19,9 @@
                 <a th:href="@{/admin/manageAccounts}" class="nav-link">Manage Accounts</a>
             </li>
             <li class="nav-item">
+                <a th:href="@{/admin/registerEmployee}" class="nav-link">Register Employee</a>
+            </li>
+            <li class="nav-item">
                 <a th:href="@{/admin/logs}" class="nav-link">System Log</a>
             </li>
             <li class="nav-item">
@@ -40,13 +43,13 @@
 
         <table class="table">
             <tr>
-                <th>UserID</th>
+                <th>User</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Role</th>
             </tr>
             <tr th:each = "employee: ${employees}">
-                <td th:text="${employee.getUserId()}"></td>
+                <td th:text="${employee.getEmail()}"></td>
                 <td th:text="${employee.getFirstName()}"></td>
                 <td th:text="${employee.getLastName()}"></td>
                 <td th:text="${employee.getRole()}"></td>

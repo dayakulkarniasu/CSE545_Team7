@@ -1,17 +1,21 @@
 package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.DataSource.EmployeeUpdatesRepository;
+import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.model.Request;
+import com.sbs.sbsgroup7.model.SessionLog;
 import com.sbs.sbsgroup7.model.SystemLog;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -34,8 +38,27 @@ public class AdminController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SessionLogRepository sessionLogRepository;
+
     @RequestMapping("/home")
-    public String adminHome() {
+    public String adminHome(Model model) {
+        User user = userService.getLoggedUser();
+        List<SessionLog> sessionLogs = sessionLogRepository.findAll();
+        if (sessionLogs != null) {
+            sessionLogs = sessionLogs
+                    .stream()
+                    .filter(e -> e.getUserId() != null)
+                    .filter(e -> e.getUserId().equals(user.getUserId()))
+                    .sorted((s1, s2) -> s1.getTimestamp().compareTo(s2.getTimestamp()))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("lastAccess", sessionLogs.get(0).getTimestamp());
+
+        } else {
+            model.addAttribute("lastAccess", "Never");
+        }
+
         return "admin/home" ;
     }
 
@@ -136,6 +159,31 @@ public class AdminController {
             return "redirect:manageAccounts";
         } catch (Exception e) {
             return "redirect:/admin/error";
+        }
+    }
+
+    @GetMapping("/registerEmployee")
+    public String register(Model model){
+        model.addAttribute("user", new User());
+        return "admin/registerEmployee";
+    }
+
+    @PostMapping("/registerEmployee")
+    public String register(@Valid @ModelAttribute("user") User userForm, BindingResult result){
+        if (result.hasErrors()) {
+            return "admin/registerEmployee";
+        }
+        try {
+            userService.registerUser(userForm);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(userForm.getEmail() + " successfully registered");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+
+            return "admin/employeeRegistered";
+        } catch(Exception e) {
+            return e.getMessage();
         }
     }
 

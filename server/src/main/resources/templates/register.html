@@ -60,9 +60,9 @@
 <br>
 <br>
 <div class="content-section col-md-8">
+    <h2>Registration Page</h2>
     <form action="#" th:action="@{/register}" th:object="${user}" method="post" onsubmit="return validatePassword()">
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4" >Registration Page</legend>
             <div class="form-group">
                 <label for="firstName">First Name:</label>
                 <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" name="First Name" th:field="*{firstName}">
@@ -96,10 +96,8 @@
                 <label for="role">Role:</label>
                 <select id="role" placeholder="" name="role" th:field="*{role}" class="form-control">
                     <option th:value="null" th:text="Select">Select</option>
-                    <option th:value="USER" th:text="User">Individual Customer</option>
+                    <option th:value="USER" th:text="Individual_Customer">Individual Customer</option>
                     <option th:value="MERCHANT" th:text="Merchant">Merchant – Organization</option>
-                    <option th:value="TIER1" th:text="Tier1">Tier1 Employee</option>
-                    <option th:value="TIER2" th:text="Tier2">Tier2 Employee</option>
                 </select>
                 <span class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
             </div>
@@ -119,22 +117,19 @@
                 <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:field="*{address}">
                 <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
             </div>
+            <br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </fieldset>
     </form>
 </div>
-<footer class="page-footer font-small unique-color-dark pt-4" style="color: #fff; background-color: #343a40; margin-top: 3%;">
-    <div class="container">
-        <ul class="list-unstyled text-center py-2">
-            <li>
-                <h5 class="mb-1">Sparky's Bank</h5>
-            </li>
-            <li>
-                <p>&copy; Sparky's Bank | Design by Group 7</p>
-            </li>
-        </ul>
+<br>
+<footer class="buttom-footer py-lg-4 py-md-3 py-sm-3 py-3 " style="color: #fff; background-color: #343a40; bottom: 0; width: 100%;">
+    <div class="copy-agile-right text-center">
+        <h2 class="my-3">Sparky's Bank</h2>
+        <p>
+            © 2020 Sparky's Bank | Design by Group 7
+        </p>
     </div>
 </footer>
 </body>
-
 </html>

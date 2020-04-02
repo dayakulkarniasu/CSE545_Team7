@@ -65,9 +65,10 @@ public class UserService {
         u.setSsn(user.getSsn());
         u.setDob(user.getDob());
         u.setAddress(user.getAddress());
-        u.setActive(false);
+        u.setActive(true);
         userRepository.save(u);
-        accountService.createAccount(u);
+        if(user.getRole().equals("USER") || user.getRole().equals("MERCHANT"))
+            accountService.createAccount(u);
         return u;
 
     }

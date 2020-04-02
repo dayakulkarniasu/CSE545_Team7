@@ -3,17 +3,29 @@ package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
+import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,13 +45,21 @@ public class UserController {
     private AppointmentService appointmentService;
 
     @Autowired
-    private TransactionService transactionService;
+    private AppointmentRepository appointmentRepository;
 
+    @Autowired
+    private TransRepository transRepository;
+  
     @Autowired
     private SessionLogRepository sessionLogRepository;
 
+
     @Autowired
-    private AppointmentRepository appointmentRepository;
+    private PdfService pdfService;
+
+
+    @Autowired
+    private SigningService signingService;
 
     @Autowired
     public UserController(UserService userService)
@@ -68,19 +88,23 @@ public class UserController {
         return "user/home" ;
     }
 
-    @RequestMapping("/profile")
-    public String userProfile(Model model){
-        User user = userService.getLoggedUser();
-        model.addAttribute("profile", user);
-        return "user/profile";
-    }
 
-    @RequestMapping("/accounts")
 //    public String approveRequests(Model model) {
 //        User user = userService.getLoggedUser();
 //        model.addAttribute("accounts", accountService.findByUser(user));
+//        model.addAttribute("userId", user.getUserId());
+
+//    public String approveRequests(Model model) {
+//        User user = userService.getLoggedUser();
+//        model.addAttribute("accounts", accountService.findByUser(user));
+
+    @RequestMapping("/accounts")
     public String getAccounts(Model model) {
         User user=userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("accounts", accountService.getAccountsByUser(user));
 
         return "user/accounts";
@@ -134,12 +158,17 @@ public class UserController {
 
     @GetMapping("/creditdebit")
     public String debit(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("creditdebit", new CreditDebit());
         return "user/creditdebit";
     }
 
     @PostMapping("/creditdebit")
-    public String debit(@Valid @ModelAttribute("creditdebit") CreditDebit creditDebit, BindingResult result){
+    public String debit(@Valid @ModelAttribute("creditdebit") CreditDebit creditDebit, BindingResult result) throws Exception {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             result.getAllErrors().stream().forEach(System.out::println);
@@ -154,18 +183,23 @@ public class UserController {
                 return "redirect:/user/accounts";
             }
         } catch(Exception e) {
-            return "redirect:/user/error";
+            throw new Exception(e);
         }
 
     }
     @GetMapping("/transferFunds")
     public String transferFunds(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("transfer", new TransactionPage());
         return "user/transferFunds";
     }
 
     @PostMapping("/transferFunds")
-    public String transferFunds(@Valid @ModelAttribute("transfer") TransactionPage transactionPage, BindingResult result) {
+    public String transferFunds(@Valid @ModelAttribute("transfer") TransactionPage transactionPage, BindingResult result) throws Exception {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             result.getAllErrors().stream().forEach(System.out::println);
@@ -173,25 +207,25 @@ public class UserController {
         }
         try {
             accountService.transferFunds(user, transactionPage);
-            if (transactionPage.getAmount() >= 1000) {
-                return "user/accountRequestSent";
-            }
-            else {
-                return "redirect:/user/accounts";
-            }
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
-            return "redirect:/user/error";
+            throw new Exception(e);
         }
     }
 
     @GetMapping("/emailTransfer")
     public String emailTransfer(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("email", new EmailPage());
         return "user/emailTransfer";
     }
 
     @PostMapping("/emailTransfer")
-    public String emailTransfer(@Valid @ModelAttribute("email") EmailPage emailPage, BindingResult result) {
+    public String emailTransfer(@Valid @ModelAttribute("email") EmailPage emailPage, BindingResult result) throws Exception {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             result.getAllErrors().stream().forEach(System.out::println);
@@ -199,18 +233,23 @@ public class UserController {
         }
         try {
             accountService.emailTransfer(user, emailPage);
-            if (emailPage.getAmount() >= 1000) {
-                return "user/accountRequestSent";
-            }
-            else {
-                return "redirect:/user/accounts";
-            }
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
-            return "redirect:/user/error";
+            throw new Exception(e);
         }
     }
 
 
+    @GetMapping("/cashierCheque")
+    public String cashierCheques(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
+        model.addAttribute("cash", new CashierCheque());
+        return "user/cashiercheque";
+    }
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
         userService.add(user);
@@ -219,22 +258,20 @@ public class UserController {
     @PutMapping ("/update")
     public void update(@NotNull @Validated @RequestBody User user){
         userService.update(user);
+
     }
 
-    @DeleteMapping(path="/remove/{id}")
-    public void deleteUserById(@PathVariable("id") String id){
-        userService.delete(id);
+    @PostMapping("/cashierCheque")
+    public String cashierCheques(@ModelAttribute("cash") CashierCheque cashierCheque){
+        User user=userService.getLoggedUser();
+        Boolean b=accountService.cashierCheque(user,cashierCheque);
+        if(b==true)
+            return "user/chequeRequestSent";
+        else{
+            return "user/cashError";
+        }
     }
 
-    @GetMapping(path = "/")
-    public List<User> getAllUsers(){
-        return userService.findAll();
-    }
-
-    @DeleteMapping(path="/removeAll")
-    public void deleteAll(){
-        userService.deleteAll();
-    }
 
     @RequestMapping("/error")
     public String error(){
@@ -269,6 +306,23 @@ public class UserController {
         return "user/updateProfile";
     }
 
+
+    @GetMapping(value = "/downloadStatement", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public HttpEntity<byte[]> bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber, HttpServletResponse response) throws IOException {
+
+        byte[] pdfToSign = pdfService.generatePdf(userId, accountNumber);
+        byte[] signedPdf = signingService.signPdf(pdfToSign);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String fileName = "bankStatement " + formatter.format(date) + ".pdf";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+        return new HttpEntity<byte[]>(signedPdf, headers);
+    }
+
     @PostMapping("/updateProfile")
     public String createAppointment(@ModelAttribute("updateProf") User user){
         userService.updateInformation(user);
@@ -278,6 +332,11 @@ public class UserController {
 
     @RequestMapping("/support")
     public String userSupport(){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         return "user/support" ;
     }
 
