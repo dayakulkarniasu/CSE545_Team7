@@ -2,6 +2,7 @@ package com.sbs.sbsgroup7.api;
 
 
 import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
+import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.*;
@@ -33,6 +34,9 @@ public class UserController {
     private AppointmentRepository appointmentRepository;
 
     @Autowired
+    private TransRepository transRepository;
+
+    @Autowired
     public UserController(UserService userService)
     {
         this.userService=userService;
@@ -43,9 +47,14 @@ public class UserController {
     }
 
 
+
     @RequestMapping("/accounts")
     public String getAccounts(Model model) {
         User user=userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("accounts", accountService.getAccountsByUser(user));
 
         return "user/accounts";
@@ -101,6 +110,11 @@ public class UserController {
 
     @GetMapping("/creditdebit")
     public String debit(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("creditdebit", new CreditDebit());
         return "user/creditdebit";
     }
@@ -118,6 +132,11 @@ public class UserController {
     }
     @GetMapping("/transferFunds")
     public String transferFunds(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("transfer", new TransactionPage());
         return "user/transferFunds";
     }
@@ -127,7 +146,7 @@ public class UserController {
         User user = userService.getLoggedUser();
         try {
             accountService.transferFunds(user, transactionPage);
-            return "redirect:/user/accounts";
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
             return "redirect:/user/error";
         }
@@ -135,6 +154,11 @@ public class UserController {
 
     @GetMapping("/emailTransfer")
     public String emailTransfer(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("email", new EmailPage());
         return "user/emailTransfer";
     }
@@ -144,7 +168,7 @@ public class UserController {
         User user = userService.getLoggedUser();
         try {
             accountService.emailTransfer(user, emailPage);
-            return "redirect:/user/accounts";
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
             return "redirect:/user/error";
         }
@@ -152,6 +176,11 @@ public class UserController {
 
     @GetMapping("/cashierCheque")
     public String cashierCheques(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("cash", new CashierCheque());
         return "user/cashiercheque";
     }
@@ -161,9 +190,9 @@ public class UserController {
         User user=userService.getLoggedUser();
         Boolean b=accountService.cashierCheque(user,cashierCheque);
         if(b==true)
-            return "/user/chequeRequestSent";
+            return "user/chequeRequestSent";
         else{
-            return "/user/cashError";
+            return "user/cashError";
         }
     }
 
@@ -207,6 +236,11 @@ public class UserController {
 
     @RequestMapping("/support")
     public String userSupport(){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         return "user/support" ;
     }
 

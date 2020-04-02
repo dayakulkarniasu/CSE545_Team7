@@ -54,11 +54,13 @@
             <tr>
                 <th>Check #</th>
                 <th>Account #</th>
+                <th>Cheque Status</th>
 
             </tr>
             <tr th:each = "cheque: ${cheques}">
                 <td th:text="${cheque.getCheckNumber()}"></td>
                 <td th:text="${cheque.getAccount().getAccountNumber()}"></td>
+                <td th:text="${cheque.getActive()} ? 'Active' : 'Expired' "></td>
             </tr>
         </table>
     </div>

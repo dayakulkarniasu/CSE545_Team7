@@ -215,17 +215,16 @@ public class AccountService {
                 transaction.setAmount(amount);
                 transaction.setFromAccount(source);
                 transaction.setToAccount(destination);
-                transaction.setTransactionStatus("approved");
+                transaction.setTransactionStatus("temp");
                 transaction.setTransactionOwner(user);
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("transferfunds");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
-//                System.out.println("transaction done");
-                source.setBalance(balance-amount);
-                destination.setBalance(destination.getBalance()+amount);
-                acctRepository.save(source);
-                acctRepository.save(destination);
+//                source.setBalance(balance-amount);
+//                destination.setBalance(destination.getBalance()+amount);
+//                acctRepository.save(source);
+//                acctRepository.save(destination);
 //                System.out.println("email transfer done");
             }
             else{
@@ -233,7 +232,7 @@ public class AccountService {
                 transaction.setAmount(amount);
                 transaction.setFromAccount(source);
                 transaction.setToAccount(destination);
-                transaction.setTransactionStatus("pending");
+                transaction.setTransactionStatus("temp");
                 transaction.setTransactionOwner(user);
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("transferfunds");
@@ -250,6 +249,9 @@ public class AccountService {
         Cheque cheque=chequeRepository.findByCheckNumber(cashierCheque.getCheckNumber()).orElse(null);
         System.out.println(cheque.getCheckNumber());
         if(cheque==null){
+            return false;
+        }
+        if(cheque.getActive()==false){
             return false;
         }
         Double balance=cheque.getAccount().getBalance();
@@ -270,7 +272,9 @@ public class AccountService {
         transaction.setTransactionOwner(user);
         transaction.setTransactionTime(Instant.now());
         transaction.setTransactionType("cheque");
+        cheque.setActive(false);
         transRepository.save(transaction);
+        chequeRepository.save(cheque);
         return true;
     }
 

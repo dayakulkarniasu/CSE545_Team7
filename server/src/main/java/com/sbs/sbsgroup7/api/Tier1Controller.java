@@ -81,6 +81,7 @@ public class Tier1Controller {
                 cheque.setAccount(request.getAccount());
                 cheque.setModifiedTime(request.getModifiedTime());
                 cheque.setRequestedTime(request.getRequestedTime());
+                cheque.setActive(true);
                 chequeRepository.save(cheque);
             }
             requestRepository.save(request);

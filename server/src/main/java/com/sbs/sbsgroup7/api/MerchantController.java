@@ -2,6 +2,7 @@ package com.sbs.sbsgroup7.api;
 
 
 import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
+import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.*;
@@ -35,12 +36,21 @@ public class MerchantController {
     private AppointmentService appointmentService;
 
     @Autowired
+    private TransRepository transRepository;
+
+    @Autowired
     public MerchantController(UserService userService)
     {
         this.userService=userService;
     }
+
     @RequestMapping("/home")
     public String merchantHome(){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+        transRepository.delete(transaction);
+    }
         return "merchant/home" ;
     }
 
@@ -48,6 +58,10 @@ public class MerchantController {
     @RequestMapping("/accounts")
     public String getAccounts(Model model) {
         User user=userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("accounts", accountService.getAccountsByUser(user));
 
         return "merchant/accounts";
@@ -85,6 +99,11 @@ public class MerchantController {
 
     @GetMapping("/creditdebit")
     public String debit(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("creditdebit", new CreditDebit());
         return "merchant/creditdebit";
     }
@@ -102,6 +121,11 @@ public class MerchantController {
     }
     @GetMapping("/transferFunds")
     public String transferFunds(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("transfer", new TransactionPage());
         return "merchant/transferFunds";
     }
@@ -111,7 +135,7 @@ public class MerchantController {
         User user = userService.getLoggedUser();
         try {
             accountService.transferFunds(user, transactionPage);
-            return "redirect:/merchant/accounts";
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
             return "redirect:/merchant/error";
         }
@@ -119,6 +143,11 @@ public class MerchantController {
 
     @GetMapping("/emailTransfer")
     public String emailTransfer(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("email", new EmailPage());
         return "merchant/emailTransfer";
     }
@@ -128,9 +157,31 @@ public class MerchantController {
         User user = userService.getLoggedUser();
         try {
             accountService.emailTransfer(user, emailPage);
-            return "redirect:/merchant/accounts";
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
             return "redirect:/merchant/error";
+        }
+    }
+
+    @GetMapping("/cashierCheque")
+    public String cashierCheques(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
+        model.addAttribute("cash", new CashierCheque());
+        return "merchant/cashiercheque";
+    }
+
+    @PostMapping("/cashierCheque")
+    public String cashierCheques(@ModelAttribute("cash") CashierCheque cashierCheque){
+        User user=userService.getLoggedUser();
+        Boolean b=accountService.cashierCheque(user,cashierCheque);
+        if(b==true)
+            return "merchant/chequeRequestSent";
+        else{
+            return "merchant/cashError";
         }
     }
 
@@ -172,6 +223,12 @@ public class MerchantController {
 
     @RequestMapping("/support")
     public String userSupport(){
+
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         return "merchant/support" ;
     }
 
