@@ -42,28 +42,40 @@
 <br>
 <br>
 <br>
+
 <main role="main" class="container">
-    <br>
-    <br>
-    <br>
-
     <div class="starter-template">
-        <ul class="nav nav-pills nav-fill">
-            <li class="nav-item">
-                <a th:href="@{/user/updateProfile}" class="nav-link active"
-                   style="margin: 10px"
-                    >Contact Info Update</a>
-            </li>
-            <li class="nav-item">
-                <a th:href="@{/user/createAppointment}" class="nav-link active"  style="margin: 10px">Schedule Appointment</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active"
-                   style="margin: 10px"
-                   th:href="@{/user/viewAppointment}" >View Appointment</a>
-            </li>
+        <h1>Cashier Cheque </h1>
 
+
+        <form role="form" th:action="@{/user/cashierCheque}" th:object="${cash}" method="post">
+
+            <div class="form-group">
+                <label for="checkNumber"> From Cheque with Cheque Number:</label>
+                <input type="text" class="form-control" id="checkNumber" placeholder="Enter your Cheque Number" name="checkNumber" th:field="*{checkNumber}">
+            </div>
+            <div class="form-group">
+                <label for="toAcc"> To destination Account Number:</label>
+                <input type="text" class="form-control" id="toAcc" placeholder="To Account Number" name="toAcc" th:field="*{toAcc}">
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount:</label>
+                <input type="text" class="form-control" id="amount" placeholder="Enter Amount" name="amount" th:field="*{amount}">
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="description" class="form-control" id="description" placeholder="Enter description" name="description" th:field="*{description}">
+            </div>
+
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+        <br>
+        <br>
     </div>
+
+
+
 </main>
 
 </body>

@@ -3,6 +3,7 @@ package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
+import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.*;
@@ -33,13 +34,17 @@ public class UserController {
     private AppointmentService appointmentService;
 
     @Autowired
-    private TransactionService transactionService;
+    private AppointmentRepository appointmentRepository;
 
+    @Autowired
+    private TransRepository transRepository;
+  
     @Autowired
     private SessionLogRepository sessionLogRepository;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
+
 
     @Autowired
     public UserController(UserService userService)
@@ -68,12 +73,6 @@ public class UserController {
         return "user/home" ;
     }
 
-    @RequestMapping("/profile")
-    public String userProfile(Model model){
-        User user = userService.getLoggedUser();
-        model.addAttribute("profile", user);
-        return "user/profile";
-    }
 
     @RequestMapping("/accounts")
 //    public String approveRequests(Model model) {
@@ -81,6 +80,10 @@ public class UserController {
 //        model.addAttribute("accounts", accountService.findByUser(user));
     public String getAccounts(Model model) {
         User user=userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("accounts", accountService.getAccountsByUser(user));
 
         return "user/accounts";
@@ -134,6 +137,11 @@ public class UserController {
 
     @GetMapping("/creditdebit")
     public String debit(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("creditdebit", new CreditDebit());
         return "user/creditdebit";
     }
@@ -160,6 +168,11 @@ public class UserController {
     }
     @GetMapping("/transferFunds")
     public String transferFunds(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("transfer", new TransactionPage());
         return "user/transferFunds";
     }
@@ -173,12 +186,7 @@ public class UserController {
         }
         try {
             accountService.transferFunds(user, transactionPage);
-            if (transactionPage.getAmount() >= 1000) {
-                return "user/accountRequestSent";
-            }
-            else {
-                return "redirect:/user/accounts";
-            }
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
             return "redirect:/user/error";
         }
@@ -186,6 +194,11 @@ public class UserController {
 
     @GetMapping("/emailTransfer")
     public String emailTransfer(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         model.addAttribute("email", new EmailPage());
         return "user/emailTransfer";
     }
@@ -199,18 +212,23 @@ public class UserController {
         }
         try {
             accountService.emailTransfer(user, emailPage);
-            if (emailPage.getAmount() >= 1000) {
-                return "user/accountRequestSent";
-            }
-            else {
-                return "redirect:/user/accounts";
-            }
+            return "redirect:/otp/validateOtp";
         } catch (Exception e) {
             return "redirect:/user/error";
         }
     }
 
 
+    @GetMapping("/cashierCheque")
+    public String cashierCheques(Model model){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
+        model.addAttribute("cash", new CashierCheque());
+        return "user/cashiercheque";
+    }
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
         userService.add(user);
@@ -219,22 +237,20 @@ public class UserController {
     @PutMapping ("/update")
     public void update(@NotNull @Validated @RequestBody User user){
         userService.update(user);
+
     }
 
-    @DeleteMapping(path="/remove/{id}")
-    public void deleteUserById(@PathVariable("id") String id){
-        userService.delete(id);
+    @PostMapping("/cashierCheque")
+    public String cashierCheques(@ModelAttribute("cash") CashierCheque cashierCheque){
+        User user=userService.getLoggedUser();
+        Boolean b=accountService.cashierCheque(user,cashierCheque);
+        if(b==true)
+            return "user/chequeRequestSent";
+        else{
+            return "user/cashError";
+        }
     }
 
-    @GetMapping(path = "/")
-    public List<User> getAllUsers(){
-        return userService.findAll();
-    }
-
-    @DeleteMapping(path="/removeAll")
-    public void deleteAll(){
-        userService.deleteAll();
-    }
 
     @RequestMapping("/error")
     public String error(){
@@ -278,6 +294,11 @@ public class UserController {
 
     @RequestMapping("/support")
     public String userSupport(){
+        User user = userService.getLoggedUser();
+        Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
+        if(transaction!=null){
+            transRepository.delete(transaction);
+        }
         return "user/support" ;
     }
 

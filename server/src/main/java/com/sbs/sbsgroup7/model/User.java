@@ -84,6 +84,17 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "transactionOwner")
     private List<Transaction> transactions;
 
+    @OneToOne(mappedBy = "user")
+    private Appointment appointment;
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
     }

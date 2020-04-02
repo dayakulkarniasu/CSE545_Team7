@@ -1,5 +1,11 @@
 package com.sbs.sbsgroup7.api;
 
+
+import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.ChequeRepository;
+import com.sbs.sbsgroup7.DataSource.RequestRepository;
+import com.sbs.sbsgroup7.DataSource.TransRepository;
+import com.sbs.sbsgroup7.model.*;
 import com.sbs.sbsgroup7.model.EmployeeInfo;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.DataSource.ChequeRepository;
@@ -43,6 +49,12 @@ public class Tier1Controller {
 
     @Autowired
     private RequestRepository requestRepository;
+
+    @Autowired
+    private TransRepository transRepository;
+
+    @Autowired
+    private AcctRepository acctRepository;
 
     @RequestMapping("/home")
     public String userHome(){
@@ -107,6 +119,7 @@ public class Tier1Controller {
                 cheque.setAccount(request.getAccount());
                 cheque.setModifiedTime(request.getModifiedTime());
                 cheque.setRequestedTime(request.getRequestedTime());
+                cheque.setActive(true);
                 chequeRepository.save(cheque);
             }
             requestRepository.save(request);
@@ -121,4 +134,44 @@ public class Tier1Controller {
         return "redirect:/tier1/approvecRequests";
 
     }
+
+
+    @GetMapping("/chequeTransfers")
+    public String approveTransfers(Model model) {
+        model.addAttribute("transfers",accountService.findPendingChequeTransactions());
+        return "tier1/chequeTransfers";
+    }
+
+    @PostMapping("/chequeTransfers")
+    public String approveTransfers(@RequestParam("transactionId") Long transactionId,
+                                   @RequestParam(value="action", required=true) String action  ) {
+
+        Transaction transaction = accountService.findByTransactionId(transactionId);
+        Account source = transaction.getFromAccount();
+        Account destination = transaction.getToAccount();
+
+        if (action.equals("approved")) {
+            if(transaction.getTransactionType().equals("cheque")){
+                source.setBalance(source.getBalance()-transaction.getAmount());
+                destination.setBalance(destination.getBalance()+transaction.getAmount());
+            }
+            transaction.setTransactionStatus("approved");
+            transaction.setModifiedTime(Instant.now());
+            transRepository.save(transaction);
+            acctRepository.save(source);
+            acctRepository.save(destination);
+
+        }
+        else if (action.equals("declined")) {
+            transaction.setTransactionStatus("declined");
+            transaction.setModifiedTime(Instant.now());
+            transRepository.save(transaction);
+
+        }
+        return "redirect:/tier1/chequeTransfers";
+
+    }
+
+
+
 }

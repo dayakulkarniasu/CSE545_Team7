@@ -21,7 +21,7 @@ public class Appointment {
     //userID (Foreign Key)
     @JoinColumn(name = "userId", nullable=false)
     @NotNull
-    @ManyToOne
+    @OneToOne
     private User user;
 
     //title

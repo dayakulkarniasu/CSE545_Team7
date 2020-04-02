@@ -28,6 +28,9 @@
                 <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
             <li class="nav-item">
+                <a th:href="@{/user/cashierCheque}" class="nav-link">Cashier Cheque</a>
+            </li>
+            <li class="nav-item">
                 <a th:href="@{/user/support}" class="nav-link">Help & Support</a>
             </li>
             <li class="nav-item">
@@ -51,11 +54,13 @@
             <tr>
                 <th>Check #</th>
                 <th>Account #</th>
+                <th>Cheque Status</th>
 
             </tr>
             <tr th:each = "cheque: ${cheques}">
                 <td th:text="${cheque.getCheckNumber()}"></td>
                 <td th:text="${cheque.getAccount().getAccountNumber()}"></td>
+                <td th:text="${cheque.getActive()} ? 'Active' : 'Expired' "></td>
             </tr>
         </table>
     </div>

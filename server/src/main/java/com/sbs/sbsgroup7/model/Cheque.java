@@ -26,6 +26,16 @@ public class Cheque {
     @Column(name="modifiedTime", nullable = true)
     private Instant modifiedTime;
 
+    @Column(name="active",nullable =false)
+    private Boolean active;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public void setCheckNumber(Long checkNumber) {
         this.checkNumber = checkNumber;

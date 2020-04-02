@@ -10,7 +10,7 @@ import com.google.common.cache.CacheLoader;
 @Service
 public class OtpService {
     //cache based on username and OPT MAX 8
-    private static final Integer EXPIRE_MINS = 5;
+    private static final Integer EXPIRE_MINS = 3;
     private LoadingCache<String, Integer> otpCache;
     public OtpService(){
         super();
@@ -21,7 +21,7 @@ public class OtpService {
             }
         });
     }
-    //This method is used to push the opt number against Key. Rewrite the OTP if it exists
+    //This method is used to push the otp number against Key. Rewrite the OTP if it exists
     //Using user.html id  as key
     public int generateOTP(String key){
         Random random = new Random();
