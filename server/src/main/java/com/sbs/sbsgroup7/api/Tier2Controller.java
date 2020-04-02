@@ -183,9 +183,10 @@ public class Tier2Controller {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result) throws Exception {
         if(result.hasErrors()) {
-            return "redirect:/tier2/error";
+            throw new Exception(result.getAllErrors().toString());
+            //return "redirect:/tier2/error";
         }
         try {
             User user = userService.getLoggedUser();
@@ -193,7 +194,8 @@ public class Tier2Controller {
 
             return "tier2/updateProfileRequest";
         } catch(Exception e) {
-            return "redirect:/tier2/error";
+            throw new Exception(e);
+            //return "redirect:/tier2/error";
         }
     }
 
