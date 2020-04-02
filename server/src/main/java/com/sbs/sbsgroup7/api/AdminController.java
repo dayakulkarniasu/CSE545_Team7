@@ -10,8 +10,10 @@ import com.sbs.sbsgroup7.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -136,6 +138,31 @@ public class AdminController {
             return "redirect:manageAccounts";
         } catch (Exception e) {
             return "redirect:/admin/error";
+        }
+    }
+
+    @GetMapping("/registerEmployee")
+    public String register(Model model){
+        model.addAttribute("user", new User());
+        return "admin/registerEmployee";
+    }
+
+    @PostMapping("/registerEmployee")
+    public String register(@Valid @ModelAttribute("user") User userForm, BindingResult result){
+        if (result.hasErrors()) {
+            return "admin/registerEmployee";
+        }
+        try {
+            userService.registerUser(userForm);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(userForm.getEmail() + " successfully registered");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+
+            return "admin/employeeRegistered";
+        } catch(Exception e) {
+            return e.getMessage();
         }
     }
 

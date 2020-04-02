@@ -41,9 +41,7 @@ public class UserController {
   
     @Autowired
     private SessionLogRepository sessionLogRepository;
-
-    @Autowired
-    private AppointmentRepository appointmentRepository;
+    
 
 
     @Autowired
