@@ -1,5 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
+import com.sbs.sbsgroup7.model.SystemLog;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Date;
 
 @Controller
 public class ViewController {
@@ -31,6 +34,9 @@ public class ViewController {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    SystemLogRepository systemLogRepository;
 
    // @Autowired
    // private TransactionService transactionService;
@@ -62,6 +68,12 @@ public class ViewController {
         }
         try {
             userService.registerUser(userForm);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(userForm.getEmail() + " successfully registered");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+
             return "signin";
         } catch(Exception e) {
             return e.getMessage();
@@ -92,6 +104,11 @@ public class ViewController {
             //Remove the recently used OTP from server.
             otpService.clearOTP(username);
             new SecurityContextLogoutHandler().logout(request, response, auth);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(username + " logged out");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
         }
         return "redirect:/login?logout";
     }

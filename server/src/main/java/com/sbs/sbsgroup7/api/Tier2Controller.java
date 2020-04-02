@@ -2,6 +2,7 @@ package com.sbs.sbsgroup7.api;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
 import com.sbs.sbsgroup7.DataSource.RequestRepository;
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
 import com.sbs.sbsgroup7.service.AccountService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,6 +44,9 @@ public class Tier2Controller {
     @Autowired
     private RequestRepository requestRepository;
 
+    @Autowired
+    private SystemLogRepository systemLogRepository;
+
     @RequestMapping("/home")
     public String userHome(){
         return "tier2/home" ;
@@ -67,12 +72,22 @@ public class Tier2Controller {
             a.setAccountType(request.getRequestType());
             accountService.createAccount(request.getRequestedUser(), a);
             requestRepository.save(request);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(approvedUser.getEmail() + " approved " + request.getRequestedUser().getEmail() + "'s " + request.getRequestType() + " account creation request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
         }
         else if (action.equals("declined")) {
             request.setRequestStatus("declined");
             request.setApprovedUser(approvedUser);
             request.setModifiedTime(Instant.now());
             requestRepository.save(request);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(approvedUser.getEmail() + " declined " + request.getRequestedUser().getEmail() + "'s " + request.getRequestType() + " account creation request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
 
         }
         return "redirect:/tier2/approveRequests";
@@ -126,10 +141,21 @@ public class Tier2Controller {
             destination.setBalance(destination.getBalance()+transaction.getAmount());
             acctRepository.save(source);
             acctRepository.save(destination);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(userService.getLoggedUser().getEmail() + " approved " + transaction.getTransactionOwner().getEmail() + "'s transaction request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+
         } else if (action.equals("declined")) {
             transaction.setTransactionStatus("declined");
             transaction.setModifiedTime(Instant.now());
             transRepository.save(transaction);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(userService.getLoggedUser().getEmail() + " declined " + transaction.getTransactionOwner().getEmail() + "'s transaction request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
         }
         return "redirect:/tier2/approveTransfers";
     }
@@ -142,14 +168,22 @@ public class Tier2Controller {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@ModelAttribute("employeeInfo") EmployeeInfo employeeInfo){
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
+        if(result.hasErrors()) {
+            return "redirect:/tier2/error";
+        }
         try {
             User user = userService.getLoggedUser();
             userService.requestProfileUpdates(user, employeeInfo);
 
             return "tier2/updateProfileRequest";
         } catch(Exception e) {
-            return e.getMessage();
+            return "redirect:/tier2/error";
         }
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "tier2/error";
     }
 }

@@ -2,9 +2,11 @@ package com.sbs.sbsgroup7.service;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.dao.AcctDaoInterface;
@@ -36,6 +38,9 @@ public class AccountService {
 
     @Autowired
     private TransRepository transRepository;
+
+    @Autowired
+    private SystemLogRepository systemLogRepository;
 
 
     @Autowired
@@ -138,6 +143,12 @@ public class AccountService {
                 transaction.setTransactionType("credit");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " successfully added credit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
+
                 source.setBalance(balance+amount);
                 acctRepository.save(source);
             }
@@ -152,6 +163,10 @@ public class AccountService {
                 transaction.setTransactionType("credit");
                 transRepository.save(transaction);
 
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " requested credit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
             }
         }
         catch(Exception e){
@@ -175,6 +190,12 @@ public class AccountService {
                 transaction.setTransactionType("debit");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " successfully added debit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
+
                 source.setBalance(balance-amount);
                 acctRepository.save(source);
             }
@@ -188,6 +209,11 @@ public class AccountService {
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("debit");
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " requested debit of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
             }
         }catch(Exception e){
             throw new Exception("Debit transaction failed from account "+source.getAccountNumber(),e);
@@ -212,6 +238,12 @@ public class AccountService {
                 transaction.setTransactionType("transferfunds");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
+
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " successfully transferred $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
+
                 source.setBalance(balance-amount);
                 destination.setBalance(destination.getBalance()+amount);
                 acctRepository.save(source);
@@ -228,6 +260,10 @@ public class AccountService {
                 transaction.setTransactionType("transferfunds");
                 transRepository.save(transaction);
 
+                SystemLog systemLog=new SystemLog();
+                systemLog.setMessage(user.getEmail() + " requested transfer of $" + transaction.getAmount());
+                systemLog.setTimestamp(new Date());
+                systemLogRepository.save(systemLog);
             }
         }catch(Exception e){
             throw new Exception("Debit transaction failed from account "+source.getAccountNumber(),e);

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,8 +55,25 @@ public class AdminController {
 
     @PostMapping("/approveUpdates")
     public String approveUpdates(@RequestParam("userId") String userId, @RequestParam("action") String action) {
+        User requestedUser = userService.findByUserId(userId);
+        User loggedUser = userService.getLoggedUser();
         if (action.equalsIgnoreCase("approved")) {
             userService.approveProfileUpdates(userId);
+
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(loggedUser.getEmail() + " approved " + requestedUser.getEmail() + "'s profile updates request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+
+            systemLog.setMessage(requestedUser.getEmail() + " successfully updated profile information");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
+        }
+        else {
+            SystemLog systemLog=new SystemLog();
+            systemLog.setMessage(loggedUser.getEmail() + " declined " + requestedUser.getEmail() + "'s profile updates request");
+            systemLog.setTimestamp(new Date());
+            systemLogRepository.save(systemLog);
         }
         employeeUpdatesRepository.deleteById(userId);
 
@@ -105,15 +123,24 @@ public class AdminController {
                                         @RequestParam("phone") String phone,
                                         @RequestParam("userId") String userId) {
 
-        User user = userRepository.findByUserId(userId);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setSsn(ssn);
-        user.setAddress(address);
-        user.setPhone(phone);
-        userRepository.save(user);
+        try {
+            User user = userRepository.findByUserId(userId);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setSsn(ssn);
+            user.setAddress(address);
+            user.setPhone(phone);
+            userRepository.save(user);
 
-        return "redirect:manageAccounts";
+            return "redirect:manageAccounts";
+        } catch (Exception e) {
+            return "redirect:/admin/error";
+        }
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "admin/error";
     }
 }
