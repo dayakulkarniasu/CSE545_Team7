@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.ChequeRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.dao.AcctDaoInterface;
@@ -36,6 +37,9 @@ public class AccountService {
 
     @Autowired
     private TransRepository transRepository;
+
+    @Autowired
+    private ChequeRepository chequeRepository;
 
 
     @Autowired
@@ -107,16 +111,19 @@ public class AccountService {
         List<Account> useraccts = acctRepository.findByUser(user);
         User targetuser= userRepository.findByEmail(emailPage.getEmailId()).orElse(null);
         if(targetuser==null){
+//            System.out.println("/////////////////////");
             throw new Exception("Target email is invalid");
         }
         Account targetAcc=acctRepository.findOneByUser(targetuser);
         for(Account useracct : useraccts){
             if(useracct.getAccountNumber()==emailPage.getFromAcc()){
+//                System.out.println("123456789");
                 debitTransfers(useracct,emailPage.getAmount(), targetAcc, user);
                 return;
             }
 
         }
+//        System.out.println(".............");
         throw new Exception("Source Account is invalid");
 
     }
@@ -160,8 +167,11 @@ public class AccountService {
     public void debitAmount(Account source, double amount, Account destination,User user) throws Exception{
         try{
             double balance=source.getBalance();
-            if(balance<amount)
+            if(balance<amount) {
+
                 throw new Exception("Insufficient funds to debit");
+
+            }
             if(amount<1000){
                 Transaction transaction=new Transaction();
                 transaction.setAmount(amount);
@@ -175,6 +185,7 @@ public class AccountService {
                 transRepository.save(transaction);
                 source.setBalance(balance-amount);
                 acctRepository.save(source);
+
             }
             else{
                 Transaction transaction=new Transaction();
@@ -196,8 +207,9 @@ public class AccountService {
     public void debitTransfers(Account source, double amount, Account destination,User user) throws Exception{
         try{
             double balance=source.getBalance();
-            if(balance<amount)
-                throw new Exception("Insufficient funds to debit");
+            if(balance<amount){
+//                System.out.println("Insufficient funds to debit");
+                throw new Exception("Insufficient funds to debit");}
             if(amount<1000){
                 Transaction transaction=new Transaction();
                 transaction.setAmount(amount);
@@ -209,10 +221,12 @@ public class AccountService {
                 transaction.setTransactionType("transferfunds");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
+//                System.out.println("transaction done");
                 source.setBalance(balance-amount);
                 destination.setBalance(destination.getBalance()+amount);
                 acctRepository.save(source);
                 acctRepository.save(destination);
+//                System.out.println("email transfer done");
             }
             else{
                 Transaction transaction=new Transaction();
@@ -224,6 +238,7 @@ public class AccountService {
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("transferfunds");
                 transRepository.save(transaction);
+//                System.out.println("transfer request done");
 
             }
         }catch(Exception e){
@@ -257,6 +272,7 @@ public class AccountService {
 
     }
 
+
     public List<Transaction> findPendingTransactions(){
         return transRepository.findByTransactionStatus("pending");
     }
@@ -264,5 +280,10 @@ public class AccountService {
     public Transaction findByTransactionId(Long id){
         return transRepository.findByTransactionId(id);
     }
+
+    public List<Cheque> findChequeByAccount(Account account){
+        return chequeRepository.findByAccount(account);
+    }
+
 
 }

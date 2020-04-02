@@ -13,7 +13,29 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-<!--    <div class="collapse navbar-collapse" id="navbarsExampleDefault">-->
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a th:href="@{/tier1/viewAccounts}" class="nav-link">View Accounts</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
+            </li>
+
+            <li class="nav-item">
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
+            </li>
+
+            <li class="nav-item">
+                <a th:href="@{/logout}" class="nav-link">Logout</a>
+            </li>
+        </ul>
+    </div>
+
+
+
+
+    <!--    <div class="collapse navbar-collapse" id="navbarsExampleDefault">-->
 <!--        <ul class="navbar-nav mr-auto">-->
 <!--            <li class="nav-item">-->
 <!--                <a th:href="@{}" class="nav-link">View Transactions</a>-->

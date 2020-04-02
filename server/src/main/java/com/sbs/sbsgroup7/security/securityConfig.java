@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -31,8 +32,12 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/accounts")
                     .hasAnyAuthority("ADMIN", "TIER1", "TIER2")
                 .antMatchers("/home")
-                    .hasAnyAuthority("ADMIN", "TIER1", "TIER2", "USER", "ORG")
+                    .hasAnyAuthority("ADMIN", "TIER1", "TIER2", "USER", "MERCHANT")
                 .antMatchers("/").permitAll()
+                .antMatchers("/user/**")
+                    .hasAnyAuthority("USER")
+                .antMatchers("/merchant/**")
+                    .hasAnyAuthority("MERCHANT")
                 .antMatchers("/tier1/**")
                     .hasAnyAuthority("TIER1")
                 .antMatchers("/tier2/**")
@@ -42,7 +47,8 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .formLogin()
                         .loginPage("/login")  //Loginform all can access ..
-                        .defaultSuccessUrl("/dashboard")
+                        .successHandler(myAuthenticationSuccessHandler())
+//                        .defaultSuccessUrl("/dashboard")
                         .failureUrl("/login?error")
                         .permitAll()
                 .and()
@@ -63,5 +69,10 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
+        return new UrlAuthenticationSuccessHandler();
     }
 }
