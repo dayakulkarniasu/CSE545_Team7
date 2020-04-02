@@ -58,9 +58,8 @@ public class Tier1Controller {
 
     @PostMapping("/updateProfile")
     public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
-        if (result.hasErrors()) {
-            result.getAllErrors().stream().forEach(System.out::println);
-            return "tier1/updateProfile";
+        if(result.hasErrors()) {
+            return "redirect:/tier1/error";
         }
         try {
             User user = userService.getLoggedUser();
@@ -68,8 +67,13 @@ public class Tier1Controller {
 
             return "tier1/updateProfileRequest";
         } catch(Exception e) {
-            return e.getMessage();
+            return "redirect:/tier1/error";
         }
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "tier2/error";
     }
 
     @GetMapping("/viewAccounts")
