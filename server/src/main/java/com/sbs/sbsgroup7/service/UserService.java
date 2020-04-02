@@ -70,15 +70,15 @@ public class UserService {
 
     public void validateUser(User user){
         userRepository.findOneByEmailIgnoreCaseOrSsnOrPhone(user.getEmail(), user.getSsn(),user.getPhone()).
-                ifPresent(existing ->{
-                    if(existing.getEmail().equalsIgnoreCase(user.getEmail().toLowerCase())){
-                        throw new EmailUsedException();
-                    } else if (existing.getPhone().equals(user.getPhone())){
-                        throw new PhoneUsedException();
-                    } else if (existing.getSsn().equals(user.getSsn())){
-                        throw new SsnUsedException();
-                    }
-                });
+            ifPresent(existing ->{
+                if(existing.getEmail().equalsIgnoreCase(user.getEmail().toLowerCase())){
+                    throw new EmailUsedException();
+                } else if (existing.getPhone().equals(user.getPhone())){
+                    throw new PhoneUsedException();
+                } else if (existing.getSsn().equals(user.getSsn())){
+                    throw new SsnUsedException();
+                }
+            });
     }
 
     public void validateUserRole(String role){
