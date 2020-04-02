@@ -232,7 +232,6 @@ public class UserController {
 
     @GetMapping(value = "/downloadStatement", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public HttpEntity<byte[]> bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber, HttpServletResponse response) throws IOException {
-        System.out.println(userId + " === " + accountNumber.toString());
 
         byte[] pdfToSign = pdfService.generatePdf(userId, accountNumber);
         byte[] signedPdf = signingService.signPdf(pdfToSign);
@@ -246,8 +245,5 @@ public class UserController {
 
         return new HttpEntity<byte[]>(signedPdf, headers);
     }
-
-
-
 
 }
