@@ -1,11 +1,14 @@
 package com.sbs.sbsgroup7.api;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.SystemLog;
 import com.sbs.sbsgroup7.model.Transaction;
 import com.sbs.sbsgroup7.model.User;
 import com.sbs.sbsgroup7.service.*;
@@ -34,6 +37,9 @@ public class OtpController {
 
     @Autowired
     private AcctRepository acctRepository;
+
+    @Autowired
+    private SystemLogRepository systemLogRepository;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -96,11 +102,20 @@ public class OtpController {
                         destination.setBalance(destination.getBalance()+transaction.getAmount());
                         acctRepository.save(source);
                         acctRepository.save(destination);
+                        SystemLog systemLog=new SystemLog();
+                        systemLog.setMessage(user.getEmail() + " successfully transferred $" + transaction.getAmount());
+                        systemLog.setTimestamp(new Date());
+                        systemLogRepository.save(systemLog);
+
 
                     }
                     else{
                         transaction.setTransactionStatus("pending");
                         transRepository.save(transaction);
+                        SystemLog systemLog=new SystemLog();
+                        systemLog.setMessage(user.getEmail() + " requested transfer of $" + transaction.getAmount());
+                        systemLog.setTimestamp(new Date());
+                        systemLogRepository.save(systemLog);
                     }
                     if(user.getRole().equals("USER")) {
                         return "redirect:/user/accounts";

@@ -53,8 +53,10 @@ public class UserController {
     @Autowired
     private SessionLogRepository sessionLogRepository;
 
+
     @Autowired
     private PdfService pdfService;
+
 
     @Autowired
     private SigningService signingService;

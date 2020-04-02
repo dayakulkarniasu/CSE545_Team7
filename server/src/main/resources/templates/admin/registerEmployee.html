@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <meta charset="UTF-8" />
+    <title>Sparky's Bank</title>
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
@@ -24,11 +24,36 @@
     </script>
 </head>
 <body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a th:href="@{/admin/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a th:href="@{/admin/manageAccounts}" class="nav-link">Manage Accounts</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/logs}" class="nav-link">System Log</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/admin/technicalAccountAccess}" class="nav-link">Technical Account Access</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/logout}" class="nav-link">Log Out</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+<br>
+<br>
 <div class="content-section col-md-8">
-    <form action="#" th:action="@{/register}" th:object="${user}" method="post" onsubmit="return validatePassword()">
+    <form action="#" th:action="@{/admin/registerEmployee}" th:object="${user}" method="post" onsubmit="return validatePassword()">
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4" >Registration Page</legend>
+            <legend class="border-bottom mb-4" >Register Employee</legend>
             <div class="form-group">
                 <label for="firstName">First Name:</label>
                 <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" name="First Name" th:field="*{firstName}">
@@ -62,8 +87,8 @@
                 <label for="role">Role:</label>
                 <select id="role" placeholder="" name="role" th:field="*{role}" class="form-control">
                     <option th:value="null" th:text="Select">Select</option>
-                    <option th:value="USER" th:text="Individual_Customer">Individual Customer</option>
-                    <option th:value="MERCHANT" th:text="Merchant">Merchant – Organization</option>
+                    <option th:value="TIER1" th:text="Tier1">Tier1 Employee</option>
+                    <option th:value="TIER2" th:text="Tier2">Tier2 Employee</option>
                 </select>
                 <span class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
             </div>
