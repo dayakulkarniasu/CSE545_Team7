@@ -8,6 +8,8 @@ import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -226,13 +229,17 @@ public class UserController {
 //    }
 
     @GetMapping(value = "/downloadStatement", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber) throws IOException {
+    public HttpEntity<byte[]> bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber, HttpServletResponse response) throws IOException {
         System.out.println(userId + " === " + accountNumber.toString());
 
         byte[] pdfToSign = pdfService.generatePdf(userId, accountNumber);
         byte[] signedPdf = signingService.signPdf(pdfToSign);
 
-        return ResponseEntity.ok(signedPdf);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        response.setHeader("Content-Disposition", "attachment; filename=bankStatement.pdf");
+
+        return new HttpEntity<byte[]>(signedPdf, headers);
     }
 
 
