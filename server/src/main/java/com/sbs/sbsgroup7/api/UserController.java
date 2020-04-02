@@ -22,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -234,10 +236,13 @@ public class UserController {
 
         byte[] pdfToSign = pdfService.generatePdf(userId, accountNumber);
         byte[] signedPdf = signingService.signPdf(pdfToSign);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String fileName = "bankStatement " + formatter.format(date) + ".pdf";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        response.setHeader("Content-Disposition", "attachment; filename=bankStatement.pdf");
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
 
         return new HttpEntity<byte[]>(signedPdf, headers);
     }
