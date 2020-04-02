@@ -8,6 +8,7 @@ import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -28,6 +29,7 @@ public class AppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
+    @Transactional
     public void createAppointment(User user, Appointment appointment){
         Appointment app = new Appointment();
         app.setContactWay(appointment.getContactWay());

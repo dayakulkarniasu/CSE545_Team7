@@ -8,6 +8,7 @@ import com.sbs.sbsgroup7.model.SystemLog;
 import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class RequestService {
 
     }
 
+    @Transactional
     public Request createRequest(User requestedUser, Request request){
         Request r = new Request();
         r.setRequestedUser(requestedUser);
@@ -46,6 +48,7 @@ public class RequestService {
         return r;
     }
 
+    @Transactional
     public Request createChequeRequest(User requestedUser, Account account, Request request){
         Request r = new Request();
         r.setRequestedUser(requestedUser);

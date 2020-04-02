@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import com.sbs.sbsgroup7.errors.EmailUsedException;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Repository
@@ -48,10 +49,12 @@ public class UserService {
 //        this.acctDao = acctDao;
     }
 
+    @Transactional
     public User registerUser(User user){
         return registerUser(user, user.getRole());
     }
 
+    @Transactional
     public User registerUser(User user, String role){
         validateUser(user);
         validateUserRole(role);
@@ -147,6 +150,7 @@ public class UserService {
 //        return acctDao.getAccounts();
 //    }
 
+    @Transactional
     public void requestProfileUpdates(User user, EmployeeInfo employeeInfo) {
         EmployeeUpdate employeeUpdate = new EmployeeUpdate(user.getUserId(), employeeInfo.getEmail(), employeeInfo.getPhone(), employeeInfo.getSsn(), employeeInfo.getAddress(), new Date());
         employeeUpdatesRepository.save(employeeUpdate);
@@ -157,6 +161,7 @@ public class UserService {
         systemLogRepository.save(systemLog);
     }
 
+    @Transactional
     public void approveProfileUpdates(String userId) {
         EmployeeUpdate employeeUpdate = employeeUpdatesRepository.findByUserId(userId);
         User user = userRepository.findByUserId(userId);
@@ -182,6 +187,7 @@ public class UserService {
         return userRepository.findByEmail(loggedUserName).orElse(null);
     }
 
+    @Transactional
     public User updateInformation(User user){
         User sameUser = getLoggedUser();
         //User updateUser = new User();

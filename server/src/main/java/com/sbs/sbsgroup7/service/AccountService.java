@@ -16,6 +16,7 @@ import com.sbs.sbsgroup7.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Repository
@@ -46,6 +47,7 @@ public class AccountService {
         this.acctDao = acctDao;
     }
 
+    @Transactional
     public Account createAccount(User user){
         Account a =new Account();
         a.setAccountType("Savings");
@@ -53,7 +55,7 @@ public class AccountService {
         return a;
     }
 
-
+    @Transactional
     public Account createAccount(User user,  Account account){
         //should have a check for if that account already exists
 
@@ -71,7 +73,7 @@ public class AccountService {
         acctRepository.findAll().forEach(accts::add);
         return accts;
     }
-
+    @Transactional
     public void creditDebitTransaction(User user, CreditDebit creditDebit) throws Exception{
         List<Account> useraccts = acctRepository.findByUser(user);
         for(Account useracct : useraccts){
@@ -91,6 +93,7 @@ public class AccountService {
 
     }
 
+    @Transactional
     public void transferFunds(User user, TransactionPage transactionPage) throws Exception{
         List<Account> useraccts = acctRepository.findByUser(user);
         Account targetAcc=acctRepository.findByAccountNumber(transactionPage.getToAcc());
@@ -107,6 +110,8 @@ public class AccountService {
         throw new Exception("Source Account is invalid");
 
     }
+
+    @Transactional
     public void emailTransfer(User user, EmailPage emailPage) throws Exception{
         List<Account> useraccts = acctRepository.findByUser(user);
         User targetuser= userRepository.findByEmail(emailPage.getEmailId()).orElse(null);
@@ -128,7 +133,7 @@ public class AccountService {
 
     }
 
-
+    @Transactional
     public void creditAmount(Account source, double amount, Account destination,User user) throws Exception{
         try{
             double balance=source.getBalance();
@@ -174,6 +179,7 @@ public class AccountService {
         }
     }
 
+    @Transactional
     public void debitAmount(Account source, double amount, Account destination,User user) throws Exception{
         try{
             double balance=source.getBalance();
@@ -224,7 +230,7 @@ public class AccountService {
         }
     }
 
-
+    @Transactional
     public void debitTransfers(Account source, double amount, Account destination,User user) throws Exception{
 //        try {
 //            double balance = source.getBalance();
@@ -350,10 +356,12 @@ public class AccountService {
 
     }
 
+    @Transactional
     public void deleteByAccountNumber(long accountNumber){
         acctRepository.deleteByAccountNumber(accountNumber);
     }
 
+    @Transactional
     public void editByAccountNumber(long accountNumber, String accountType){
         acctRepository.editByAccountNumber(accountNumber, accountType);
     }
