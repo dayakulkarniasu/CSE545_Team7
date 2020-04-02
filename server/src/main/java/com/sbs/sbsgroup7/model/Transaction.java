@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Entity
+@Table(name="transaction")
 public class Transaction {
 
     @Id

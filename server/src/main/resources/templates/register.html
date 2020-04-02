@@ -15,6 +15,10 @@
 
             if (firstInput !== secondInput || firstInput === "" || secondInput === "") {
                 alert("Passwords do not match - Please make sure you confirm with the correct password!")
+                return false;
+            }
+            else {
+                return true;
             }
         }
     </script>
@@ -58,8 +62,10 @@
                 <label for="role">Role:</label>
                 <select id="role" placeholder="" name="role" th:field="*{role}" class="form-control">
                     <option th:value="null" th:text="Select">Select</option>
-                    <option th:value="USER" th:text="User">User</option>
-                    <option th:value="ORG" th:text="Merchant">Merchant</option>
+                    <option th:value="USER" th:text="User">Individual Customer</option>
+                    <option th:value="MERCHANT" th:text="Merchant">Merchant – Organization</option>
+                    <option th:value="TIER1" th:text="Tier1">Tier1 Employee</option>
+                    <option th:value="TIER2" th:text="Tier2">Tier2 Employee</option>
                 </select>
                 <span class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></span>
             </div>

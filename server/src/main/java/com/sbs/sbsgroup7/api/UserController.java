@@ -2,24 +2,19 @@ package com.sbs.sbsgroup7.api;
 
 
 import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
+import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
 import com.sbs.sbsgroup7.model.*;
 
-import com.sbs.sbsgroup7.service.AccountService;
-import com.sbs.sbsgroup7.service.RequestService;
-import com.sbs.sbsgroup7.service.TransactionService;
-import com.sbs.sbsgroup7.service.UserService;
+import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequestMapping("/user")
@@ -35,10 +30,16 @@ public class UserController {
     private RequestService requestService;
 
     @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
     private TransactionService transactionService;
 
     @Autowired
     private SessionLogRepository sessionLogRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
     public UserController(UserService userService)
@@ -67,11 +68,20 @@ public class UserController {
         return "user/home" ;
     }
 
+    @RequestMapping("/profile")
+    public String userProfile(Model model){
+        User user = userService.getLoggedUser();
+        model.addAttribute("profile", user);
+        return "user/profile";
+    }
 
     @RequestMapping("/accounts")
-    public String approveRequests(Model model) {
-        User user = userService.getLoggedUser();
-        model.addAttribute("accounts", accountService.findByUser(user));
+//    public String approveRequests(Model model) {
+//        User user = userService.getLoggedUser();
+//        model.addAttribute("accounts", accountService.findByUser(user));
+    public String getAccounts(Model model) {
+        User user=userService.getLoggedUser();
+        model.addAttribute("accounts", accountService.getAccountsByUser(user));
 
         return "user/accounts";
     }
@@ -87,12 +97,39 @@ public class UserController {
         try {
             User user = userService.getLoggedUser();
             requestService.createRequest(user, request);
-            System.out.println(user.getUserId() + " created bank account request");
-
             return "user/accountRequestSent";
         } catch(Exception e) {
             return e.getMessage();
         }
+    }
+    @GetMapping("/viewCheque/{id}")
+    public String viewCheques(@PathVariable("id") Long id, Model model){
+        User user=userService.getLoggedUser();
+        List<Account> accts=accountService.getAccountsByUser(user);
+        Account account=accountService.getAccountByAccountNumber(id);
+        for (Account acct: accts){
+            if(acct==account){
+                List<Cheque> cheques=accountService.findChequeByAccount(account);
+                model.addAttribute("cheques", cheques);
+                return "user/viewCheque";
+            }
+        }
+        return "redirect:/user/error";
+    }
+
+    @RequestMapping("/requestCheque/{id}")
+    public String requestCheques(@PathVariable("id") Long id){
+            User user = userService.getLoggedUser();
+            Account account=accountService.getAccountByAccountNumber(id);
+            List<Account> accts=accountService.getAccountsByUser(user);
+            for (Account acct: accts){
+                if(acct==account){
+                   Request request=new Request();
+                    requestService.createChequeRequest(user, acct, request);
+                    return "user/chequeRequestSent";
+                    }
+                }
+            return "redirect:/user/error";
     }
 
     @GetMapping("/creditdebit")
@@ -193,10 +230,6 @@ public class UserController {
     public List<User> getAllUsers(){
         return userService.findAll();
     }
-//    public String getAllUsers(Model model) {
-//        model.addAttribute("name", "John");
-//        return "index";
-//    }
 
     @DeleteMapping(path="/removeAll")
     public void deleteAll(){
@@ -209,15 +242,55 @@ public class UserController {
     }
 
 
+    @GetMapping("/createAppointment")
+    public String createAppointment(Model model){
+        User user =userService.getLoggedUser();
+        Appointment appointment=appointmentRepository.findByUser(user).orElse(null);
+        if(appointment==null){
+            model.addAttribute("scheduleApp", new Appointment());
+            return "user/appointment";}
+        else{
+            return "user/appointmentExists";
+        }
+    }
 
-//    @RequestMapping("/accounts")
-//    public String approveRequests(Model model) {
-//        model.addAttribute("accounts", accountService.findAll());
-//
-//        return "user/accounts";
-//    }
+    @PostMapping("/createAppointment")
+    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment){
+        User user = userService.getLoggedUser();
+        System.out.println(user.getUserId());
+        appointmentService.createAppointment(user, appointment);
+        return "redirect:/user/viewAppointment";
+    }
 
+    @GetMapping("/updateProfile")
+    public String updateProfile(Model model){
+        User currentUser = userService.getLoggedUser();
+        model.addAttribute("updateProf", currentUser);
+        return "user/updateProfile";
+    }
 
+    @PostMapping("/updateProfile")
+    public String createAppointment(@ModelAttribute("updateProf") User user){
+        userService.updateInformation(user);
 
+        return "user/profileUpdated";
+    }
 
+    @RequestMapping("/support")
+    public String userSupport(){
+        return "user/support" ;
+    }
+
+    @RequestMapping("/viewAppointment")
+    public String getAppointment(Model model) {
+        User user=userService.getLoggedUser();
+        Appointment appointment=appointmentRepository.findByUser(user).orElse(null);
+        if(appointment==null){
+            return "user/noAppointment";
+        }
+        else {
+            model.addAttribute("app", appointment);
+            return "user/viewAppointment";
+        }
+    }
 }

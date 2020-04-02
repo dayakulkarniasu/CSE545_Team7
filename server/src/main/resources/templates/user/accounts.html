@@ -28,6 +28,9 @@
                 <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
             <li class="nav-item">
+                <a th:href="@{/user/support}" class="nav-link">Help & Support</a>
+            </li>
+            <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Log Out</a>
             </li>
         </ul>
@@ -55,7 +58,9 @@
             <td th:text="${account.accountNumber}"></td>
             <td th:text="${account.accountType}"></td>
             <td th:text="${account.balance}"></td>
-            <td><button type="button" class="btn btn-primary">Download Statement</button></td>
+            <td><a th:href="@{/user/viewCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">View Cheques</a></td>
+            <td><a th:href="@{/user/statement/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Statement</a></td>
+            <td><td><a th:href="@{/user/requestCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Request Cheques</a></td></td>
         </tr>
     </table>
 
