@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../static/bootstrap.css" />
+    <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
@@ -27,8 +27,6 @@
             <li class="nav-item">
                 <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
-            <li>   </li>
-            <li>    </li>
             <li class="nav-item">
                 <a th:href="@{/user/support}" class="nav-link">Help & Support</a>
             </li>
@@ -43,14 +41,40 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <br>
-        <h2>There are no scheduled appointments for you</h2>
-        <br>
-        <a th:href="@{/user/createAppointment}" class="nav-link active"  style="margin: 10px">Schedule Your appointment here</a>
-        <br>
-        <br>
-
+        <h1>Your Profile</h1>
     </div>
+
+    <br>
+    <br>
+
+    <table class="table">
+        <tr>
+            <th>Account #</th>
+            <th>Account Type</th>
+            <th>Balance</th>
+        </tr>
+        <tr th:each = "account: ${accounts}">
+            <td th:text="${account.accountNumber}"></td>
+            <td th:text="${account.accountType}"></td>
+            <td th:text="${account.balance}"></td>
+            <td><a th:href="@{/user/viewCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">View Cheques</a></td>
+            <td><a th:href="@{/user/statement/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Statement</a></td>
+            <td><td><a th:href="@{/user/requestCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Request Cheques</a></td></td>
+        </tr>
+    </table>
+
+    <!--    <div class="card" style="width: 25rem;" th:each="account: ${accounts}">-->
+    <!--        <div class="card-body">-->
+    <!--            <h5 class="card-title" th:text="${account.accountType}"></h5>-->
+    <!--            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</p>-->
+    <!--            <a href="#" class="card-link" th:text="${account.accountType}">Debit</a>-->
+    <!--            <a href="#" class="card-link">Download Statement</a>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <br>
+    <br>
+
 </main>
 
 </body>

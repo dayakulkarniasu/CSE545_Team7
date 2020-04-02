@@ -45,6 +45,13 @@ public class UserController {
         return "user/home" ;
     }
 
+    @RequestMapping("/profile")
+    public String userProfile(Model model){
+        User user = userService.getLoggedUser();
+        model.addAttribute("profile", user);
+        return "user/profile";
+    }
+
 
     @RequestMapping("/accounts")
     public String getAccounts(Model model) {
@@ -234,7 +241,7 @@ public class UserController {
             return "user/noAppointment";
         }
         else {
-            model.addAttribute("app", appointmentRepository.findByUser(user));
+            model.addAttribute("app", appointment);
             return "user/viewAppointment";
         }
     }

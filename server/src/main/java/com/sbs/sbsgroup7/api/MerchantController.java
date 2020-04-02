@@ -1,12 +1,10 @@
 package com.sbs.sbsgroup7.api;
 
 
+import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
 import com.sbs.sbsgroup7.model.*;
 
-import com.sbs.sbsgroup7.service.AccountService;
-import com.sbs.sbsgroup7.service.RequestService;
-import com.sbs.sbsgroup7.service.TransactionService;
-import com.sbs.sbsgroup7.service.UserService;
+import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +29,12 @@ public class MerchantController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     @Autowired
     public MerchantController(UserService userService)
@@ -130,6 +134,66 @@ public class MerchantController {
         } catch (Exception e) {
             return "redirect:/merchant/error";
         }
+    }
+
+    @GetMapping("/createAppointment")
+    public String createAppointment(Model model){
+        User user =userService.getLoggedUser();
+        Appointment appointment=appointmentRepository.findByUser(user).orElse(null);
+        if(appointment==null){
+            model.addAttribute("scheduleApp", new Appointment());
+            return "merchant/appointment";}
+        else{
+            return "merchant/appointmentExists";
+        }
+    }
+
+    @PostMapping("/createAppointment")
+    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment){
+        User user = userService.getLoggedUser();
+        System.out.println(user.getUserId());
+        appointmentService.createAppointment(user, appointment);
+        return "redirect:/merchant/viewAppointment";
+    }
+
+    @GetMapping("/updateProfile")
+    public String updateProfile(Model model){
+        User currentUser = userService.getLoggedUser();
+        model.addAttribute("updateProf", currentUser);
+        return "merchant/updateProfile";
+    }
+
+    @PostMapping("/updateProfile")
+    public String createAppointment(@ModelAttribute("updateProf") User user){
+        //User sameUser = userService.getLoggedUser();
+        //System.out.println(user.getUserId());
+        userService.updateInformation(user);
+
+        return "merchant/profileUpdated";
+    }
+
+    @RequestMapping("/support")
+    public String userSupport(){
+        return "merchant/support" ;
+    }
+
+    @RequestMapping("/viewAppointment")
+    public String getAppointment(Model model) {
+        User user=userService.getLoggedUser();
+        Appointment appointment=appointmentRepository.findByUser(user).orElse(null);
+        if(appointment==null){
+            return "merchant/noAppointment";
+        }
+        else {
+            model.addAttribute("app", appointment);
+            return "merchant/viewAppointment";
+        }
+    }
+
+
+    @RequestMapping("/error")
+    public String error(){
+        return "merchant/error";
     }
 
 
