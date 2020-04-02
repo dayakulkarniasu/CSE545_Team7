@@ -8,13 +8,24 @@ import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,8 +52,14 @@ public class UserController {
   
     @Autowired
     private SessionLogRepository sessionLogRepository;
-    
 
+
+    @Autowired
+    private PdfService pdfService;
+
+
+    @Autowired
+    private SigningService signingService;
 
     @Autowired
     public UserController(UserService userService)
@@ -72,10 +89,16 @@ public class UserController {
     }
 
 
-    @RequestMapping("/accounts")
 //    public String approveRequests(Model model) {
 //        User user = userService.getLoggedUser();
 //        model.addAttribute("accounts", accountService.findByUser(user));
+//        model.addAttribute("userId", user.getUserId());
+
+//    public String approveRequests(Model model) {
+//        User user = userService.getLoggedUser();
+//        model.addAttribute("accounts", accountService.findByUser(user));
+
+    @RequestMapping("/accounts")
     public String getAccounts(Model model) {
         User user=userService.getLoggedUser();
         Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
@@ -281,6 +304,23 @@ public class UserController {
         User currentUser = userService.getLoggedUser();
         model.addAttribute("updateProf", currentUser);
         return "user/updateProfile";
+    }
+
+
+    @GetMapping(value = "/downloadStatement", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public HttpEntity<byte[]> bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber, HttpServletResponse response) throws IOException {
+
+        byte[] pdfToSign = pdfService.generatePdf(userId, accountNumber);
+        byte[] signedPdf = signingService.signPdf(pdfToSign);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String fileName = "bankStatement " + formatter.format(date) + ".pdf";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+        return new HttpEntity<byte[]>(signedPdf, headers);
     }
 
     @PostMapping("/updateProfile")
