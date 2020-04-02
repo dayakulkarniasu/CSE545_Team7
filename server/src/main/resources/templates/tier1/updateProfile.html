@@ -5,16 +5,67 @@
     <title>Sparky's Bank</title>
     <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="css/screen.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="js/jquery.validate.js"></script>
+
+    <script type="text/javascript">
+        $().ready(function() {
+            $.validator.addMethod("ssn_func",function(value,element){
+                return /^[0-9][0-9]{2}-[0-9]{2}-[0-9]{4}$/;
+            },"Wrong form");
+            $.validator.addMethod("phone_func",function(value,element){
+                return /^[0-9][0-9]{2}-[0-9]{3}-[0-9]{4}$/;
+            },"Wrong form");
+            $.validator.addMethod("email_func",function(value,element){
+                return /^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$/;
+            },"Wrong form");
+
+            $('#updateProfileForm').validate({
+                rules: {
+                    phone: {
+                        required: true,
+                        phone_func: true
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        maxLength: 256,
+                        email_func: true
+                    },
+                    ssn: {
+                        required: true,
+                        ssn_func: true
+                    },
+                    address: {
+                        required: true,
+                        maxLength: 256
+                    }
+                }
+            })
+        })
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/tier2/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/tier1/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a th:href="@{/tier1/viewAccounts}" class="nav-link">View Accounts</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
+            </li>
             <li class="nav-item">
                 <a th:href="@{/tier1/updateProfile}" class="nav-link">Update Profile</a>
             </li>
@@ -33,101 +84,45 @@
     <div class="content-section col-md-8">
         <h2>Update Profile Information</h2>
 
-
-
-        <form action="#" th:action="@{/tier1/updateProfile}" th:object="${employeeInfo}" method="post">
+        <form class="updateProfileForm" id="updateProfileForm" action="#" th:action="@{/tier1/updateProfile}" th:object="${employeeInfo}" method="post">
             <fieldset class="form-group">
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-                    <input type="email" class="form-control" id="email" placeholder="e.g. abc@gmail.com" name="email" th:field="*{email}">
+                    <label for="firstName">First Name:</label>
+                    <input disabled type="text" class="form-control" id="firstName" name="firstName" th:value="${userInfo.getFirstName()}">
                 </div>
                 <div class="form-group">
-                    <label for="phone">Phone Number:</label>
-                    <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
-                    <input type="text" class="form-control" id="phone" placeholder="Format: xxx-yyy-zzzz" name="phone" th:field="*{phone}">
+                    <label for="email">Last Name:</label>
+                    <input disabled type="text" class="form-control" id="lastName" name="lastName" th:value="${userInfo.getLastName()}">
                 </div>
                 <div class="form-group">
-                    <label for="ssn">Social Security Number (SNN):</label>
-                    <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}"></span>
-                    <input type="text" class="form-control" id="ssn" placeholder="Format: xxx-yy-zzzz" name="ssn" th:field="*{ssn}">
+                    <label for="email"><b>Email:</b> (e.g. abc@gmail.com)</label>
+                    <input type="email" class="form-control" id="email" name="email" th:value="${userInfo.getEmail()}">
                 </div>
                 <div class="form-group">
-                    <label for="address">Address:</label>
-                    <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
-                    <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:field="*{address}">
+                    <label for="email"><b>Phone Number:</b> (Must be in the form of: XXX-XXX-XXXX)</label>
+                    <input type="text" class="form-control" id="phone" name="phone" th:value="${userInfo.getPhone()}">
                 </div>
+                <div class="form-group">
+                    <label for="role">Role:</label>
+                    <input disabled type="text" class="form-control" id="role" name="role" th:value="${userInfo.getRole()}">
+                </div>
+                <div class="form-group">
+                    <label for="ssn"><b>Social Security Number:</b> (Must be in the form of: XXX-XX-XXXX)</label>
+                    <input type="text" class="form-control" id="ssn" name="ssn" th:value="${userInfo.getSsn()}">
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input disabled type="text" class="form-control" id="dob" name="dob" th:value="${userInfo.getDob()}">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:value="${userInfo.getAddress()}">
+                </div>
+
+                <br>
                 <button type="submit" class="btn btn-primary">Update Changes</button>
             </fieldset>
         </form>
-
-
-
-        <!--        <form action="#" th:action="@{/tier2/updateProfile}" th:object="${employeeInfo}" method="post">-->
-        <!--            <fieldset class="form-group" th:each="info : ${userInfo}">-->
-        <!--                <legend class="border-bottom mb-4" >Update Profile Information</legend>-->
-
-        <!--                <div>-->
-        <!--                    <label>First Name:</label>-->
-        <!--                    <input disabled type="text" class="form-control" th:value="${userInfo.getFirstName()}"/>-->
-        <!--                    <br>-->
-        <!--                </div>-->
-
-        <!--                <div>-->
-        <!--                <label>Last Name:</label>-->
-        <!--                <input disabled type="text" class="form-control" th:value="${userInfo.getLastName()}"/>-->
-        <!--                <br>-->
-        <!--                </div>-->
-
-        <!--                <div>-->
-        <!--                <label for="email">Email:</label>-->
-        <!--                <input type="text" class="form-control" id="email" name="email" th:field="${userInfo.getEmail()}" th:errorclass="fieldError"/>-->
-        <!--                <span class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
-        <!--                <br>-->
-        <!--                </div>-->
-
-        <!--                <div>-->
-        <!--                <label for="phone">Phone Number:</label>-->
-        <!--                <input type="text" class="form-control" id="phone" name="phone" th:field="${userInfo.getPhone()}" th:errorclass="fieldError" />-->
-        <!--                <span class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>-->
-        <!--                <br>-->
-        <!--                </div>-->
-
-        <!--                <div>-->
-        <!--                <label>Role:</label>-->
-        <!--                <input disabled type="text" class="form-control" th:value="${userInfo.getRole()}"/>-->
-        <!--                <br>-->
-        <!--                </div>-->
-
-        <!--                <div>-->
-        <!--                <label for="ssn">Social Security Number (SSN):</label>-->
-        <!--                <input type="text" class="form-control" id="ssn" name="ssn" th:field="${userInfo.getSsn()}" th:errorclass="fieldError" />-->
-        <!--                <span class="text-danger" th:if="${#fields.hasErrors('ssn')}" th:errors="*{ssn}"></span>-->
-        <!--                <br>-->
-        <!--                </div>-->
-
-        <!--                <div>-->
-        <!--                <label>Date of Birth:</label>-->
-        <!--                <input disabled type="text" class="form-control" th:value="${userInfo.getDob()}"/>-->
-        <!--                <br>-->
-        <!--                </div>-->
-
-        <!--                <div>-->
-        <!--                <label for="address">Address:</label>-->
-        <!--                <input type="text" class="form-control" id="address" name="address" th:field="${userInfo.getAddress()}" th:errorclass="fieldError" />-->
-        <!--                <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>-->
-        <!--                <br>-->
-        <!--                <br>-->
-        <!--                </div>-->
-
-        <!--                <button type="submit" class="btn btn-primary">Update Changes</button>-->
-        <!--                <br>-->
-        <!--                <br>-->
-        <!--                <br>-->
-        <!--            </fieldset>-->
-        <!--        </form>-->
-
-
     </div>
 </main>
 

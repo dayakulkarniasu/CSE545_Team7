@@ -56,7 +56,7 @@ public class Tier2Controller {
 //    Tier-2 employees can approve bank account requests
     @GetMapping("/approveRequests")
     public String approveRequests(Model model){
-        model.addAttribute("requests", requestService.findpendingRequests());
+        model.addAttribute("requests", requestService.findPendingRequests());
         return "tier2/approveRequests";
     }
     @PostMapping("/approveRequests")
@@ -110,14 +110,20 @@ public class Tier2Controller {
     @PostMapping("/viewAccounts")
     public String viewAccounts(@RequestParam("accountNumber") Long accountNumber, @Valid String type,
                                    @RequestParam(value="action", required=true) String action  ) {
-        if (action.equals("edit")) {
-            accountService.editByAccountNumber(accountNumber, type);
-            System.out.println("Editing Account# " + accountNumber + "'s type to " + type);
-        } else if (action.equals("delete")) {
-            accountService.deleteByAccountNumber(accountNumber);
-            System.out.println("Deleting Account # " + accountNumber);
+        try {
+            if (action.equals("edit")) {
+                accountService.editByAccountNumber(accountNumber, type);
+                System.out.println("Editing Account# " + accountNumber + "'s type to " + type);
+            } else if (action.equals("delete")) {
+
+                acctRepository.deleteById(accountNumber);
+                System.out.println("Deleting Account # " + accountNumber);
+            }
+            return "redirect:/tier2/viewAccounts";
+        } catch(Exception e) {
+            return "redirect:/tier2/deleteAccountError";
         }
-        return "redirect:/tier2/viewAccounts";
+
     }
 
     //Tier-2 employees can view accounts to edit, delete
@@ -129,16 +135,25 @@ public class Tier2Controller {
     @PostMapping("/approveTransfers")
     public String approveTransfers(@RequestParam("transactionId") Long transactionId,
                                    @RequestParam(value="action", required=true) String action  ) {
+
         Transaction transaction = accountService.findByTransactionId(transactionId);
         Account source = transaction.getFromAccount();
         Account destination = transaction.getToAccount();
 
         if (action.equals("approved")) {
+            if(transaction.getTransactionType().equals("credit")){
+                destination.setBalance(destination.getBalance()+transaction.getAmount());
+            }
+            else if(transaction.getTransactionType().equals("debit")){
+                source.setBalance(source.getBalance()-transaction.getAmount());
+            }
+            else if(transaction.getTransactionType().equals("transferfunds")){
+                source.setBalance(source.getBalance()-transaction.getAmount());
+                destination.setBalance(destination.getBalance()+transaction.getAmount());
+            }
             transaction.setTransactionStatus("approved");
             transaction.setModifiedTime(Instant.now());
             transRepository.save(transaction);
-            source.setBalance(source.getBalance()-transaction.getAmount());
-            destination.setBalance(destination.getBalance()+transaction.getAmount());
             acctRepository.save(source);
             acctRepository.save(destination);
 
@@ -168,9 +183,10 @@ public class Tier2Controller {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result) throws Exception {
         if(result.hasErrors()) {
-            return "redirect:/tier2/error";
+            throw new Exception(result.getAllErrors().toString());
+            //return "redirect:/tier2/error";
         }
         try {
             User user = userService.getLoggedUser();
@@ -178,12 +194,18 @@ public class Tier2Controller {
 
             return "tier2/updateProfileRequest";
         } catch(Exception e) {
-            return "redirect:/tier2/error";
+            throw new Exception(e);
+            //return "redirect:/tier2/error";
         }
     }
 
     @RequestMapping("/error")
     public String error(){
         return "tier2/error";
+    }
+
+    @RequestMapping("/deleteAccountError")
+    public String deleteAccountError(){
+        return "tier2/deleteAccountError";
     }
 }

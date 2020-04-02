@@ -7,21 +7,15 @@ import java.util.List;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
 import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
+import com.sbs.sbsgroup7.DataSource.ChequeRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.dao.AcctDaoInterface;
 import com.sbs.sbsgroup7.dao.UserDaoInterface;
-import com.sbs.sbsgroup7.errors.PhoneUsedException;
-import com.sbs.sbsgroup7.errors.RoleException;
-import com.sbs.sbsgroup7.errors.SsnUsedException;
 import com.sbs.sbsgroup7.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
-import com.sbs.sbsgroup7.errors.EmailUsedException;
 
 
 @Repository
@@ -41,6 +35,9 @@ public class AccountService {
 
     @Autowired
     private SystemLogRepository systemLogRepository;
+
+    @Autowired
+    private ChequeRepository chequeRepository;
 
 
     @Autowired
@@ -114,16 +111,19 @@ public class AccountService {
         List<Account> useraccts = acctRepository.findByUser(user);
         User targetuser= userRepository.findByEmail(emailPage.getEmailId()).orElse(null);
         if(targetuser==null){
+//            System.out.println("/////////////////////");
             throw new Exception("Target email is invalid");
         }
         Account targetAcc=acctRepository.findOneByUser(targetuser);
         for(Account useracct : useraccts){
             if(useracct.getAccountNumber()==emailPage.getFromAcc()){
+//                System.out.println("123456789");
                 debitTransfers(useracct,emailPage.getAmount(), targetAcc, user);
                 return;
             }
 
         }
+//        System.out.println(".............");
         throw new Exception("Source Account is invalid");
 
     }
@@ -177,8 +177,11 @@ public class AccountService {
     public void debitAmount(Account source, double amount, Account destination,User user) throws Exception{
         try{
             double balance=source.getBalance();
-            if(balance<amount)
+            if(balance<amount) {
+
                 throw new Exception("Insufficient funds to debit");
+
+            }
             if(amount<1000){
                 Transaction transaction=new Transaction();
                 transaction.setAmount(amount);
@@ -198,6 +201,7 @@ public class AccountService {
 
                 source.setBalance(balance-amount);
                 acctRepository.save(source);
+
             }
             else{
                 Transaction transaction=new Transaction();
@@ -222,52 +226,94 @@ public class AccountService {
 
 
     public void debitTransfers(Account source, double amount, Account destination,User user) throws Exception{
-        try {
-            double balance = source.getBalance();
-            if (balance < amount){
-            throw new Exception("Insufficient funds to debit");
-            }
+//        try {
+//            double balance = source.getBalance();
+//            if (balance < amount){
+//            throw new Exception("Insufficient funds to debit");
+//            }
+        try{
+            double balance=source.getBalance();
+            if(balance<amount){
+                throw new Exception("Insufficient funds to debit");}
             if(amount<1000){
                 Transaction transaction=new Transaction();
                 transaction.setAmount(amount);
                 transaction.setFromAccount(source);
                 transaction.setToAccount(destination);
-                transaction.setTransactionStatus("approved");
+                transaction.setTransactionStatus("temp");
                 transaction.setTransactionOwner(user);
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("transferfunds");
                 transaction.setModifiedTime(Instant.now());
                 transRepository.save(transaction);
 
-                SystemLog systemLog=new SystemLog();
-                systemLog.setMessage(user.getEmail() + " successfully transferred $" + transaction.getAmount());
-                systemLog.setTimestamp(new Date());
-                systemLogRepository.save(systemLog);
+//                source.setBalance(balance-amount);
+//                destination.setBalance(destination.getBalance()+amount);
+//                acctRepository.save(source);
+//                acctRepository.save(destination);
 
-                source.setBalance(balance-amount);
-                destination.setBalance(destination.getBalance()+amount);
-                acctRepository.save(source);
-                acctRepository.save(destination);
+
+//                 SystemLog systemLog=new SystemLog();
+//                 systemLog.setMessage(user.getEmail() + " successfully transferred $" + transaction.getAmount());
+//                 systemLog.setTimestamp(new Date());
+//                 systemLogRepository.save(systemLog);
+
+//                System.out.println("transaction done");
+
             }
             else{
                 Transaction transaction=new Transaction();
                 transaction.setAmount(amount);
                 transaction.setFromAccount(source);
                 transaction.setToAccount(destination);
-                transaction.setTransactionStatus("pending");
+                transaction.setTransactionStatus("temp");
                 transaction.setTransactionOwner(user);
                 transaction.setTransactionTime(Instant.now());
                 transaction.setTransactionType("transferfunds");
                 transRepository.save(transaction);
+//                System.out.println("transfer request done");
 
-                SystemLog systemLog=new SystemLog();
-                systemLog.setMessage(user.getEmail() + " requested transfer of $" + transaction.getAmount());
-                systemLog.setTimestamp(new Date());
-                systemLogRepository.save(systemLog);
+//                 SystemLog systemLog=new SystemLog();
+//                 systemLog.setMessage(user.getEmail() + " requested transfer of $" + transaction.getAmount());
+//                 systemLog.setTimestamp(new Date());
+//                 systemLogRepository.save(systemLog);
             }
         }catch(Exception e){
             throw new Exception("Debit transaction failed from account "+source.getAccountNumber(),e);
         }
+    }
+
+    public Boolean cashierCheque(User user, CashierCheque cashierCheque){
+        Cheque cheque=chequeRepository.findByCheckNumber(cashierCheque.getCheckNumber()).orElse(null);
+        System.out.println(cheque.getCheckNumber());
+        if(cheque==null){
+            return false;
+        }
+        if(cheque.getActive()==false){
+            return false;
+        }
+        Double balance=cheque.getAccount().getBalance();
+        System.out.println(balance);
+        Account destination=acctRepository.findByAccountNumber(cashierCheque.getToAcc());
+        System.out.println(destination.getAccountNumber());
+        if(balance<cashierCheque.getAmount()){
+            return false;
+        }
+        if(destination == null){
+            return false;
+        }
+        Transaction transaction=new Transaction();
+        transaction.setAmount(cashierCheque.getAmount());
+        transaction.setFromAccount(cheque.getAccount());
+        transaction.setToAccount(destination);
+        transaction.setTransactionStatus("pending");
+        transaction.setTransactionOwner(user);
+        transaction.setTransactionTime(Instant.now());
+        transaction.setTransactionType("cheque");
+        cheque.setActive(false);
+        transRepository.save(transaction);
+        chequeRepository.save(cheque);
+        return true;
     }
 
 
@@ -309,16 +355,38 @@ public class AccountService {
     }
 
     public void editByAccountNumber(long accountNumber, String accountType){
-        System.out.println("!!!! account service: " + accountNumber);
         acctRepository.editByAccountNumber(accountNumber, accountType);
     }
 
     public List<Transaction> findPendingTransactions(){
-        return transRepository.findByTransactionStatus("pending");
+        List<Transaction> transactions= transRepository.findByTransactionStatus("pending");
+        List<Transaction>  transactionList= new ArrayList<>();
+        for (Transaction transaction: transactions) {
+            if(!transaction.getTransactionType().equals("cheque")){
+                transactionList.add(transaction);
+            }
+        }
+        return transactionList;
     }
 
     public Transaction findByTransactionId(Long id){
         return transRepository.findByTransactionId(id);
+    }
+
+    public List<Cheque> findChequeByAccount(Account account){
+        return chequeRepository.findByAccount(account);
+    }
+
+
+    public List<Transaction> findPendingChequeTransactions(){
+        List<Transaction> transactions= transRepository.findByTransactionStatus("pending");
+        List<Transaction>  transactionList= new ArrayList<>();
+        for (Transaction transaction: transactions) {
+            if(transaction.getTransactionType().equals("cheque")){
+                transactionList.add(transaction);
+            }
+        }
+        return transactionList;
     }
 
 }

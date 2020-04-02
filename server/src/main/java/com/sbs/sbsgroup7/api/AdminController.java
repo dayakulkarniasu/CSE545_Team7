@@ -61,7 +61,7 @@ public class AdminController {
             userService.approveProfileUpdates(userId);
 
             SystemLog systemLog=new SystemLog();
-            systemLog.setMessage(loggedUser.getEmail() + " approved " + requestedUser.getEmail() + "'s profile updates request");
+            systemLog.setMessage("admin (" + loggedUser.getEmail() + ") approved " + requestedUser.getEmail() + "'s profile updates request");
             systemLog.setTimestamp(new Date());
             systemLogRepository.save(systemLog);
 
@@ -71,7 +71,7 @@ public class AdminController {
         }
         else {
             SystemLog systemLog=new SystemLog();
-            systemLog.setMessage(loggedUser.getEmail() + " declined " + requestedUser.getEmail() + "'s profile updates request");
+            systemLog.setMessage("admin (" + loggedUser.getEmail() + ") declined " + requestedUser.getEmail() + "'s profile updates request");
             systemLog.setTimestamp(new Date());
             systemLogRepository.save(systemLog);
         }

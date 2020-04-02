@@ -3,9 +3,12 @@ package com.sbs.sbsgroup7.api;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.sbs.sbsgroup7.DataSource.AcctRepository;
+import com.sbs.sbsgroup7.DataSource.TransRepository;
+import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.Transaction;
 import com.sbs.sbsgroup7.model.User;
-import com.sbs.sbsgroup7.service.MailService;
-import com.sbs.sbsgroup7.service.UserService;
+import com.sbs.sbsgroup7.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +17,35 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.sbs.sbsgroup7.service.MailService;
-import com.sbs.sbsgroup7.service.OtpService;
+
 /**
  * @author shrisowdhaman
  * Dec 15, 2017
  */
 @Controller
+@RequestMapping("/otp")
 public class OtpController {
+
+    @Autowired
+    private TransRepository transRepository;
+
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private AcctRepository acctRepository;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     public OtpService otpService;
+
     @Autowired
     public MailService emailService;
+
     @Autowired
     private UserService userService;
+
     @GetMapping("/generateOtp")
     public String generateOtp(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -41,7 +59,7 @@ public class OtpController {
 //        replacements.put("otpnum", String.valueOf(otp));
 //        String message = template.getTemplate(replacements);
         emailService.sendOTPMail(username, Integer.toString(otp));
-        return "otppage";
+        return "otp/otppage";
     }
 
     @RequestMapping(value ="/validateOtp", method = RequestMethod.GET)
@@ -51,7 +69,7 @@ public class OtpController {
         int otp = otpService.generateOTP(username);
         logger.info("OTP : "+otp);
         emailService.sendOTPMail(username, Integer.toString(otp));
-        return "otppage";
+        return "otp/otppage";
     }
 
     @RequestMapping(value ="/validateOtp", method = RequestMethod.POST)
@@ -68,19 +86,35 @@ public class OtpController {
             if(serverOtp > 0){
                 if(Integer.parseInt(otpnum ) == serverOtp) {
                     otpService.clearOTP(username);
-                    if(user.getRole().equals("ADMIN")){
-                        return "redirect:/admin/home";
-                    }
-                    else if(user.getRole().equals("TIER1")){return "redirect:/tier1/home";}
-                    else if(user.getRole().equals("TIER2")){return "redirect:/tier2/home";}
-                    else {
-                        return "redirect:/user/home";
-                    }
+                    Transaction transaction = transRepository.findByTransactionOwnerAndTransactionStatus(user,"temp");
+                    Account source= transaction.getFromAccount();
+                    Account destination = transaction.getToAccount();
+                    if(transaction.getAmount()<1000){
+                        transaction.setTransactionStatus("approved");
+                        transRepository.save(transaction);
+                        source.setBalance(source.getBalance()-transaction.getAmount());
+                        destination.setBalance(destination.getBalance()+transaction.getAmount());
+                        acctRepository.save(source);
+                        acctRepository.save(destination);
 
+                    }
+                    else{
+                        transaction.setTransactionStatus("pending");
+                        transRepository.save(transaction);
+                    }
+                    if(user.getRole().equals("USER")) {
+                        return "redirect:/user/accounts";
+                    }
+                    else if(user.getRole().equals("MERCHANT")){
+                        return "redirect:/merchant/accounts";
+                    }
+                    else{
+                        return "403error";
+                    }
                 }
             }
         }
-        return FAIL;
+        return "otp/invalid";
     }
 
 
