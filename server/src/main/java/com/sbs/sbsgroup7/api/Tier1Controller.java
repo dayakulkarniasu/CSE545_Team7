@@ -57,9 +57,11 @@ public class Tier1Controller {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result) throws Exception {
         if(result.hasErrors()) {
-            return "redirect:/tier1/error";
+            //result.getAllErrors().stream().forEach(System.out::println);
+            throw new Exception(result.getAllErrors().toString());
+            //return "redirect:/tier1/error";
         }
         try {
             User user = userService.getLoggedUser();
@@ -67,7 +69,8 @@ public class Tier1Controller {
 
             return "tier1/updateProfileRequest";
         } catch(Exception e) {
-            return "redirect:/tier1/error";
+            throw new Exception(e);
+//            return "redirect:/tier1/error";
         }
     }
 

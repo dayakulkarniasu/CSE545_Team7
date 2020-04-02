@@ -139,7 +139,7 @@ public class UserController {
     }
 
     @PostMapping("/creditdebit")
-    public String debit(@Valid @ModelAttribute("creditdebit") CreditDebit creditDebit, BindingResult result){
+    public String debit(@Valid @ModelAttribute("creditdebit") CreditDebit creditDebit, BindingResult result) throws Exception {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             result.getAllErrors().stream().forEach(System.out::println);
@@ -154,7 +154,7 @@ public class UserController {
                 return "redirect:/user/accounts";
             }
         } catch(Exception e) {
-            return "redirect:/user/error";
+            throw new Exception(e);
         }
 
     }
@@ -165,7 +165,7 @@ public class UserController {
     }
 
     @PostMapping("/transferFunds")
-    public String transferFunds(@Valid @ModelAttribute("transfer") TransactionPage transactionPage, BindingResult result) {
+    public String transferFunds(@Valid @ModelAttribute("transfer") TransactionPage transactionPage, BindingResult result) throws Exception {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             result.getAllErrors().stream().forEach(System.out::println);
@@ -180,7 +180,7 @@ public class UserController {
                 return "redirect:/user/accounts";
             }
         } catch (Exception e) {
-            return "redirect:/user/error";
+            throw new Exception(e);
         }
     }
 
@@ -191,7 +191,7 @@ public class UserController {
     }
 
     @PostMapping("/emailTransfer")
-    public String emailTransfer(@Valid @ModelAttribute("email") EmailPage emailPage, BindingResult result) {
+    public String emailTransfer(@Valid @ModelAttribute("email") EmailPage emailPage, BindingResult result) throws Exception {
         User user = userService.getLoggedUser();
         if (result.hasErrors()) {
             result.getAllErrors().stream().forEach(System.out::println);
@@ -206,7 +206,7 @@ public class UserController {
                 return "redirect:/user/accounts";
             }
         } catch (Exception e) {
-            return "redirect:/user/error";
+            throw new Exception(e);
         }
     }
 
