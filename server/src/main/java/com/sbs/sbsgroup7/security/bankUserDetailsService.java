@@ -43,7 +43,6 @@ public class bankUserDetailsService implements UserDetailsService {
             systemLogRepository.save(systemLog);
         }
 
-
         return user.map(bankUserDetails::new).get();
     }
 }

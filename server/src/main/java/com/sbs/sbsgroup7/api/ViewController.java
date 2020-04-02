@@ -11,8 +11,6 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,15 +36,13 @@ public class ViewController {
     @Autowired
     SystemLogRepository systemLogRepository;
 
-   // @Autowired
-   // private TransactionService transactionService;
-
     @RequestMapping("/home")
     public String index(Model model) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("name", auth.getName());
         return "index";
     }
+
     @GetMapping("/login")
     public String login() {
         System.out.printf("in login");
@@ -86,11 +82,6 @@ public class ViewController {
         return "dashboard";
     }
 
-//    @GetMapping("/role")
-//    public String user() {
-//        return "role";
-//    }
-
     @GetMapping("/403")
     public String error403() {
         return "error/403";
@@ -113,23 +104,8 @@ public class ViewController {
         return "redirect:/login?logout";
     }
 
-
-
-
-   // @RequestMapping("/EmailPhoneTransfer")
- //   public String EmailPhoneTransfer() {
-    //    return "EmailPhoneTransfer";
-    //}
-
     @RequestMapping("/appointment")
     public String appointment() {
         return "appointment";
     }
-
-    /*@RequestMapping("/transactions")
-    public String transaction(Model model) {
-        model.addAttribute("requests", TransactionService.TIDVAL());
-
-        return "transactions";
-    }*/
 }

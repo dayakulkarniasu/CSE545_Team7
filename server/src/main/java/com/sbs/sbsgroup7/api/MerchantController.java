@@ -10,10 +10,8 @@ import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +27,6 @@ public class MerchantController {
 
     @Autowired
     private RequestService requestService;
-
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -74,7 +71,6 @@ public class MerchantController {
         }
         return "merchant/home" ;
     }
-
 
     @RequestMapping("/accounts")
     public String getAccounts(Model model) {
@@ -235,8 +231,6 @@ public class MerchantController {
 
     @PostMapping("/updateProfile")
     public String createAppointment(@ModelAttribute("updateProf") User user){
-        //User sameUser = userService.getLoggedUser();
-        //System.out.println(user.getUserId());
         userService.updateInformation(user);
 
         return "merchant/profileUpdated";
@@ -266,12 +260,8 @@ public class MerchantController {
         }
     }
 
-
     @RequestMapping("/error")
     public String error(){
         return "merchant/error";
     }
-
-
-
 }

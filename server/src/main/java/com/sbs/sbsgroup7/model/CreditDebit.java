@@ -1,6 +1,5 @@
 package com.sbs.sbsgroup7.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 public class CreditDebit {
@@ -51,6 +50,4 @@ public class CreditDebit {
     public Long getAccountNumber() {
         return accountNumber;
     }
-
-
 }

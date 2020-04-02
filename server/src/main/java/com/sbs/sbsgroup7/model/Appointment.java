@@ -1,11 +1,7 @@
 package com.sbs.sbsgroup7.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @Table(name = "appointment")
@@ -48,25 +44,16 @@ public class Appointment {
     @NotNull
     private String contactWay;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(nullable = false)
-//    @NotNull
-//    private User userId;
-
-
     public Appointment(@JsonProperty("appId") Long appId,
                        @JsonProperty("user") User user,
                        @JsonProperty("title") String title,
                        @JsonProperty("description") String description,
                        @JsonProperty("contactWay") String contactWay){
-        //@JsonProperty("user") User user){
-
         this.appId=appId;
         this.user=user;
         this.title=title;
         this.description=description;
         this.contactWay=contactWay;
-        //this.user = user;
     }
 
     public Appointment() { }
@@ -76,9 +63,6 @@ public class Appointment {
     }
 
     public Long getAppId() { return appId; }
-
-    // public void setUserId(String userId){ this.userId=userId; }
-    // public String getUserId() { return userId; }
 
     public void setTitle(String title) { this.title=title; }
 
@@ -92,9 +76,6 @@ public class Appointment {
 
     public String getContactWay() { return contactWay; }
 
-//    public void setUser(User user) { this.user=user; }
-//
-//    public User getUser() { return user; }
 
     public void setUser(User user) { this.user=user; }
 
@@ -107,6 +88,5 @@ public class Appointment {
     public String getEndTime() { return endTime ;}
 
     public void setEndTime(String endTime){ this.endTime = endTime; }
-
 }
 

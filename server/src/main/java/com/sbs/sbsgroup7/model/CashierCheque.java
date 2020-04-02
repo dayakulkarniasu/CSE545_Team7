@@ -1,6 +1,5 @@
 package com.sbs.sbsgroup7.model;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
@@ -49,6 +48,4 @@ public class CashierCheque
     public String getDescription() {
         return description;
     }
-
-
 }

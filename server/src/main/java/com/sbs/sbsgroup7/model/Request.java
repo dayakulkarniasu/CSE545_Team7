@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
-
 @Entity
 @Table(name="request")
 public class Request {
@@ -93,6 +92,7 @@ public class Request {
     public String getRequestStatus() {
         return requestStatus;
     }
+
 
     public void setRequestId(Long requestId) {
         this.requestId = requestId;

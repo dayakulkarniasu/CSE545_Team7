@@ -22,12 +22,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import com.sbs.sbsgroup7.errors.EmailUsedException;
 
-
 @Repository
 public class UserService {
 
     private final UserDaoInterface userDao;
-//    private final AcctDaoInterface acctDao;
 
     @Autowired
     private UserRepository userRepository;
@@ -41,11 +39,9 @@ public class UserService {
     @Autowired
     private SystemLogRepository systemLogRepository;
 
-
     @Autowired
-    public UserService(@Qualifier("user") UserDaoInterface userDao) { //, @Qualifier("account") AcctDaoInterface acctDao) {
+    public UserService(@Qualifier("user") UserDaoInterface userDao) {
         this.userDao = userDao;
-//        this.acctDao = acctDao;
     }
 
     public User registerUser(User user){
@@ -70,9 +66,7 @@ public class UserService {
         if(user.getRole().equals("USER") || user.getRole().equals("MERCHANT"))
             accountService.createAccount(u);
         return u;
-
     }
-
 
     public void validateUser(User user){
         userRepository.findOneByEmailIgnoreCaseOrSsnOrPhone(user.getEmail(), user.getSsn(),user.getPhone()).
@@ -85,8 +79,6 @@ public class UserService {
                         throw new SsnUsedException();
                     }
                 });
-
-
     }
 
     public void validateUserRole(String role){
@@ -95,25 +87,16 @@ public class UserService {
         }
     }
 
-
     public void add(User user) {
-        //userDao.openCurrentSessionwithTransaction();
         userDao.persist(user);
-        //userDao.closeCurrentSessionwithTransaction();
     }
 
     public void update(User user) {
-        //userDao.openCurrentSessionwithTransaction();
         userDao.update(user);
-        //userDao.closeCurrentSessionwithTransaction();
     }
 
-
-
     public User findByUsername(String username) {
-        //userDao.openCurrentSession();
         User user = userDao.findByUsername(username);
-        //userDao.closeCurrentSession();
         return user;
     }
 
@@ -123,10 +106,8 @@ public class UserService {
     public User findByUserId(User user){ return userRepository.findByUserId(user.getUserId());}
 
     public void delete(String username) {
-        //userDao.openCurrentSessionwithTransaction();
         User user = userDao.findByUsername(username);
         userDao.delete(user);
-        //userDao.closeCurrentSessionwithTransaction();
     }
 
     public List<User> findAll() {
@@ -134,18 +115,8 @@ public class UserService {
     }
 
     public void deleteAll() {
-        //userDao.openCurrentSessionwithTransaction();
         userDao.deleteAll();
-        //userDao.closeCurrentSessionwithTransaction();
     }
-
-//    public void createAccount(Account account){
-//        acctDao.createAccount(account);
-//    }
-//
-//    public List<Account> getAccounts() {
-//        return acctDao.getAccounts();
-//    }
 
     public void requestProfileUpdates(User user, EmployeeInfo employeeInfo) {
         EmployeeUpdate employeeUpdate = new EmployeeUpdate(user.getUserId(), employeeInfo.getEmail(), employeeInfo.getPhone(), employeeInfo.getSsn(), employeeInfo.getAddress(), new Date());
@@ -172,7 +143,6 @@ public class UserService {
         systemLogRepository.save(systemLog);
     }
 
-
     public User getLoggedUser() {
         String loggedUserName = "";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -184,20 +154,12 @@ public class UserService {
 
     public User updateInformation(User user){
         User sameUser = getLoggedUser();
-        //User updateUser = new User();
-        //updateUser.setUserId(sameUser.getUserId());
         sameUser.setEmail(user.getEmail());
         sameUser.setAddress(user.getAddress());
-//        sameUser.setDob(user.getDob());
-//        sameUser.setFirstName(user.getFirstName());
-//        sameUser.setLastName(user.getLastName());
         sameUser.setPhone(user.getPhone());
         sameUser.setSsn(user.getSsn());
-        //System.out.println("Hi" +updateUser.getUserId());
         System.out.println("Hi" +sameUser.getUserId());
         userRepository.save(sameUser);
         return sameUser;
     }
-
-
 }

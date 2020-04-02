@@ -1,8 +1,6 @@
 package com.sbs.sbsgroup7.model;
 
-
 import javax.persistence.*;
-import java.security.Timestamp;
 import java.util.Date;
 
 @Entity

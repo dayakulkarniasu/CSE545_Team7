@@ -1,20 +1,17 @@
 package com.sbs.sbsgroup7.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Bean;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
-import java.util.Locale;
 import java.util.Properties;
 
 @Service
@@ -33,7 +30,6 @@ public class MailService {
 
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
-
         MimeMessage mimeMessage = getJavaMailSender().createMimeMessage();
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, StandardCharsets.UTF_8.name());
@@ -70,5 +66,4 @@ public class MailService {
     public void sendOTPMail(String email, String otp) {
         sendEmail(email, "OTP for the transaction:", "<html><body>" + otp + "</body></html>",false,true);
     }
-
 }

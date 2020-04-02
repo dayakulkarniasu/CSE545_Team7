@@ -55,7 +55,6 @@ public class SigningService {
         } catch (IOException e) {
             System.out.println(e);
         }
-
         //if pdf cannot be signed, then return plain, not signed pdf
         return pdfToSign;
     }
@@ -71,7 +70,6 @@ public class SigningService {
         if (inFile == null || !inFile.exists()) {
             throw new FileNotFoundException("Document for signing does not exist");
         }
-
         try (FileOutputStream fos = new FileOutputStream(outFile);
              PDDocument doc = PDDocument.load(inFile)) {
             signDetached(signature, doc, fos);

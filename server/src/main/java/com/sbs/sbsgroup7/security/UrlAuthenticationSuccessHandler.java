@@ -31,7 +31,6 @@ public class UrlAuthenticationSuccessHandler implements AuthenticationSuccessHan
 
         handle(httpServletRequest, httpServletResponse, authentication);
         clearAuthenticationAttributes(httpServletRequest);
-
     }
 
     protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -43,10 +42,8 @@ public class UrlAuthenticationSuccessHandler implements AuthenticationSuccessHan
             logger.debug("Response is already committed. Unable to redirect to" + targetUrl);
             return;
         }
-
         redirectStrategy.sendRedirect(request,response,targetUrl);
     }
-
 
     protected String determineTargetUrl(final Authentication authentication){
 
@@ -64,20 +61,15 @@ public class UrlAuthenticationSuccessHandler implements AuthenticationSuccessHan
             if(roleTargetUrlMap.containsKey(authorityName)){
                 return roleTargetUrlMap.get(authorityName);
             }
-
         }
         throw new IllegalStateException();
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request){
-
         HttpSession httpSession=request.getSession(false);
         if(httpSession==null){
             return;
         }
-
         httpSession.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
     }
-
-
 }

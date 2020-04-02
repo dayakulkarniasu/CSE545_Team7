@@ -41,5 +41,4 @@ public class EmployeeInfo {
     public void setSsn(String ssn) { this.ssn=ssn; }
 
     public void setAddress(String address)  { this.address=address; }
-
 }

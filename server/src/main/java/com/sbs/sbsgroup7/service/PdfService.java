@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class PdfService {
@@ -24,14 +23,12 @@ public class PdfService {
     @Autowired
     private TransRepository transRepository;
 
-
     public byte[] generatePdf(String userId, Long accountNumber) throws IOException {
         PDDocument pdDocument = new PDDocument();
         PDPage pdPage = new PDPage();
         PDFont pdfFont = PDType1Font.HELVETICA_BOLD;
         int fontSize = 28;
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-
 
         List<Transaction> transactions = transRepository.findAll().stream()
                 .filter(e -> e.getFromAccount().getAccountNumber().equals(accountNumber) || e.getToAccount().getAccountNumber().equals(accountNumber))
@@ -56,13 +53,10 @@ public class PdfService {
                 Date transactionTime = Date.from(transactions.get(i).getTransactionTime());
                 toInject[i+1][4] = formatter.format(transactionTime);
             }
-
             PDPageContentStream contentStream = new PDPageContentStream(pdDocument, pdPage);
             drawTable(pdPage, contentStream, 770, 20, toInject);
             contentStream.close();
         }
-
-
         pdDocument.addPage(pdPage);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         pdDocument.save(byteArrayOutputStream);
@@ -114,5 +108,4 @@ public class PdfService {
             textx = margin+cellMargin;
         }
     }
-
 }
