@@ -1,8 +1,6 @@
 package com.sbs.sbsgroup7.api;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
 import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
@@ -58,12 +56,12 @@ public class OtpController {
         String username = auth.getName();
         int otp = otpService.generateOTP(username);
         logger.info("OTP : "+otp);
-//Generate The Template to send OTP
-//        EmailTemplate template = new EmailTemplate("SendOtp.html");
-//        Map<String,String> replacements = new HashMap<String,String>();
-//        replacements.put("user", username);
-//        replacements.put("otpnum", String.valueOf(otp));
-//        String message = template.getTemplate(replacements);
+        //Generate The Template to send OTP
+        //        EmailTemplate template = new EmailTemplate("SendOtp.html");
+        //        Map<String,String> replacements = new HashMap<String,String>();
+        //        replacements.put("user", username);
+        //        replacements.put("otpnum", String.valueOf(otp));
+        //        String message = template.getTemplate(replacements);
         emailService.sendOTPMail(username, Integer.toString(otp));
         return "otp/otppage";
     }
@@ -86,7 +84,8 @@ public class OtpController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
         logger.info(" Otp Number : "+otpnum);
-//Validate the Otp
+
+        //Validate the Otp
         if(Integer.parseInt(otpnum )>= 0){
             int serverOtp = otpService.getOtp(username);
             if(serverOtp > 0){
@@ -106,8 +105,6 @@ public class OtpController {
                         systemLog.setMessage(user.getEmail() + " successfully transferred $" + transaction.getAmount());
                         systemLog.setTimestamp(new Date());
                         systemLogRepository.save(systemLog);
-
-
                     }
                     else{
                         transaction.setTransactionStatus("pending");
@@ -131,9 +128,4 @@ public class OtpController {
         }
         return "otp/invalid";
     }
-
-
-
-
-
 }

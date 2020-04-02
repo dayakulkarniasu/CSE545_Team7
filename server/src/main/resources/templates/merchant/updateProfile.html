@@ -28,6 +28,9 @@
                 <a th:href="@{/merchant/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
             <li class="nav-item">
+                <a th:href="@{/merchant/cashierCheque}" class="nav-link">Cashier Cheque</a>
+            </li>
+            <li class="nav-item">
                 <a th:href="@{/merchant/support}" class="nav-link">Help & Support</a>
             </li>
             <li class="nav-item">
@@ -42,7 +45,7 @@
 
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Update your contact information here:</h1>
+        <h1>Update Contact Information:</h1>
     </div>
     <div class="card-block" style="padding: 24px;">
         <form role="form" th:action="@{/merchant/updateProfile}" method="post" th:object="${updateProf}">

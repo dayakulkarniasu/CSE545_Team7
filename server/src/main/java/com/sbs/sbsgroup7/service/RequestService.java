@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Repository
 public class RequestService {
 
@@ -26,7 +25,6 @@ public class RequestService {
 
     public RequestService(RequestRepository requestRepository) {
         this.requestRepository=requestRepository;
-
     }
 
     public Request createRequest(User requestedUser, Request request){
@@ -76,11 +74,10 @@ public class RequestService {
     {
         List<Request> repos=requestRepository.findByRequestStatus("pending");
         List<Request>  requests= new ArrayList<Request>();
-        for(Request request : repos)
-        {
-            if(!(request.getRequestType().equals("cheque"))){
+        for(Request request : repos) {
+            if(!(request.getRequestType().equals("cheque"))) {
                 requests.add(request);
-        }
+            }
         }
         return requests;
     }

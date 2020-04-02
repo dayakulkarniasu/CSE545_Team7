@@ -2,7 +2,6 @@ package com.sbs.sbsgroup7.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -30,10 +29,8 @@ public class Account {
     @NotNull
     private double balance;
 
-
     @OneToMany(mappedBy = "fromAccount")
     private List<Transaction> debitTransactions;
-
 
     @OneToMany(mappedBy = "toAccount")
     private List<Transaction> creditTransactions;

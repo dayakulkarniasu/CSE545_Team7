@@ -43,10 +43,20 @@ public class Transaction {
     @NotNull
     private User transactionOwner;
 
-
     @ManyToOne
     @JoinColumn(nullable = false)
     private Account fromAccount;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Account toAccount;
+
+    @NotNull
+    @Column(name = "transactionStatus",nullable = false)
+    private String transactionStatus;
+
+    @Column(name = "description",nullable = true)
+    private String description;
 
 
     public Long getTransactionId() {
@@ -60,7 +70,6 @@ public class Transaction {
     public Instant getTransactionTime() {
         return transactionTime;
     }
-
 
     public Double getAmount() {
         return amount;
@@ -85,6 +94,7 @@ public class Transaction {
     public String getDescription() {
         return description;
     }
+
 
     public void setTransactionId(Long transactionId) {
         this.transactionId = transactionId;
@@ -121,17 +131,4 @@ public class Transaction {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private Account toAccount;
-
-    @NotNull
-    @Column(name = "transactionStatus",nullable = false)
-    private String transactionStatus;
-
-    @Column(name = "description",nullable = true)
-    private String description;
-
-
 }

@@ -1,9 +1,6 @@
 package com.sbs.sbsgroup7.api;
 
-import com.sbs.sbsgroup7.DataSource.AcctRepository;
-import com.sbs.sbsgroup7.DataSource.RequestRepository;
-import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
-import com.sbs.sbsgroup7.DataSource.TransRepository;
+import com.sbs.sbsgroup7.DataSource.*;
 import com.sbs.sbsgroup7.model.*;
 import com.sbs.sbsgroup7.service.AccountService;
 import com.sbs.sbsgroup7.service.RequestService;
@@ -19,11 +16,10 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/tier2")
-//@PreAuthorize("TIER2")
 public class Tier2Controller {
 
     @Autowired
@@ -47,13 +43,31 @@ public class Tier2Controller {
     @Autowired
     private SystemLogRepository systemLogRepository;
 
+    @Autowired
+    private SessionLogRepository sessionLogRepository;
+
     @RequestMapping("/home")
-    public String userHome(){
+    public String userHome(Model model){
+        User user = userService.getLoggedUser();
+        List<SessionLog> sessionLogs = sessionLogRepository.findAll();
+        if (sessionLogs != null) {
+            sessionLogs = sessionLogs
+                    .stream()
+                    .filter(e -> e.getUserId() != null)
+                    .filter(e -> e.getUserId().equals(user.getUserId()))
+                    .sorted((s1, s2) -> s1.getTimestamp().compareTo(s2.getTimestamp()))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("lastAccess", sessionLogs.get(0).getTimestamp());
+        } else {
+            model.addAttribute("lastAccess", "Never");
+        }
+
         return "tier2/home" ;
     }
 
 
-//    Tier-2 employees can approve bank account requests
+    //Tier-2 employees can approve bank account requests
     @GetMapping("/approveRequests")
     public String approveRequests(Model model){
         model.addAttribute("requests", requestService.findPendingRequests());
@@ -88,10 +102,8 @@ public class Tier2Controller {
             systemLog.setMessage(approvedUser.getEmail() + " declined " + request.getRequestedUser().getEmail() + "'s " + request.getRequestType() + " account creation request");
             systemLog.setTimestamp(new Date());
             systemLogRepository.save(systemLog);
-
         }
         return "redirect:/tier2/approveRequests";
-
     }
 
 
@@ -123,7 +135,6 @@ public class Tier2Controller {
         } catch(Exception e) {
             return "redirect:/tier2/deleteAccountError";
         }
-
     }
 
     //Tier-2 employees can view accounts to edit, delete
@@ -135,11 +146,9 @@ public class Tier2Controller {
     @PostMapping("/approveTransfers")
     public String approveTransfers(@RequestParam("transactionId") Long transactionId,
                                    @RequestParam(value="action", required=true) String action  ) {
-
         Transaction transaction = accountService.findByTransactionId(transactionId);
         Account source = transaction.getFromAccount();
         Account destination = transaction.getToAccount();
-
         if (action.equals("approved")) {
             if(transaction.getTransactionType().equals("credit")){
                 destination.setBalance(destination.getBalance()+transaction.getAmount());
@@ -161,7 +170,6 @@ public class Tier2Controller {
             systemLog.setMessage(userService.getLoggedUser().getEmail() + " approved " + transaction.getTransactionOwner().getEmail() + "'s transaction request");
             systemLog.setTimestamp(new Date());
             systemLogRepository.save(systemLog);
-
         } else if (action.equals("declined")) {
             transaction.setTransactionStatus("declined");
             transaction.setModifiedTime(Instant.now());
@@ -186,7 +194,6 @@ public class Tier2Controller {
     public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result) throws Exception {
         if(result.hasErrors()) {
             throw new Exception(result.getAllErrors().toString());
-            //return "redirect:/tier2/error";
         }
         try {
             User user = userService.getLoggedUser();
@@ -195,7 +202,6 @@ public class Tier2Controller {
             return "tier2/updateProfileRequest";
         } catch(Exception e) {
             throw new Exception(e);
-            //return "redirect:/tier2/error";
         }
     }
 

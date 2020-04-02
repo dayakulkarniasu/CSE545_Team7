@@ -111,19 +111,12 @@ public class User {
         this.requests = requests;
     }
 
-
-
     public List<Request> getRequests() {
         return requests;
 
     }
-//    @OneToMany(cascade = CascadeType.ALL, targetEntity = Request.class)
-//    @JoinColumn(name = "userId")
-//    private List<Request> requests;
-
 
     private boolean active;
-
 
     public User(@JsonProperty("userId") String userId,
                 @JsonProperty("firstName") String firstName,
@@ -192,9 +185,6 @@ public class User {
     }
 
 
-
-
-
     public void setUserId(String userId) {
          this.userId=userId;
     }
@@ -210,7 +200,6 @@ public class User {
     public void setPhone(String phone) { this.phone= phone; }
 
     public void setRole(String role) { this.role=role; }
-
 
     public void setPassword(String password) { this.password = password; }
 
@@ -229,6 +218,4 @@ public class User {
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
-
-
 }

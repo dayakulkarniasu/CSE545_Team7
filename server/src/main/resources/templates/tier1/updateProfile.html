@@ -64,7 +64,10 @@
                 <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
             </li>
             <li class="nav-item">
-                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Issue Cheques</a>
+            </li>
+            <li class="nav-item">
+                <a th:href="@{/tier1/chequeTransfers}" class="nav-link">Cheque Transfers</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/tier1/updateProfile}" class="nav-link">Update Profile</a>
@@ -82,7 +85,7 @@
 
 <main role="main" class="container">
     <div class="content-section col-md-8">
-        <h2>Update Profile Information</h2>
+        <h1>Update Profile Information</h1>
 
         <form class="updateProfileForm" id="updateProfileForm" action="#" th:action="@{/tier1/updateProfile}" th:object="${employeeInfo}" method="post">
             <fieldset class="form-group">
@@ -121,10 +124,10 @@
 
                 <br>
                 <button type="submit" class="btn btn-primary">Update Changes</button>
+                <br>
             </fieldset>
         </form>
     </div>
 </main>
-
 </body>
 </html>

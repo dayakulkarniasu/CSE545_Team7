@@ -62,7 +62,6 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                         .and()
                         .defaultsDisabled()
                         .xssProtection();
-
     }
 
     // TODO: need to use a password encoder - okay for now

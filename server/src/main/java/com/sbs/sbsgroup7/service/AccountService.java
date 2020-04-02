@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public class AccountService {
 
@@ -39,7 +38,6 @@ public class AccountService {
     @Autowired
     private ChequeRepository chequeRepository;
 
-
     @Autowired
     public AccountService(@Qualifier("user") UserDaoInterface userDao, @Qualifier("account") AcctDaoInterface acctDao) {
         this.userDao = userDao;
@@ -53,10 +51,7 @@ public class AccountService {
         return a;
     }
 
-
     public Account createAccount(User user,  Account account){
-        //should have a check for if that account already exists
-
         Account a = new Account();
         a.setBalance(100.00);
         a.setAccountType(account.getAccountType());
@@ -83,12 +78,9 @@ public class AccountService {
                         debitAmount(useracct, creditDebit.getAmount(), useracct, user);
                     }
                     return;
-
             }
-
         }
         throw new Exception("Account is invalid");
-
     }
 
     public void transferFunds(User user, TransactionPage transactionPage) throws Exception{
@@ -102,32 +94,25 @@ public class AccountService {
                 debitTransfers(useracct,transactionPage.getAmount(), targetAcc, user);
                 return;
             }
-
         }
         throw new Exception("Source Account is invalid");
-
     }
+
     public void emailTransfer(User user, EmailPage emailPage) throws Exception{
         List<Account> useraccts = acctRepository.findByUser(user);
         User targetuser= userRepository.findByEmail(emailPage.getEmailId()).orElse(null);
         if(targetuser==null){
-//            System.out.println("/////////////////////");
             throw new Exception("Target email is invalid");
         }
         Account targetAcc=acctRepository.findOneByUser(targetuser);
         for(Account useracct : useraccts){
             if(useracct.getAccountNumber()==emailPage.getFromAcc()){
-//                System.out.println("123456789");
                 debitTransfers(useracct,emailPage.getAmount(), targetAcc, user);
                 return;
             }
-
         }
-//        System.out.println(".............");
         throw new Exception("Source Account is invalid");
-
     }
-
 
     public void creditAmount(Account source, double amount, Account destination,User user) throws Exception{
         try{
@@ -201,7 +186,6 @@ public class AccountService {
 
                 source.setBalance(balance-amount);
                 acctRepository.save(source);
-
             }
             else{
                 Transaction transaction=new Transaction();
@@ -226,11 +210,6 @@ public class AccountService {
 
 
     public void debitTransfers(Account source, double amount, Account destination,User user) throws Exception{
-//        try {
-//            double balance = source.getBalance();
-//            if (balance < amount){
-//            throw new Exception("Insufficient funds to debit");
-//            }
         try{
             double balance=source.getBalance();
             if(balance<amount){
@@ -316,10 +295,6 @@ public class AccountService {
         return true;
     }
 
-
-
-
-
     public List<Account> getAccountsByUser(User user){
         return acctRepository.findByUser(user);
     }
@@ -347,7 +322,6 @@ public class AccountService {
 
     public List<Transaction> findAllTransactions(){
         return transRepository.findAll();
-
     }
 
     public void deleteByAccountNumber(long accountNumber){
@@ -377,7 +351,6 @@ public class AccountService {
         return chequeRepository.findByAccount(account);
     }
 
-
     public List<Transaction> findPendingChequeTransactions(){
         List<Transaction> transactions= transRepository.findByTransactionStatus("pending");
         List<Transaction>  transactionList= new ArrayList<>();
@@ -388,5 +361,4 @@ public class AccountService {
         }
         return transactionList;
     }
-
 }

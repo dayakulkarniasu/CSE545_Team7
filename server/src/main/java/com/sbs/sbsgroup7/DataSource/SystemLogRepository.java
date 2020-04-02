@@ -1,7 +1,6 @@
 package com.sbs.sbsgroup7.DataSource;
 
 import com.sbs.sbsgroup7.model.SystemLog;
-import com.sbs.sbsgroup7.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

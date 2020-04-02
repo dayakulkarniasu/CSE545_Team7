@@ -1,19 +1,15 @@
 package com.sbs.sbsgroup7.api;
 
-
 import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
-
 import com.sbs.sbsgroup7.service.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -53,10 +49,8 @@ public class UserController {
     @Autowired
     private SessionLogRepository sessionLogRepository;
 
-
     @Autowired
     private PdfService pdfService;
-
 
     @Autowired
     private SigningService signingService;
@@ -80,23 +74,11 @@ public class UserController {
                     .collect(Collectors.toList());
 
             model.addAttribute("lastAccess", sessionLogs.get(0).getTimestamp());
-
         } else {
             model.addAttribute("lastAccess", "Never");
         }
-
         return "user/home" ;
     }
-
-
-//    public String approveRequests(Model model) {
-//        User user = userService.getLoggedUser();
-//        model.addAttribute("accounts", accountService.findByUser(user));
-//        model.addAttribute("userId", user.getUserId());
-
-//    public String approveRequests(Model model) {
-//        User user = userService.getLoggedUser();
-//        model.addAttribute("accounts", accountService.findByUser(user));
 
     @RequestMapping("/accounts")
     public String getAccounts(Model model) {
@@ -126,6 +108,7 @@ public class UserController {
             return e.getMessage();
         }
     }
+
     @GetMapping("/viewCheque/{id}")
     public String viewCheques(@PathVariable("id") Long id, Model model){
         User user=userService.getLoggedUser();
@@ -185,7 +168,6 @@ public class UserController {
         } catch(Exception e) {
             throw new Exception(e);
         }
-
     }
     @GetMapping("/transferFunds")
     public String transferFunds(Model model){
@@ -239,7 +221,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/cashierCheque")
     public String cashierCheques(Model model){
         User user = userService.getLoggedUser();
@@ -250,6 +231,7 @@ public class UserController {
         model.addAttribute("cash", new CashierCheque());
         return "user/cashiercheque";
     }
+
     @PostMapping("/add")
     public void addUser(@NotNull @Validated @RequestBody User user){
         userService.add(user);
@@ -258,7 +240,6 @@ public class UserController {
     @PutMapping ("/update")
     public void update(@NotNull @Validated @RequestBody User user){
         userService.update(user);
-
     }
 
     @PostMapping("/cashierCheque")
@@ -277,7 +258,6 @@ public class UserController {
     public String error(){
         return "user/error";
     }
-
 
     @GetMapping("/createAppointment")
     public String createAppointment(Model model){
@@ -305,7 +285,6 @@ public class UserController {
         model.addAttribute("updateProf", currentUser);
         return "user/updateProfile";
     }
-
 
     @GetMapping(value = "/downloadStatement", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     public HttpEntity<byte[]> bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber, HttpServletResponse response) throws IOException {

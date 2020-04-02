@@ -13,7 +13,6 @@ public class Cheque {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkNumber;
 
-
     @ManyToOne
     @JoinColumn(name = "accountNumber", nullable=false)
     @NotNull

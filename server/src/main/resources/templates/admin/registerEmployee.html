@@ -36,6 +36,9 @@
                 <a th:href="@{/admin/manageAccounts}" class="nav-link">Manage Accounts</a>
             </li>
             <li class="nav-item">
+                <a th:href="@{/admin/registerEmployee}" class="nav-link">Register Employee</a>
+            </li>
+            <li class="nav-item">
                 <a th:href="@{/admin/logs}" class="nav-link">System Log</a>
             </li>
             <li class="nav-item">
@@ -51,9 +54,9 @@
 <br>
 <br>
 <div class="content-section col-md-8">
+    <h1>Register an Employee</h1>
     <form action="#" th:action="@{/admin/registerEmployee}" th:object="${user}" method="post" onsubmit="return validatePassword()">
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4" >Register Employee</legend>
             <div class="form-group">
                 <label for="firstName">First Name:</label>
                 <input type="text" class="form-control" id="firstName" placeholder="Enter First Name" name="First Name" th:field="*{firstName}">
@@ -108,7 +111,8 @@
                 <input type="text" class="form-control" id="address" placeholder="Address" name="address" th:field="*{address}">
                 <span class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <br>
         </fieldset>
     </form>
 </div>

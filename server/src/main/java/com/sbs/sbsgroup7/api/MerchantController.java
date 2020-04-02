@@ -2,6 +2,7 @@ package com.sbs.sbsgroup7.api;
 
 
 import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
+import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
 
@@ -9,11 +10,10 @@ import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/merchant")
 @Controller
@@ -28,7 +28,6 @@ public class MerchantController {
     @Autowired
     private RequestService requestService;
 
-
     @Autowired
     private AppointmentRepository appointmentRepository;
 
@@ -39,21 +38,39 @@ public class MerchantController {
     private TransRepository transRepository;
 
     @Autowired
+    private SessionLogRepository sessionLogRepository;
+
+    @Autowired
     public MerchantController(UserService userService)
     {
         this.userService=userService;
     }
 
     @RequestMapping("/home")
-    public String merchantHome(){
+    public String merchantHome(Model model){
+        User loggedUser = userService.getLoggedUser();
+        List<SessionLog> sessionLogs = sessionLogRepository.findAll();
+        if (sessionLogs != null) {
+            sessionLogs = sessionLogs
+                    .stream()
+                    .filter(e -> e.getUserId() != null)
+                    .filter(e -> e.getUserId().equals(loggedUser.getUserId()))
+                    .sorted((s1, s2) -> s1.getTimestamp().compareTo(s2.getTimestamp()))
+                    .collect(Collectors.toList());
+
+            model.addAttribute("lastAccess", sessionLogs.get(0).getTimestamp());
+
+        } else {
+            model.addAttribute("lastAccess", "Never");
+        }
+
         User user = userService.getLoggedUser();
         Transaction transaction=transRepository.findByTransactionOwnerAndTransactionStatus(user, "temp");
         if(transaction!=null){
-        transRepository.delete(transaction);
-    }
+            transRepository.delete(transaction);
+        }
         return "merchant/home" ;
     }
-
 
     @RequestMapping("/accounts")
     public String getAccounts(Model model) {
@@ -214,8 +231,6 @@ public class MerchantController {
 
     @PostMapping("/updateProfile")
     public String createAppointment(@ModelAttribute("updateProf") User user){
-        //User sameUser = userService.getLoggedUser();
-        //System.out.println(user.getUserId());
         userService.updateInformation(user);
 
         return "merchant/profileUpdated";
@@ -245,12 +260,8 @@ public class MerchantController {
         }
     }
 
-
     @RequestMapping("/error")
     public String error(){
         return "merchant/error";
     }
-
-
-
 }

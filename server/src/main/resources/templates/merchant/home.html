@@ -39,21 +39,48 @@
         </ul>
     </div>
 </nav>
-<br>
-<br>
-<br>
-<main role="main" class="container">
-    <div class="starter-template">
-        <h1 th:inline="text">Hello :
-            [[${#httpServletRequest.remoteUser}]]!</h1>
-        <br>
-        <h3>Welcome to Sparky's bank</h3>
-        <p class="lead">Where privacy and security are our #1 priority.</p>
-        <br>
-        <br>
 
+<br>
+<br>
+<br>
+
+<main role="main" class="container">
+    <div class="jumbotron" style="background-color: #deecf9">
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+        <hr>
+        <h3>Welcome to Sparky's Bank</h3>
+        <p class="lead">Where privacy and security are our #1 priority.</p>
+        <p class="info">Your Last Login: <span th:text="${lastAccess}"></span></p>
+    </div>
+
+    <div class="container">
+        <div class="block">
+            <div class="row">
+                <div class="span4">
+                    <img class="img-left" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRkmqHTaH5MASwxNglNko9U_SMy70hrx0qaDCDjX-1n5T8ktfXf"/>
+                    <br>
+                    <br>
+                    <div class="content-heading"><h4>Features available through our website: </h4></div>
+                    <p>View, Debit, Credit your accounts</p>
+                    <p>Transfer funds by account number, email, and/or cheques</p>
+                    <p>Schedule an appointment with a representative at our help center</p>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
+
+<br>
+<br>
+
+<footer class="buttom-footer py-lg-4 py-md-3 py-sm-3 py-3 " style="color: #fff; background-color: #343a40; bottom: 0; width: 100%;">
+    <div class="copy-agile-right text-center">
+        <h2 class="my-3">Sparky's Bank</h2>
+        <p>
+            © 2020 Sparky's Bank | Design by Group 7
+        </p>
+    </div>
+</footer>
 
 </body>
 </html>

@@ -24,5 +24,4 @@ public interface UserDaoInterface<T, Id extends Serializable> {
     public List<User> findAll();
 
     public void deleteAll();
-
 }
