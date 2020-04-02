@@ -4,12 +4,12 @@ package com.sbs.sbsgroup7.api;
 import com.sbs.sbsgroup7.DataSource.SessionLogRepository;
 import com.sbs.sbsgroup7.model.*;
 
-import com.sbs.sbsgroup7.service.AccountService;
-import com.sbs.sbsgroup7.service.RequestService;
-import com.sbs.sbsgroup7.service.TransactionService;
-import com.sbs.sbsgroup7.service.UserService;
+import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -39,6 +40,12 @@ public class UserController {
 
     @Autowired
     private SessionLogRepository sessionLogRepository;
+
+    @Autowired
+    private PdfService pdfService;
+
+    @Autowired
+    private SigningService signingService;
 
     @Autowired
     public UserController(UserService userService)
@@ -72,6 +79,7 @@ public class UserController {
     public String approveRequests(Model model) {
         User user = userService.getLoggedUser();
         model.addAttribute("accounts", accountService.findByUser(user));
+        model.addAttribute("userId", user.getUserId());
 
         return "user/accounts";
     }
@@ -216,6 +224,16 @@ public class UserController {
 //
 //        return "user/accounts";
 //    }
+
+    @GetMapping(value = "/downloadStatement", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber) throws IOException {
+        System.out.println(userId + " === " + accountNumber.toString());
+
+        byte[] pdfToSign = pdfService.generatePdf(userId, accountNumber);
+        byte[] signedPdf = signingService.signPdf(pdfToSign);
+
+        return ResponseEntity.ok(signedPdf);
+    }
 
 
 

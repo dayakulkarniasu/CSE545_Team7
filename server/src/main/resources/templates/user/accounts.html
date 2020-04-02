@@ -55,7 +55,11 @@
             <td th:text="${account.accountNumber}"></td>
             <td th:text="${account.accountType}"></td>
             <td th:text="${account.balance}"></td>
-            <td><button type="button" class="btn btn-primary">Download Statement</button></td>
+            <form action="#" th:action="@{/user/downloadStatement}" method="get">
+                <input type="hidden" name="userId" id="userId" th:value="${userId}" />
+                <input type="hidden" name="accountId" id="accountId" th:value="${account.getAccountNumber()}" />
+                <td><button type="submit" class="btn btn-primary">Download Statement</button></td>
+            </form>
         </tr>
     </table>
 
