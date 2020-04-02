@@ -61,14 +61,14 @@
             <td th:text="${account.accountNumber}"></td>
             <td th:text="${account.accountType}"></td>
             <td th:text="${account.balance}"></td>
+            <td><a th:href="@{/user/viewCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">View Cheques</a></td>
+            <td><a th:href="@{/user/requestCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Request Cheques</a></td>
             <form action="#" th:action="@{/user/downloadStatement}" method="get">
                 <input type="hidden" name="userId" id="userId" th:value="${userId}" />
                 <input type="hidden" name="accountId" id="accountId" th:value="${account.getAccountNumber()}" />
                 <td><button type="submit" class="btn btn-primary">Download Statement</button></td>
             </form>
-            <td><a th:href="@{/user/viewCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">View Cheques</a></td>
-            <td><a th:href="@{/user/statement/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Statement</a></td>
-            <td><td><a th:href="@{/user/requestCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Request Cheques</a></td></td>
+
         </tr>
     </table>
 

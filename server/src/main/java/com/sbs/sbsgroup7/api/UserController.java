@@ -58,7 +58,6 @@ public class UserController {
 
     @Autowired
     private SigningService signingService;
-    private AppointmentRepository appointmentRepository;
 
     @Autowired
     public UserController(UserService userService)
