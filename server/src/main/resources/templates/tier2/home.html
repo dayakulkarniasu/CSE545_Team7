@@ -39,10 +39,38 @@
 <br>
 
 <main role="main" class="container">
-    <div class="starter-template">
-        <h1>Tier 2 Homepage</h1>
+    <div class="jumbotron" style="background-color: #deecf9">
+
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+        <hr>
+        <p class="text-danger">NOTE TO EMPLOYEES.</p>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="text-center">
+        <h2>Holiday Calendar</h2>
+        <p>Jan 1, 2020: New Year's Day</p>
+        <p>May 25, 2020: Memorial Day</p>
+        <p>Sept 7, 2020: Labor Day</p>
+        <p>Nov 11, 2020: Veterans Day</p>
+        <p>Nov 26-27, 2020: Thanksgiving</p>
+        <p>Dec 24-25, 2020: Winter Holiday</p>
     </div>
 </main>
+<footer class="page-footer font-small unique-color-dark pt-4" style="color: #fff; background-color: #343a40; margin-top: 3%">
+    <div class="container">
+        <ul class="list-unstyled text-center py-2">
+            <li>
+                <h5 class="mb-1">Sparky's Bank</h5>
+            </li>
+            <li>
+                <p>&copy; Sparky's Bank | Design by Group 7</p>
+            </li>
+        </ul>
+    </div>
+</footer>
 
 </body>
 </html>
