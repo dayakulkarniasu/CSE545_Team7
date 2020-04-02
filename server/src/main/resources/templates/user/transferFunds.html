@@ -48,48 +48,32 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Transfer Funds</h1>
+        <h1>Transfer Funds to Accounts</h1>
 
 
         <form role="form" th:action="@{/user/transferFunds}" th:object="${transfer}" method="post">
 
             <div class="form-group">
                 <label for="fromAcc"> From Account Number:</label>
+                <span class="text-danger" th:if="${#fields.hasErrors('fromAcc')}" th:errors="*{fromAcc}"></span>
                 <input type="text" class="form-control" id="fromAcc" placeholder="Enter your Account Number" name="fromAcc" th:field="*{fromAcc}">
             </div>
             <div class="form-group">
                 <label for="toAcc"> To Account Number:</label>
+                <span class="text-danger" th:if="${#fields.hasErrors('toAcc')}" th:errors="*{toAcc}"></span>
                 <input type="text" class="form-control" id="toAcc" placeholder="To Account Number" name="toAcc" th:field="*{toAcc}">
             </div>
             <div class="form-group">
                 <label for="amount">Amount:</label>
+                <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
                 <input type="text" class="form-control" id="amount" placeholder="Enter Amount" name="amount" th:field="*{amount}">
             </div>
             <div class="form-group">
                 <label for="description">Description:</label>
                 <input type="description" class="form-control" id="description" placeholder="Enter description" name="description" th:field="*{description}">
             </div>
-
-
-            <!--            <select th:field="*{transferType}" class="form-control">-->
-            <!--                <option th:value="Select" th:text="Select">Select</option>-->
-            <!--                <option th:value="CREDIT" th:text="CREDIT">CREDIT</option>-->
-            <!--                <option th:value="DEBIT" th:text="DEBIT">DEBIT</option>-->
-            <!--            </select>-->
-
-            <!--        Once this button is pressed, the type of account to be open is sent to a Requests (?) table where only-->
-            <!--        Tier-2 employees can view. That table is then viewed in Approve Transfers page for only Tier-2-->
-            <!--        <a th:href="@{accountRequestSent}" class="btn btn-info" href="#">Request</a>-->
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-        <!--        <script>-->
-        <!--            $(".dropdown-menu li a").click(function(){-->
-        <!--                $(this).parents(".dropdown").find('.btn').html($(this).text() + ' <span class="caret"></span>');-->
-        <!--                $(this).parents(".dropdown").find('.btn').val($(this).data('value'));-->
-        <!--            });-->
-        <!--        </script>-->
-
         <br>
         <br>
     </div>

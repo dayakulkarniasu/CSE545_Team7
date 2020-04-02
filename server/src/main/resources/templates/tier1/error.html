@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Sparky's Bank</title>
+    <title>Error Page</title>
     <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
@@ -21,53 +21,39 @@
             <li class="nav-item">
                 <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
             </li>
-
             <li class="nav-item">
-                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Issue Cheques</a>
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
             </li>
             <li class="nav-item">
-
-                <a th:href="@{/tier1/chequeTransfers}" class="nav-link">Cheque transfers</a>
-            </li>
-
-            <li class="nav-item">
-               
-
                 <a th:href="@{/tier1/updateProfile}" class="nav-link">Update Profile</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Log Out</a>
-
             </li>
         </ul>
     </div>
-
-
 </nav>
-
+<br>
+<br>
+<br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Transactions</h1>
-
-        <table class="table">
-            <tr>
-                <th>UserId</th>
-                <th>Source Acc #</th>
-                <th>Destination Acc #</th>
-                <th>amount</th>
-                <th>Transaction Type</th>
-                <th>Transaction Status</th>
-            </tr>
-            <tr th:each = "transfer: ${transfers}">
-                <td th:text="${transfer.getTransactionOwner().getEmail()}"></td>
-                <td th:text="${transfer.getFromAccount().getAccountNumber()}"></td>
-                <td th:text="${transfer.getToAccount().getAccountNumber()}"></td>
-                <td th:text="${transfer.getAmount()}"></td>
-                <td th:text="${transfer.getTransactionType()}"></td>
-                <td th:text="${transfer.getTransactionStatus()}"></td>
-
-            </tr>
-        </table>
+        <div class="jumbotron alert-danger">
+            <h1><b>Oops... Something Went Wrong</b></h1>
+            <h2>The profile updates could not be made</h2>
+            <br>
+            <br>
+            <h3>One of the following errors could've occurred: </h3>
+            <ul>
+                <li><b>First/Last Name</b> was not in between 2-30 characters</li>
+                <li><b>Phone Number</b> was not in the correct form (XXX-XXX-XXXX)</li>
+                <li><b>Social Security Number</b> was not in the correct form (XXX-XX-XXXX)</li>
+                <li><b>Email Address</b> was not in the correct form (e.g. abc@gmail.com)</li>
+            </ul>
+            <br>
+            <br>
+            <input class="btn btn-light" type="button" value="Go Back and Redo" onclick="history.back(-1)" />
+        </div>
     </div>
 </main>
 </body>

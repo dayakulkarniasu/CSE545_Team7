@@ -36,4 +36,14 @@ public class AcctDao implements AcctDaoInterface<Account, String> {
         it.forEach(accounts::add);
         return accounts;
     }
+
+    @Override
+    public void deleteByAccountNumber(long accountNumber) {
+        acctRepository.deleteByAccountNumber(accountNumber);
+    }
+
+    @Override
+    public void editByAccountNumber(long accountNumber, String accountType) {
+        acctRepository.editByAccountNumber(accountNumber, accountType);
+    }
 }

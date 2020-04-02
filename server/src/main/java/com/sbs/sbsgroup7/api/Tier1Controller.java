@@ -1,10 +1,17 @@
 package com.sbs.sbsgroup7.api;
 
+
 import com.sbs.sbsgroup7.DataSource.AcctRepository;
 import com.sbs.sbsgroup7.DataSource.ChequeRepository;
 import com.sbs.sbsgroup7.DataSource.RequestRepository;
 import com.sbs.sbsgroup7.DataSource.TransRepository;
 import com.sbs.sbsgroup7.model.*;
+import com.sbs.sbsgroup7.model.EmployeeInfo;
+import com.sbs.sbsgroup7.model.User;
+import com.sbs.sbsgroup7.DataSource.ChequeRepository;
+import com.sbs.sbsgroup7.DataSource.RequestRepository;
+import com.sbs.sbsgroup7.model.Cheque;
+import com.sbs.sbsgroup7.model.Request;
 import com.sbs.sbsgroup7.service.AccountService;
 import com.sbs.sbsgroup7.service.RequestService;
 import com.sbs.sbsgroup7.service.UserService;
@@ -12,12 +19,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Instant;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/tier1")
@@ -48,6 +59,33 @@ public class Tier1Controller {
     @RequestMapping("/home")
     public String userHome(){
         return "tier1/home" ;
+    }
+
+    @RequestMapping("/updateProfile")
+    public String updateProfile(Model model){
+        model.addAttribute("userInfo", userService.getLoggedUser());
+        model.addAttribute("employeeInfo", new EmployeeInfo());
+        return "tier1/updateProfile";
+    }
+
+    @PostMapping("/updateProfile")
+    public String updateProfile(@Valid @ModelAttribute("employeeInfo") EmployeeInfo employeeInfo, BindingResult result){
+        if(result.hasErrors()) {
+            return "redirect:/tier1/error";
+        }
+        try {
+            User user = userService.getLoggedUser();
+            userService.requestProfileUpdates(user, employeeInfo);
+
+            return "tier1/updateProfileRequest";
+        } catch(Exception e) {
+            return "redirect:/tier1/error";
+        }
+    }
+
+    @RequestMapping("/error")
+    public String error(){
+        return "tier2/error";
     }
 
     @GetMapping("/viewAccounts")
@@ -97,6 +135,7 @@ public class Tier1Controller {
 
     }
 
+
     @GetMapping("/chequeTransfers")
     public String approveTransfers(Model model) {
         model.addAttribute("transfers",accountService.findPendingChequeTransactions());
@@ -132,5 +171,7 @@ public class Tier1Controller {
         return "redirect:/tier1/chequeTransfers";
 
     }
+
+
 
 }

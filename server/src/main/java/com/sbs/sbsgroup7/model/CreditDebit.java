@@ -1,16 +1,21 @@
 package com.sbs.sbsgroup7.model;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 public class CreditDebit {
 
-    @NotNull
+    @NotNull(message="Required*")
     private Long accountNumber;
 
-    @NotNull
+    @NotNull(message="Required*")
+    @DecimalMin(value= "1.00", message="Must be at least $1.00")
+    @DecimalMax(value="99999.99", message="Cannot exceed $99,999.99")
+    @Digits(integer=6, fraction=2, message="Please enter the correct amount of cents")
     private Double amount;
 
-    @NotNull
+    @NotNull(message="Required*")
+    @NotEmpty(message = "Required*")
     private String transferType;
 
     private String description;

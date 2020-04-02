@@ -1,13 +1,18 @@
 package com.sbs.sbsgroup7.service;
 
+import java.util.Date;
 import java.util.List;
 
+import com.sbs.sbsgroup7.DataSource.EmployeeUpdatesRepository;
+import com.sbs.sbsgroup7.DataSource.SystemLogRepository;
 import com.sbs.sbsgroup7.DataSource.UserRepository;
 import com.sbs.sbsgroup7.dao.UserDaoInterface;
 import com.sbs.sbsgroup7.errors.PhoneUsedException;
 import com.sbs.sbsgroup7.errors.RoleException;
 import com.sbs.sbsgroup7.errors.SsnUsedException;
-import com.sbs.sbsgroup7.model.Account;
+import com.sbs.sbsgroup7.model.EmployeeInfo;
+import com.sbs.sbsgroup7.model.EmployeeUpdate;
+import com.sbs.sbsgroup7.model.SystemLog;
 import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +34,12 @@ public class UserService {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private EmployeeUpdatesRepository employeeUpdatesRepository;
+
+    @Autowired
+    private SystemLogRepository systemLogRepository;
 
 
     @Autowired
@@ -134,6 +145,31 @@ public class UserService {
 //    public List<Account> getAccounts() {
 //        return acctDao.getAccounts();
 //    }
+
+    public void requestProfileUpdates(User user, EmployeeInfo employeeInfo) {
+        EmployeeUpdate employeeUpdate = new EmployeeUpdate(user.getUserId(), employeeInfo.getEmail(), employeeInfo.getPhone(), employeeInfo.getSsn(), employeeInfo.getAddress(), new Date());
+        employeeUpdatesRepository.save(employeeUpdate);
+
+        SystemLog systemLog=new SystemLog();
+        systemLog.setMessage(user.getEmail() + " requested for the saving of his/her profile updates");
+        systemLog.setTimestamp(new Date());
+        systemLogRepository.save(systemLog);
+    }
+
+    public void approveProfileUpdates(String userId) {
+        EmployeeUpdate employeeUpdate = employeeUpdatesRepository.findByUserId(userId);
+        User user = userRepository.findByUserId(userId);
+        user.setEmail(employeeUpdate.getEmail());
+        user.setPhone(employeeUpdate.getPhone());
+        user.setSsn(employeeUpdate.getSsn());
+        user.setAddress(employeeUpdate.getAddress());
+        userRepository.save(user);
+
+        SystemLog systemLog=new SystemLog();
+        systemLog.setMessage(getLoggedUser() + " approved " + user.getEmail() + "'s profile updates request");
+        systemLog.setTimestamp(new Date());
+        systemLogRepository.save(systemLog);
+    }
 
 
     public User getLoggedUser() {

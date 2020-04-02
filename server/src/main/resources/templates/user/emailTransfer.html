@@ -48,21 +48,21 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Transfer amount through Email</h1>
-
-
+        <h1>Transfer Funds Through Email</h1>
         <form role="form" th:action="@{/user/emailTransfer}" th:object="${email}" method="post">
-
             <div class="form-group">
                 <label for="fromAcc"> From Account Number:</label>
+                <span class="text-danger" th:if="${#fields.hasErrors('fromAcc')}" th:errors="*{fromAcc}"></span>
                 <input type="text" class="form-control" id="fromAcc" placeholder="Enter your Account Number" name="fromAcc" th:field="*{fromAcc}">
             </div>
             <div class="form-group">
-                <label for="emailId"> To destination EmailID:</label>
+                <label for="emailId"> To Destination EmailID:</label>
+                <span class="text-danger" th:if="${#fields.hasErrors('emailId')}" th:errors="*{emailId}"></span>
                 <input type="text" class="form-control" id="emailId" placeholder="To Email ID" name="emailId" th:field="*{emailId}">
             </div>
             <div class="form-group">
                 <label for="amount">Amount:</label>
+                <span class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
                 <input type="text" class="form-control" id="amount" placeholder="Enter Amount" name="amount" th:field="*{amount}">
             </div>
             <div class="form-group">
@@ -70,16 +70,11 @@
                 <input type="description" class="form-control" id="description" placeholder="Enter description" name="description" th:field="*{description}">
             </div>
 
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-
         <br>
         <br>
     </div>
-
-
-
 </main>
 </body>
 </html>

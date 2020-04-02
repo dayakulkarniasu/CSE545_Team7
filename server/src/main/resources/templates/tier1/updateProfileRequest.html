@@ -8,7 +8,7 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/tier1/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+    <a th:href="@{/tier2/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -21,54 +21,28 @@
             <li class="nav-item">
                 <a th:href="@{/tier1/viewTransactions}" class="nav-link">View Transactions</a>
             </li>
-
             <li class="nav-item">
-                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Issue Cheques</a>
+                <a th:href="@{/tier1/approvecRequests}" class="nav-link">Approve Requests</a>
             </li>
             <li class="nav-item">
-
-                <a th:href="@{/tier1/chequeTransfers}" class="nav-link">Cheque transfers</a>
-            </li>
-
-            <li class="nav-item">
-               
-
                 <a th:href="@{/tier1/updateProfile}" class="nav-link">Update Profile</a>
             </li>
             <li class="nav-item">
                 <a th:href="@{/logout}" class="nav-link">Log Out</a>
-
             </li>
         </ul>
     </div>
-
-
 </nav>
 
+<br>
+<br>
+<br>
+
 <main role="main" class="container">
-    <div class="starter-template">
-        <h1>Transactions</h1>
-
-        <table class="table">
-            <tr>
-                <th>UserId</th>
-                <th>Source Acc #</th>
-                <th>Destination Acc #</th>
-                <th>amount</th>
-                <th>Transaction Type</th>
-                <th>Transaction Status</th>
-            </tr>
-            <tr th:each = "transfer: ${transfers}">
-                <td th:text="${transfer.getTransactionOwner().getEmail()}"></td>
-                <td th:text="${transfer.getFromAccount().getAccountNumber()}"></td>
-                <td th:text="${transfer.getToAccount().getAccountNumber()}"></td>
-                <td th:text="${transfer.getAmount()}"></td>
-                <td th:text="${transfer.getTransactionType()}"></td>
-                <td th:text="${transfer.getTransactionStatus()}"></td>
-
-            </tr>
-        </table>
+    <div class="content-section col-md-8">
+        <h2>Your Profile Updates are Pending for Approval by the Admin...</h2>
     </div>
 </main>
+
 </body>
 </html>
