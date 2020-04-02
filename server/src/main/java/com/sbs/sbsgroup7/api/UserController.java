@@ -1,6 +1,7 @@
 package com.sbs.sbsgroup7.api;
 
 
+import com.sbs.sbsgroup7.DataSource.AppointmentRepository;
 import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.*;
@@ -30,6 +31,9 @@ public class UserController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
     public UserController(UserService userService)
@@ -183,8 +187,14 @@ public class UserController {
 
     @GetMapping("/createAppointment")
     public String createAppointment(Model model){
-        model.addAttribute("scheduleApp", new Appointment());
-        return "user/appointment";
+        User user =userService.getLoggedUser();
+        Appointment appointment=appointmentRepository.findByUser(user).orElse(null);
+        if(appointment==null){
+            model.addAttribute("scheduleApp", new Appointment());
+            return "user/appointment";}
+        else{
+            return "user/appointmentExists";
+        }
     }
 
     @PostMapping("/createAppointment")
@@ -192,8 +202,7 @@ public class UserController {
         User user = userService.getLoggedUser();
         System.out.println(user.getUserId());
         appointmentService.createAppointment(user, appointment);
-
-        return "user/createdAppointment";
+        return "redirect:/user/viewAppointment";
     }
 
     @GetMapping("/updateProfile")
@@ -212,7 +221,23 @@ public class UserController {
         return "user/profileUpdated";
     }
 
+    @RequestMapping("/support")
+    public String userSupport(){
+        return "user/support" ;
+    }
 
+    @RequestMapping("/viewAppointment")
+    public String getAppointment(Model model) {
+        User user=userService.getLoggedUser();
+        Appointment appointment=appointmentRepository.findByUser(user).orElse(null);
+        if(appointment==null){
+            return "user/noAppointment";
+        }
+        else {
+            model.addAttribute("app", appointmentRepository.findByUser(user));
+            return "user/viewAppointment";
+        }
+    }
 
 //    @RequestMapping("/accounts")
 //    public String approveRequests(Model model) {

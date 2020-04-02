@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../../static/bootstrap.css" />
+    <link rel="stylesheet" href="../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
@@ -41,8 +41,14 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Your Cheque request has been sent! </h1>
-        <h2>Please wait until it has been processed...</h2>
+        <h1 th:inline="text">Hello :
+            [[${#httpServletRequest.remoteUser}]]!</h1>
+        <br>
+        <h3>You already have an appointment scheduled</h3>
+        <p class="lead">You can only schedule one appointment at a time.</p>
+        <br>
+        <br>
+
     </div>
 </main>
 

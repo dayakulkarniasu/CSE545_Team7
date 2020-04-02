@@ -19,9 +19,10 @@ public class Appointment {
 
 
     //userID (Foreign Key)
-    @Column(name = "userId")
+    @JoinColumn(name = "userId", nullable=false)
     @NotNull
-    private String userId;
+    @ManyToOne
+    private User user;
 
     //title
     @Column(name = "title")
@@ -30,7 +31,6 @@ public class Appointment {
 
     //description
     @Column(name = "description")
-    @NotNull
     private String description;
 
     // Start time
@@ -55,14 +55,14 @@ public class Appointment {
 
 
     public Appointment(@JsonProperty("appId") Long appId,
-                       @JsonProperty("userId") String userId,
+                       @JsonProperty("user") User user,
                        @JsonProperty("title") String title,
                        @JsonProperty("description") String description,
                        @JsonProperty("contactWay") String contactWay){
         //@JsonProperty("user") User user){
 
         this.appId=appId;
-        this.userId=userId;
+        this.user=user;
         this.title=title;
         this.description=description;
         this.contactWay=contactWay;
@@ -96,9 +96,9 @@ public class Appointment {
 //
 //    public User getUser() { return user; }
 
-    public void setUserId(String userId) { this.userId=userId; }
+    public void setUser(User user) { this.user=user; }
 
-    public String getUserId() { return userId; }
+    public User getUser() { return user; }
 
     public Date getStartTime() { return startTime ;}
 

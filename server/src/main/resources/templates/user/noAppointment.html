@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sparky's Bank</title>
-    <link rel="stylesheet" href="../../static/bootstrap.css" />
+    <link rel="stylesheet" href="../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
 <body>
@@ -27,6 +27,8 @@
             <li class="nav-item">
                 <a th:href="@{/user/emailTransfer}" class="nav-link">Email Transfer</a>
             </li>
+            <li>   </li>
+            <li>    </li>
             <li class="nav-item">
                 <a th:href="@{/user/support}" class="nav-link">Help & Support</a>
             </li>
@@ -41,8 +43,15 @@
 <br>
 <main role="main" class="container">
     <div class="starter-template">
-        <h1>Your Cheque request has been sent! </h1>
-        <h2>Please wait until it has been processed...</h2>
+        <h1 th:inline="text">Hello :
+            [[${#httpServletRequest.remoteUser}]]!</h1>
+        <br>
+        <br>
+        <h3>There are no scheduled appointments for you</h3>
+
+        <br>
+        <br>
+
     </div>
 </main>
 

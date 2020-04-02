@@ -40,10 +40,38 @@
 <br>
 <br>
 <main role="main" class="container">
-    <div class="starter-template">
-        <h1>Your Cheque request has been sent! </h1>
-        <h2>Please wait until it has been processed...</h2>
-    </div>
+
+
+    <br>
+    <br>
+
+    <table class="table">
+        <tr>
+            <th>Appointment</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Contact Way</th>
+        </tr>
+        <tr th:each = "ap: ${app}">
+            <td th:text="${ap.title}"></td>
+            <td th:text="${ap.getStartTime()}"></td>
+            <td th:text="${ap.getEndTime()}"></td>
+            <td th:text="${ap.getContactWay()}"></td>
+        </tr>
+    </table>
+
+    <!--    <div class="card" style="width: 25rem;" th:each="account: ${accounts}">-->
+    <!--        <div class="card-body">-->
+    <!--            <h5 class="card-title" th:text="${account.accountType}"></h5>-->
+    <!--            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</p>-->
+    <!--            <a href="#" class="card-link" th:text="${account.accountType}">Debit</a>-->
+    <!--            <a href="#" class="card-link">Download Statement</a>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
+    <br>
+    <br>
+
 </main>
 
 </body>

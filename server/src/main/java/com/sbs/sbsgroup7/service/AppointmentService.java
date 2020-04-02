@@ -33,13 +33,13 @@ public class AppointmentService {
         app.setContactWay(appointment.getContactWay());
         app.setDescription(appointment.getDescription());
         app.setTitle(appointment.getTitle());
-        app.setUserId(user.getUserId());
+        app.setUser(user);
         Date date = new Date();
         app.setStartTime(date);
         app.setEndTime(date);
         System.out.println(app.getDescription());
         System.out.println(app.getTitle());
-        System.out.println(app.getUserId());
+//        System.out.println(app.getUserId());
         //System.out.println(app.getAppId());
         System.out.println(app.getContactWay());
         System.out.println(app.getStartTime());
