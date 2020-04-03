@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
 </head>
-<body>
+<body background = "https://3xgymp28fzn02crn6l3n0zhl-wpengine.netdna-ssl.com/wp-content/uploads/2019/01/adult-african-descent-analysis-1549000-1024x623.jpg">
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a th:href="@{/admin/home}" class="navbar-brand" href="#">Sparky's Bank</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,33 +43,14 @@
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
         <hr>
         <h3>Welcome to the Admin Dashboard</h3>
-        <p class="info">Your Last Login: <span th:text="${lastAccess}"></span></p>
         <br>
-        <p class="text-danger">NOTE TO ADMINS: N/A</p>
     </div>
     <br>
-    <div class="text-center">
-        <h2>Holiday Calendar</h2>
-        <p>Jan 1, 2020: New Year's Day</p>
-        <p>May 25, 2020: Memorial Day</p>
-        <p>Sept 7, 2020: Labor Day</p>
-        <p>Nov 11, 2020: Veterans Day</p>
-        <p>Nov 26-27, 2020: Thanksgiving</p>
-        <p>Dec 24-25, 2020: Winter Holiday</p>
-    </div>
 </main>
 
 <br>
 <br>
 
-<footer class="buttom-footer py-lg-4 py-md-3 py-sm-3 py-3 " style="color: #fff; background-color: #343a40; bottom: 0; width: 100%;">
-    <div class="copy-agile-right text-center">
-        <h2 class="my-3">Sparky's Bank</h2>
-        <p>
-            © 2020 Sparky's Bank | Design by Group 7
-        </p>
-    </div>
-</footer>
 
 </body>
 </html>
