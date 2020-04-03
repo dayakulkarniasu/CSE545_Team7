@@ -2,6 +2,8 @@ package com.sbs.sbsgroup7.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +14,7 @@ import java.util.List;
 public class Account {
     @Id
     @Column(name = "accountNumber",nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountNumber;
 
     @ManyToOne
@@ -99,7 +101,7 @@ public class Account {
 
 
     public void setAccountNumber(Long accountNumber) {
-        this.accountNumber=accountNumber;
+        this.accountNumber= accountNumber ;
     }
 
     public void setUser(User user) {

@@ -10,7 +10,7 @@ public class Cheque {
 
     @Id
     @Column(name = "checkNumber",nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long checkNumber;
 
     @ManyToOne
