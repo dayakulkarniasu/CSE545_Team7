@@ -8,11 +8,17 @@ import com.sbs.sbsgroup7.model.*;
 
 import com.sbs.sbsgroup7.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +52,12 @@ public class MerchantController {
     {
         this.userService=userService;
     }
+
+    @Autowired
+    private PdfService pdfService;
+
+    @Autowired
+    private SigningService signingService;
 
     @RequestMapping("/home")
     public String merchantHome(Model model){
@@ -267,5 +279,21 @@ public class MerchantController {
     @RequestMapping("/error")
     public String error(){
         return "merchant/error";
+    }
+
+    @GetMapping(value = "/downloadStatement", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public HttpEntity<byte[]> bankStatement(@RequestParam("userId") String userId, @RequestParam("accountId") Long accountNumber, HttpServletResponse response) throws IOException {
+
+        byte[] pdfToSign = pdfService.generatePdf(userId, accountNumber);
+        byte[] signedPdf = signingService.signPdf(pdfToSign);
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String fileName = "bankStatement " + formatter.format(date) + ".pdf";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+
+        return new HttpEntity<byte[]>(signedPdf, headers);
     }
 }

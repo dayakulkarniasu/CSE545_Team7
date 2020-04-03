@@ -61,8 +61,12 @@
             <td th:text="${account.accountType}"></td>
             <td th:text="${account.balance}"></td>
             <td><a th:href="@{/merchant/viewCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">View Cheques</a></td>
-            <td><a th:href="@{/merchant/statement/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Statement</a></td>
-            <td><td><a th:href="@{/merchant/requestCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Request Cheques</a></td></td>
+            <td><a th:href="@{/merchant/requestCheque/{id}(id=${account.accountNumber})}" class="btn btn-link" href="#">Request Cheques</a></td>
+            <form action="#" th:action="@{/merchant/downloadStatement}" method="get">
+                <input type="hidden" name="userId" id="userId" th:value="${userId}" />
+                <input type="hidden" name="accountId" id="accountId" th:value="${account.getAccountNumber()}" />
+                <td><button type="submit" class="btn btn-primary">Download Statement</button></td>
+            </form>
         </tr>
     </table>
 

@@ -307,7 +307,7 @@ public class UserController {
     }
 
     @PostMapping("/updateProfile")
-    public String createAppointment(@ModelAttribute("updateProf") User user){
+    public String updateProfile(@ModelAttribute("updateProf") User user){
         userService.updateInformation(user);
 
         return "user/profileUpdated";

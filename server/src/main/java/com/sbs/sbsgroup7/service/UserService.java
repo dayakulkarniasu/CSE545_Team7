@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import com.sbs.sbsgroup7.errors.EmailUsedException;
 
@@ -28,10 +29,14 @@ public class UserService {
     private final UserDaoInterface userDao;
 
     @Autowired
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private AccountService accountService;
+
 
     @Autowired
     private EmployeeUpdatesRepository employeeUpdatesRepository;
@@ -40,8 +45,13 @@ public class UserService {
     private SystemLogRepository systemLogRepository;
 
     @Autowired
-    public UserService(@Qualifier("user") UserDaoInterface userDao) {
+    public UserService(@Qualifier("user") UserDaoInterface userDao, PasswordEncoder passwordEncoder, UserRepository userRepository, AccountService accountService, EmployeeUpdatesRepository employeeUpdatesRepository, SystemLogRepository systemLogRepository) {
         this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.accountService = accountService;
+        this.employeeUpdatesRepository = employeeUpdatesRepository;
+        this.systemLogRepository = systemLogRepository;
     }
 
     public User registerUser(User user){
@@ -58,6 +68,7 @@ public class UserService {
         u.setPhone(user.getPhone());
         u.setRole(role);
         u.setPassword(user.getPassword());
+//        u.setPassword(passwordEncoder.encode(user.getPassword()));
         u.setSsn(user.getSsn());
         u.setDob(user.getDob());
         u.setAddress(user.getAddress());

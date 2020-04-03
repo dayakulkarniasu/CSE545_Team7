@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -54,6 +55,10 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
                 .and()
+                .exceptionHandling()
+                .and()
+                .sessionManagement()
+                .and()
                     .csrf()
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
@@ -64,10 +69,9 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                         .xssProtection();
     }
 
-    // TODO: need to use a password encoder - okay for now
     @Bean
     public PasswordEncoder getPasswordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
