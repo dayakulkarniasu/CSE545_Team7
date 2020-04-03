@@ -51,7 +51,7 @@ public class User {
     @Column(name = "password")
     @NotNull(message = "Required*")
     @NotEmpty(message = "Required*")
-    @Size(min=6, max=20, message="Password must be at 6-20 characters long")
+    @Size(min=6, max=60, message="Password must be at least 6 characters long")
     private String password;
 
     @Column(name = "ssn" , unique = true)

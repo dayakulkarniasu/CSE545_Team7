@@ -16,9 +16,11 @@ import com.sbs.sbsgroup7.model.SystemLog;
 import com.sbs.sbsgroup7.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import com.sbs.sbsgroup7.errors.EmailUsedException;
@@ -29,7 +31,7 @@ public class UserService {
     private final UserDaoInterface userDao;
 
     @Autowired
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepository userRepository;
@@ -45,13 +47,13 @@ public class UserService {
     private SystemLogRepository systemLogRepository;
 
     @Autowired
-    public UserService(@Qualifier("user") UserDaoInterface userDao, PasswordEncoder passwordEncoder, UserRepository userRepository, AccountService accountService, EmployeeUpdatesRepository employeeUpdatesRepository, SystemLogRepository systemLogRepository) {
+    public UserService(@Qualifier("user") UserDaoInterface userDao) {
         this.userDao = userDao;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-        this.accountService = accountService;
-        this.employeeUpdatesRepository = employeeUpdatesRepository;
-        this.systemLogRepository = systemLogRepository;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     public User registerUser(User user){
@@ -67,8 +69,8 @@ public class UserService {
         u.setEmail(user.getEmail());
         u.setPhone(user.getPhone());
         u.setRole(role);
-        u.setPassword(user.getPassword());
-//        u.setPassword(passwordEncoder.encode(user.getPassword()));
+//        u.setPassword(user.getPassword());
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
         u.setSsn(user.getSsn());
         u.setDob(user.getDob());
         u.setAddress(user.getAddress());
