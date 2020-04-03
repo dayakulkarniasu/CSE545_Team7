@@ -5,15 +5,28 @@
     <title>Sparky's Bank</title>
     <link rel="stylesheet" href="../../static/bootstrap.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+    <!--  jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <!-- Isolated Version of Bootstrap, not needed if your site already uses Bootstrap -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+    <!-- Bootstrap Date-Picker Plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault" style="display: flex; justify-content: flex-start">
+        <a th:href="@{/user/home}" class="navbar-brand" href="#">Sparky's Bank</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a th:href="@{/user/accounts}" class="nav-link">Accounts</a>
@@ -45,9 +58,11 @@
 <main role="main" class="container">
     <div class="starter-template">
         <h1>Schedule Appointment</h1>
+        <br>
+        <br>
+        <br>
     </div>
     <div class="card-block" style="padding: 24px;">
-        <!-- <form name="appointmentForm" method = "POST" th:object="${scheduleApp}" th:action="${'/user/createAppointment'}"> -->
         <form role="form" th:action="@{/user/createAppointment}" method="post" th:object="${scheduleApp}" >
             <fieldset>
                 <div class="form-group">
@@ -56,23 +71,39 @@
                            placeholder="Title" th:field="*{title}" >
                 </div>
 
-                <div class="form-group">
-                    <label for="starttime">Start Date and Time  </label>
-                    <input type="datetime-local" class="form-control" id="starttime" name="starttime"
-                           placeholder="Appointment Start Time" th:field="*{startTime}">
+                <div class="form-group"> <!-- Date input -->
+                    <label class="control-label" for="date">Date:</label>
+                    <input class="form-control" id="date" name="date" placeholder="YYYY/MM/DD" type="text"/>
                 </div>
-                <div class="form-group">
-                    <label for="endtime">End Date and Time  </label>
-                    <input type="datetime-local" class="form-control" id="endtime" name="endtime"
-                           placeholder="Appointment End Time" th:field="*{endTime}">
-                </div>
+
                 <div>
+                    <label for="time">Start Time (1 hour appointment):</label>
+                    <select id="time" name="time" class="form-control">
+                        <option th:value="null" th:text="Select"></option>
+                        <option th:value="'9:00:00'" th:text="'9:00 AM'"></option>
+                        <option th:value="'10:00:00'" th:text="'10:00 AM'"></option>
+                        <option th:value="'11:00:00'" th:text="'11:00 AM'"></option>
+                        <option th:value="'12:00:00'" th:text="'12:00 PM'"></option>
+                        <option th:value="'13:00:00'" th:text="'1:00 PM'"></option>
+                        <option th:value="'14:00:00'" th:text="'2:00 PM'"></option>
+                        <option th:value="'15:00:00'" th:text="'3:00 PM'"></option>
+                        <option th:value="'16:00:00'" th:text="'4:00 PM'"></option>
+                        <option th:value="'17:00:00'" th:text="'5:00 PM'"></option>
+                        <option th:value="'18:00:00'" th:text="'6:00 PM'"></option>
+                    </select>
+                </div>
+
+                <br>
+                <div>
+                    <label>Contact Type:</label>
+                    <span class="text-danger" th:if="${#fields.hasErrors('contactWay')}" th:errors="*{contactWay}"></span>
                     <select th:field="*{contactWay}">
-                        <option th:value="ContactWay" th:text="ContactWay">Contact Way</option>-->
-                        <option th:value="InPerson" th:text="InPerson">In Person</option>
+                        <option th:value="InPerson">In Person</option>
                         <option th:value="Phone" th:text="Phone">Phone</option>
                     </select>
                 </div>
+                <br>
+
                 <div class="form-group">
                     <label for="description">Description </label>
                     <input type="text" class="form-control" id="description" name="description"
@@ -82,12 +113,28 @@
                 <div class="form-actions" style="margin-top: 12px;">
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
-
-
             </fieldset>
         </form>
     </div>
 </main>
+
+<script>
+    var today = new Date();
+    var day = today.getDay();
+
+    $(document).ready(function(){
+        var date_input=$('input[name="date"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        var options={
+            format: 'yyyy-mm-dd',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+            startDate: day.toString()
+        };
+        date_input.datepicker(options);
+    })
+</script>
 
 </body>
 </html>
