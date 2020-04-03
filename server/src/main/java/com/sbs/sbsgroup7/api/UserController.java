@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -272,10 +273,13 @@ public class UserController {
     }
 
     @PostMapping("/createAppointment")
-    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment){
+    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment, @RequestParam("date") String date, @RequestParam("time") String time) throws Exception {
+        if (appointment.getContactWay().equals("null")) {
+            throw new Exception("Contact type cannot be null!");
+        }
         User user = userService.getLoggedUser();
         System.out.println(user.getUserId());
-        appointmentService.createAppointment(user, appointment);
+        appointmentService.createAppointment(user, appointment, date, time);
         return "redirect:/user/viewAppointment";
     }
 
@@ -303,7 +307,7 @@ public class UserController {
     }
 
     @PostMapping("/updateProfile")
-    public String createAppointment(@ModelAttribute("updateProf") User user){
+    public String updateProfile(@ModelAttribute("updateProf") User user){
         userService.updateInformation(user);
 
         return "user/profileUpdated";

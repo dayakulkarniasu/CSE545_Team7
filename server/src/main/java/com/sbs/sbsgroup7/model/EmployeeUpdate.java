@@ -27,15 +27,15 @@ public class EmployeeUpdate {
     private String address;
 
     @Column
-    private Date timestamp;
+    private Date date;
 
-    public EmployeeUpdate(String userId, String email, String phone, String ssn, String address, Date timestamp) {
+    public EmployeeUpdate(String userId, String email, String phone, String ssn, String address, Date date) {
         this.userId = userId;
         this.email = email;
         this.phone = phone;
         this.ssn = ssn;
         this.address = address;
-        this.timestamp = timestamp;
+        this.date = date;
     }
 
     public EmployeeUpdate() {

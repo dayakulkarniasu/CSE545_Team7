@@ -47,13 +47,11 @@
 
         <table class="table">
             <tr>
-                <th>Request ID</th>
                 <th>Requested User</th>
                 <th>Account </th>
                 <th>Request Type</th>
             </tr>
             <tr th:each = "request: ${crequests}">
-                <td th:text="${request.getRequestId()}"></td>
                 <td th:text="${request.getRequestedUser().getEmail()}"></td>
                 <td th:text="${request.getAccount().getAccountNumber()}"></td>
                 <td th:text="${request.getRequestType()}"></td>

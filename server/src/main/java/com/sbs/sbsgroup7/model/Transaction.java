@@ -11,7 +11,7 @@ public class Transaction {
 
     @Id
     @Column(name = "transactionId",nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long transactionId;
 
     @NotNull

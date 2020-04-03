@@ -78,6 +78,7 @@ public class Tier1Controller {
         return "tier1/home" ;
     }
 
+
     @RequestMapping("/updateProfile")
     public String updateProfile(Model model){
         model.addAttribute("userInfo", userService.getLoggedUser());
