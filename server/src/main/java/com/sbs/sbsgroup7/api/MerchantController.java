@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -215,10 +216,13 @@ public class MerchantController {
     }
 
     @PostMapping("/createAppointment")
-    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment){
+    public String createAppointment(@ModelAttribute("scheduleApp") Appointment appointment, @RequestParam("date") String date, @RequestParam("time") String time) throws Exception {
+        if (appointment.getContactWay().equals("null")) {
+            throw new Exception("Contact type cannot be null!");
+        }
         User user = userService.getLoggedUser();
         System.out.println(user.getUserId());
-        appointmentService.createAppointment(user, appointment);
+        appointmentService.createAppointment(user, appointment, date, time);
         return "redirect:/merchant/viewAppointment";
     }
 
